@@ -1,0 +1,45 @@
+<?php
+
+/*
+ * This File is part of the App\Controller package
+ *
+ * (c) iwyg <mail@thomas-appel.com>
+ *
+ * For full copyright and license information, please refer to the LICENSE file
+ * that was distributed with this package.
+ */
+
+namespace App\Controller;
+
+use Zend\Diactoros\Stream;
+use Zend\Diactoros\Response;
+
+/**
+ * @class IndexController
+ *
+ * @package App\Controller
+ * @version $Id$
+ * @author iwyg <mail@thomas-appel.com>
+ */
+class IndexController
+{
+    public function __construct($view)
+    {
+        $this->view = $view;
+    }
+
+    public function __invoke()
+    {
+        return $this->renderTemplate('index.php');
+    }
+
+    protected function renderTemplate($template)
+    {
+        $rendered = $this->view->render($template);
+
+        $resource = fopen('php://memory', 'r+');
+        fwrite($resource, $rendered);
+
+        return new Response(new Stream($resource));
+    }
+}

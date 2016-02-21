@@ -8,11 +8,12 @@ if (PHP_SAPI == 'cli-server') {
     }
 }
 
-require __DIR__ . '/../vendor/autoload.php';
+set_error_handler(function ($errno, $errmsg, $errfile, $lino) {
+    throw new \ErrorException($errmsg, $errno, 1, $errfile, $lino);
+});
 
-session_start();
+//session_start();
 
 $app = require __DIR__ . '/../config/bootstrap.php';
-
-// Run app
-echo $app->run();
+//
+$app->run();

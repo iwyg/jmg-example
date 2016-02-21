@@ -13,5 +13,9 @@
         <p>The default content.</p>
       <?= $view->endsection() ?>
     </div>
+
+  <?= $view->section('body-scripts') ?>
+  <!-- js scripts go here -->
+  <?= $view->endsection() ?>
   </body>
 </html>

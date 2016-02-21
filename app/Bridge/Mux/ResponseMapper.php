@@ -43,9 +43,9 @@ class ResponseMapper implements ResponseMapperInterface
         }
 
         try {
-            return $this->deterMineResponseType($response);
+            $this->deterMineResponseType($response);
         } catch (\InvalidArgumentException $e) {
-            throw $e;
+            return null;
         }
     }
 
@@ -53,9 +53,9 @@ class ResponseMapper implements ResponseMapperInterface
     {
         $response = $this->getResponse($response);
 
-        //if (!$request = $this->container->get($this->key)) {
-        //    return $response;
-        //}
+        if (!$request = $this->container->get($this->key)) {
+            return $response;
+        }
 
         return $response;
     }

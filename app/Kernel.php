@@ -11,11 +11,13 @@
 
 namespace App;
 
+use Zend\Diactoros\Response;
 use Interop\Container\ContainerInterface;
 use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Lucid\Mux\Request\Context as RequestContext;
+use App\Middleware\MiddlewareInterface;
 
 /**
  * @class Kernel
@@ -27,21 +29,40 @@ use Lucid\Mux\Request\Context as RequestContext;
 class Kernel
 {
     private $container;
+    private $middleware;
+    private $booted;
 
     public function __construct(ContainerInterface $container)
     {
+        $this->booted = false;
         $this->container = $container;
         $this->emitter = new \Zend\Diactoros\Response\SapiEmitter;
+        $this->middleware = new \SplStack;
+    }
+
+    public function middleware(MiddlewareInterface $middleware)
+    {
+        $this->middleware->push($middleware);
     }
 
     public function handle(ServerRequestInterface $request)
     {
         $this->container['request'] = $request;
-        $match = $this->container['router']->match($rc = RequestContext::fromPsrRequest($request));
 
+
+        list($request, $response) = $this->flushMiddleware($request);
+
+        if (null !== $response) {
+            return $response;
+        }
+
+        $router = $this->container->get('router');
+        $match = $router->match($rc = RequestContext::fromPsrRequest($request));
 
         if (!$match->isMatch()) {
-            return;
+            var_dump($this->container->get('routes')->get('mediaq'));
+            die;
+            return new Response('php://temp', 404);
         }
 
         foreach ($match->getVars() as $key => $value) {
@@ -50,15 +71,54 @@ class Kernel
 
         $this->container['request'] = $request;
 
-        $response = $this->container['router']->dispatchMatch($match);
+        $response = $router->dispatchMatch($match);
 
-        $this->emitter->emit($response);
+        return $response;
+    }
+
+    public function boot()
+    {
+        if ($this->booted) {
+            return false;
+        }
+
+        $this->registerEvents();
+
+        return $this->booted = true;
     }
 
     public function run()
     {
         $request = ServerRequestFactory::fromGlobals();
 
-        return $this->handle($request);
+        $this->boot();
+        $response = $this->handle($request);
+
+        $this->emitter->emit($response);
+    }
+
+    protected function registerEvents()
+    {
+        $container = $this->container;
+        require dirname(__DIR__).'/config/events.php';
+    }
+
+    private function flushMiddleware(ServerRequestInterface $request, ResponseInterface $response = null)
+    {
+        $mdw = null;
+
+        $this->middleware->rewind();
+
+        while ($this->middleware->valid()) {
+            $next = $this->middleware->current();
+            $this->middleware->next();
+            list($request, $response) = $next->handle($request, $response);
+
+            $mdw = $next;
+        }
+
+        $this->middleware->rewind();
+
+        return [$request, $response];
     }
 }

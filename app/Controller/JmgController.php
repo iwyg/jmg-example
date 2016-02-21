@@ -11,9 +11,11 @@
 
 namespace App\Controller;
 
+use Zend\Diactoros\Response;
+use Zend\Diactoros\Response\JsonResponse;
 use Thapp\Jmg\Parameters;
+use Thapp\Jmg\Http\Psr7\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\TextResponse;
 
 /**
  * @class JmgController
@@ -27,29 +29,35 @@ class JmgController
     public function __construct($imageResolver)
     {
         $this->imageResolver = $imageResolver;
+        $this->responseFactory = new ResponseFactory;
+    }
+
+    public function imageCachedAction(ServerRequestInterface $request)
+    {
+        $alias = $request->getAttribute('alias');
+        $id = $request->getAttribute('id');
+        $ext = $request->getAttribute('ext');
+
+        if (!$resource = $this->imageResolver->resolveCached($alias, $id.$ext)) {
+
+        }
+
+        return $this->responseFactory->getResponse($request, $resource);
     }
 
     public function imageQueryAction(ServerRequestInterface $request)
     {
-        $params = $this->params($request->getQueryParams());
+        $params = Parameters::fromQuery($request->getQueryParams());
 
-        if ($resource = $this->imageResolver->resolve($request->getAttribute('src'), $params)) {
-            return $request->getAttribute('src');
-        }
-    }
-
-    private function params(array $params)
-    {
-        if (!isset($params['mode'])) {
-            $params['mode'] = 0;
+        if (!$resource = $this->imageResolver->resolve(
+            $request->getAttribute('src'),
+            $params,
+            null,
+            $request->getAttribute('alias')
+        )) {
+            return new Response('php://temp', 404);
         }
 
-        if (6 === $params['mode'] && isset($params['pixel'])) {
-            $params['width'] = $params['pixel'];
-        } elseif (5 === $params['mode'] && isset($params['scale'])) {
-            $params['width'] = $params['scale'];
-        }
-
-        return new Parameters($params);
+        return $this->responseFactory->getResponse($request, $resource);
     }
 }

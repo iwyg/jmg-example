@@ -13,6 +13,8 @@ namespace App\Controller;
 
 use Zend\Diactoros\Stream;
 use Zend\Diactoros\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @class IndexController
@@ -21,23 +23,10 @@ use Zend\Diactoros\Response;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class IndexController
+class GutterController extends PageController
 {
-    public function __construct($view)
+    public function __invoke(ServerRequestInterface $request, $response = null)
     {
-        $this->view = $view;
-    }
-
-    public function __invoke()
-    {
-        return $this->renderTemplate('index.php');
-    }
-
-    protected function renderTemplate($template)
-    {
-        $resource = fopen('php://temp', 'bw+');
-        fwrite($resource, $this->view->render($template));
-
-        return new Response(new Stream($resource));
+        return $this->renderTemplate('gutter.php');
     }
 }

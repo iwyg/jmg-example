@@ -15,7 +15,7 @@ module.exports = {
   context: path.resolve(__dirname, './' + srcDir + '/'),
   entry: {
     //index: 'index.js',
-    gutter: 'gutter.js',
+    grid: 'grid.js',
     //api: 'api.js'
   },
   output: {

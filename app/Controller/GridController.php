@@ -23,10 +23,10 @@ use Psr\Http\Message\ServerRequestInterface;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class GutterController extends PageController
+class GridController extends PageController
 {
     public function __invoke(ServerRequestInterface $request, $response = null)
     {
-        return $this->renderTemplate('gutter.php');
+        return $this->renderTemplate('grid.php');
     }
 }

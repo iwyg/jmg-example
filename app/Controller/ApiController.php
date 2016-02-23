@@ -32,26 +32,31 @@ class ApiController
 
     public function actionIndex(Request $request)
     {
-        $basePath = $request->getAttribute('basepath');
+        $params = Parameters::fromQuery($q = $request->getQueryParams());
+        $limit  = isset($q['limit']) ? max(1, min(30, (int)$q['limit'])) : 20;
 
-        $src = $request->getAttribute('src');
-        $files = $this->repository->fetch(
-            $request->getAttribute('alias'),
-            Parameters::fromQuery($q = $request->getQueryParams()),
-            null,
-            0 !== mb_strlen($src) ? $src : null,
-            10,
-            true
-        );
-
-        //var_dump($basePath);
-        //var_dump($request->getAttribute('alias'));
-        //die;
-        return $this->response(['basepath' => $basePath, 'images' => $files]);
+        return $this->response($request, $this->createPayloadArray($request, $params, $limit));
     }
 
-    private function response($response)
+    public function triggerError(Request $request)
     {
-        return new JsonResponse($response);
+        return $this->response($request, ['error' => 500], 500);
+    }
+
+    private function createPayloadArray(Request $request, Parameters $params, $limit)
+    {
+        list($src, $alias) = [null, null];
+        extract($request->getAttributes(), EXTR_IF_EXISTS);
+
+        if (empty($src)) {
+            $src = null;
+        }
+
+        return ['images' => $this->repository->fetch($alias, $params, null, $src, $limit, true)];
+    }
+
+    private function response(Request $request, $response = [], $status = 200)
+    {
+        return new JsonResponse($response, $status);
     }
 }

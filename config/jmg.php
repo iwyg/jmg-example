@@ -72,7 +72,7 @@ $container['jmg.jmg'] = $container->share(function () use ($container) {
 });
 
 $container['jmg.api'] = $container->share(function () use ($container) {
-    return new Thapp\Jmg\Api\Generator(
+    return new App\Api\Generator(
         $container->get('jmg.image_resolver'),
         $container->get('jmg.recipe_resolver'),
         $container->get('jmg.uri'),

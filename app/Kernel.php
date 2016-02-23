@@ -60,8 +60,6 @@ class Kernel
         $match = $router->match($rc = RequestContext::fromPsrRequest($request));
 
         if (!$match->isMatch()) {
-            var_dump($this->container->get('routes')->get('mediaq'));
-            die;
             return new Response('php://temp', 404);
         }
 

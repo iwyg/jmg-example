@@ -12,8 +12,8 @@ $container['ctrl.index'] = $container->share(function () use ($container) {
     return new App\Controller\IndexController($container['view']);
 });
 
-$container['ctrl.gutter'] = $container->share(function () use ($container) {
-    return new App\Controller\GutterController($container['view']);
+$container['ctrl.grid'] = $container->share(function () use ($container) {
+    return new App\Controller\GridController($container['view']);
 });
 
 $container['ctrl.api'] = $container->share(function () use ($container) {

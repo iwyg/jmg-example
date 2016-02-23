@@ -7,24 +7,30 @@ return [
         'handler' => 'ctrl.index'
     ],
 
-    'gutter' => [
-        'pattern' => '/gutter',
+    'grid' => [
+        'pattern' => '/grid',
         'methods' => ['GET'],
-        'handler' => 'ctrl.gutter'
+        'handler' => 'ctrl.grid'
     ],
 
     'api' => [
         'pattern' => '/api/v1',
         [
-        'mediaq' => [
-            'methods' => ['GET'],
-            'pattern' => '/{alias}/{src?}',
-            'handler' => 'ctrl.api@actionIndex',
-            'requirements' => [
-                'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
-                'src' => '.*\.(jpe?g|png|gif)'
+            'mediaq' => [
+                'methods' => ['GET'],
+                'pattern' => '/{alias}/{src?}',
+                'handler' => 'ctrl.api@actionIndex',
+                'requirements' => [
+                    'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
+                    'src' => '.*\.(jpe?g|png|gif)'
+                ]
+            ],
+
+            'error' => [
+                'methods' => ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD'],
+                'pattern' => '/error',
+                'handler' => 'ctrl.api@triggerError',
             ]
-        ]
         ]
 
     ],

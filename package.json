@@ -4,7 +4,8 @@
   "description": "",
   "main": "public/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=development webpack -w -d"
   },
   "repository": {
     "type": "git",
@@ -38,12 +39,16 @@
   "dependencies": {
     "babel-polyfill": "^6.5.0",
     "image-loaded": "0.0.2",
+    "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.14.4",
     "modernizr": "^3.3.1",
+    "query-string": "^3.0.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.0",
     "react-tap-event-plugin": "^0.2.2",
-    "redux": "^3.3.1"
+    "redux": "^3.3.1",
+    "redux-logger": "^2.6.0",
+    "redux-thunk": "^1.0.3"
   }
 }

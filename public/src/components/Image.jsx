@@ -1,10 +1,21 @@
-import React, {Component, PropTypes} from 'react';
-import ReactDOM from 'react-dom';
+import React, {PropTypes} from 'react';
 import loaded from 'image-loaded';
 
-export default class Image extends Component {
-  constructor() {
-    super();
+export default class Figure extends React.Component {
+  render() {
+    let {src, ...props} = this.props;
+    return (
+      <figure>
+        <Image src={src} {...props} />
+        <figcaption></figcaption>
+      </figure>
+    );
+  }
+}
+
+export class Image extends React.Component {
+  constructor(props) {
+    super(props);
     this.className = null;
     this.onLoad = this.onLoad.bind(this);
     this.state = {
@@ -13,11 +24,13 @@ export default class Image extends Component {
     };
     this.image = null;
   }
+
   getImage() {
     return this.image;
   }
-  onLoad(err, loaded) {
-    console.log('load callback', arguments);
+
+  onLoad(err, wasLoaded) {
+    console.log('load callback', wasLoaded);
     if (err !== null) {
       this.onError(err);
       return;
@@ -32,37 +45,41 @@ export default class Image extends Component {
 
   load() {
     let img = this.getImage();
-    img.src = this.state.src;
+    img.src = this.props.src;
     this.setState({className: this.className + ' ' + this.props.loadingClass});
     loaded(img, this.onLoad);
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.src === this.props) {
       return;
     }
   }
+
   componentWillMount() {
-    console.log(arguments);
-    console.log(this);
     this.className = this.props.className;
     this.image = document.createElement('img');
-    this.setState({src: this.props.src});
+    //this.setState({src: this.props.src});
   }
+
   componentDidMount() {
     this.load();
   }
+
   render() {
-    let props = {
-      src: this.state.src,
-      className: this.state.className
-    };
+    let {src, height, width} = this.props;
     return (
-      <img {...props}></img>
+      <img src={src} height={height} width={width} className={this.state.className}></img>
     );
   }
 }
 
-Image.displayName = 'ImageComponent';
+Figure.propTypes = {
+  src: PropTypes.string.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number
+};
+
 Image.propTypes = {
   src: PropTypes.string.isRequired,
   loadingClass: PropTypes.string,

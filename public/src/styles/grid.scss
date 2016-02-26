@@ -1,0 +1,102 @@
+@import "base";
+@import "test";
+@import "mixins";
+@import "breakpoint";
+
+$q-small: 400px;
+$q-medium: 800px;
+$q-big: 1400px;
+
+.container {
+  width: 100%;
+  max-width: 2400px;
+}
+
+.inbox {
+  height: 100%;
+  width: 100%;
+}
+
+$figpadding: .5rem;
+@mixin figboarder {
+  padding: $figpadding;
+}
+
+.grid {
+  position: relative;
+  width: 100%;
+  @include clearfix();
+
+  .grid-item {
+    color: #fff;
+    float: left;
+    width: 100%;
+    @include figboarder;
+    @include breakpoint($q-small) {
+      width: 50%;
+    }
+
+    @include breakpoint($q-medium) {
+      width: 33.33333333%;
+    }
+
+    @include breakpoint($q-big) {
+      width: 25%;
+    }
+  }
+
+  figure {
+    @extend .inbox;
+    position: relative;
+    margin: 0 0;
+  }
+
+  figcaption {
+    @extend .inbox;
+    padding: $figpadding;
+    display: block;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background: rgba(#000, 0.6);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.5, .12, .36, .9);
+
+    &:hover {
+      opacity: 1;
+    }
+
+  }
+
+  label {
+    font-size: 0.6rem;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-size: 0.8rem;
+    word-break: break-all;
+    &.height, &.width {
+      width: 50%;
+      float: left;
+      padding-right: 0.2rem;
+    }
+    &.height, &.width {
+      font-size: 1rem;
+      border-top: 1px solid #fff;
+      border-bottom: 1px solid;
+      padding-top: 0.6rem;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@import "_gravity-select.scss";

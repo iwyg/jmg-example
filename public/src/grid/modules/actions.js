@@ -1,9 +1,12 @@
 import fetch from 'isomorphic-fetch';
+import MODES, {initial, parseValues} from './modes';
 
 export const FETCH_RESULT_REQUEST = 'FETCH_RESULT_REQUEST';
 export const FETCH_RESULT_SUCCESS = 'FETCH_RESULT_SUCCESS';
 export const FETCH_RESULT_ERROR   = 'FETCH_RESULT_ERROR';
 export const SELECT_QUERY   = 'SELECT_QUERY';
+export const SELECT_MODE   = 'SELECT_MODE';
+
 
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
@@ -13,6 +16,7 @@ const getQueryString = (query = {}) => {
   return queryString.stringify(query);
 };
 
+/* Action creators */
 export const selectOuery = (query = {}) => {
   return {
     type: SELECT_QUERY,
@@ -22,7 +26,15 @@ export const selectOuery = (query = {}) => {
   };
 };
 
-/* Action creators */
+export const selectMode = (mode = MODES.IM_NOSCALE) => {
+  return {
+    type: SELECT_QUERY,
+    payload: {
+      query
+    }
+  };
+};
+
 export const fetchRequested = (url) => {
   return {
     type: FETCH_RESULT_REQUEST,
@@ -65,3 +77,6 @@ export const fetchImages = (url) => {
       .catch(err => dispatch(fetchFailed(err)));
   };
 };
+
+console.log('TEST ME');
+console.log(parseValues(3, {height: 0}));

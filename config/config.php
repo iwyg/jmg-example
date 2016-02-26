@@ -16,6 +16,7 @@ return [
     ],
     'jmg.cache_prefix' => 'cached',
     'jmg.caches' => [
-        'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(publicPath() . '/images/cached')
+        'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(dirname(__DIR__).'/resources/cache/media/q/images')
+        //'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(publicPath() . '/cached/media/q/images')
     ]
 ];

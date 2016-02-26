@@ -1,0 +1,14 @@
+.gravity-select {
+  height: 40px;
+  width: 40px;
+  @include clearfix();
+  > * {
+    width: 33.3333%;
+    height: 33.3333%;
+    border: 1px solid #000;
+    float: left;
+    &.active {
+      background: green;
+    }
+  }
+}

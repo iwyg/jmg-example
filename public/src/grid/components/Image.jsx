@@ -3,11 +3,11 @@ import loaded from 'image-loaded';
 
 export default class Figure extends React.Component {
   render() {
-    let {src, ...props} = this.props;
+    let {src, style, ref, ...props} = this.props;
     return (
-      <figure>
+      <figure style={style} ref={ref}>
         <Image src={src} {...props} />
-        <figcaption></figcaption>
+        <figcaption>{this.props.children}</figcaption>
       </figure>
     );
   }
@@ -76,8 +76,14 @@ export class Image extends React.Component {
 
 Figure.propTypes = {
   src: PropTypes.string.isRequired,
+  style: PropTypes.object,
   width: PropTypes.number,
-  height: PropTypes.number
+  height: PropTypes.number,
+  ref: PropTypes.string
+};
+
+Figure.defaultProps = {
+  style: {},
 };
 
 Image.propTypes = {

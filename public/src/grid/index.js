@@ -1,15 +1,18 @@
+require('styles/grid');
+
 import "babel-polyfill";
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider, connect} from 'react-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import {createStore, applyMiddleware} from 'redux';
-import rootReducer from './modules/reducer';
-import Layout from './components/Layout.jsx';
-import {DEFAULT_STATE} from './modules/state';
-import {selectOuery} from './modules/actions';
+import Layout from 'grid/components/Layout';
+import {DEFAULT_STATE} from 'grid/modules/state';
+import {selectOuery} from 'grid/modules/actions';
+import rootReducer from 'grid/modules/reducer';
+import 'modernizr';
+
 
 const configureStore = (initialState) => {
   const logger = createLogger();
@@ -18,9 +21,6 @@ const configureStore = (initialState) => {
 
 const store = configureStore();
 
-
-
-injectTapEventPlugin();
 
 const mapStateToProps = function (state) {
   console.log(state);

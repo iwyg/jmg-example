@@ -36,9 +36,10 @@ export const fetchUrl = (state = defaultUrl, action) => {
 export const fetching  = (state = false, action) => {
   switch (action.type) {
     case FETCH_RESULT_REQUEST:
-        console.log(FETCH_RESULT_REQUEST);
         let {fetching} = action.payload;
         return fetching;
+    case FETCH_RESULT_SUCCESS:
+        return false;
   }
 
   return state;
@@ -49,7 +50,6 @@ export const images  = (state = [], action) => {
     case FETCH_RESULT_ERROR:
         return state;
     case FETCH_RESULT_SUCCESS:
-        console.log(FETCH_RESULT_SUCCESS);
         let {images} = action.payload;
         return images;
   }

@@ -1,18 +1,19 @@
 {
   "name": "jmg-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "example application.",
   "main": "public/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development webpack -w -d"
+    "start": "NODE_ENV=development webpack -w -d",
+    "build": "NODE_ENV=production webpack -p"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iwyg/jmg-example.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Thomas Appel. <mail@thomas-appel.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/iwyg/jmg-example/issues"
   },
@@ -21,9 +22,12 @@
     "autoprefixer": "^6.3.3",
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.3",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-plugin-transform-dev-warning": "^0.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-1": "^6.5.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
@@ -34,21 +38,34 @@
     "precss": "^1.4.0",
     "redux-devtools": "^3.1.1",
     "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "toolbox-loader": "0.0.3",
     "webpack": "^1.12.13"
   },
   "dependencies": {
+    "babel-plugin-transform-runtime": "^6.5.2",
     "babel-polyfill": "^6.5.0",
+    "breakpoint-sass": "^2.7.0",
     "image-loaded": "0.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "material-ui": "^0.14.4",
+    "lodash.debounce": "^4.0.3",
+    "lodash.zipobject": "^4.1.2",
     "modernizr": "^3.3.1",
+    "node-reset-scss": "^1.0.1",
+    "normalize-scss": "^4.0.3",
+    "normalize.css": "^3.0.3",
     "query-string": "^3.0.0",
     "react": "^0.14.7",
+    "react-addons-css-transition-group": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-masonry-component": "^4.0.0",
+    "react-proxy-loader": "^0.3.4",
     "react-redux": "^4.4.0",
     "react-tap-event-plugin": "^0.2.2",
+    "react-toolbox": "^0.14.1",
     "redux": "^3.3.1",
     "redux-logger": "^2.6.0",
-    "redux-thunk": "^1.0.3"
+    "redux-thunk": "^1.0.3",
+    "susy": "^2.2.12"
   }
 }

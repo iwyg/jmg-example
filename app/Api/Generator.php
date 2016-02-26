@@ -120,7 +120,7 @@ class Generator
      * @param string $recipe
      * @param bool $asQuery
      *
-     * @return void
+     * @return array
      */
     private function getParsed(
         ResourceInterface $resource,

@@ -1,4 +1,7 @@
 <?php $view->extend('main.php')?>
+<?php $view->section('head')?>
+    <link href="/dist/css/grid.css" rel="stylesheet"/>
+<?php $view->endsection() ?>
 <?php $view->section('content')?>
 <?php $view->endsection() ?>
 

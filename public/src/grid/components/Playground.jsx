@@ -9,8 +9,16 @@ export class Playground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: null
+      image: null,
+      mode: null,
     }
+
+    this.onModeChange = this.onModeChange.bind(this);
+  }
+
+  onModeChange(mode) {
+    this.setState({mode: mode});
+    console.log('mode changed', mode);
   }
 
   componentWillUpdate(nextProps) {
@@ -23,7 +31,12 @@ export class Playground extends React.Component {
     dispatch(getImage(fetchImage.uri()));
   }
 
+  componentWillMount() {
+    this.setState({mode: this.props.mode || 0});
+  }
+
   render() {
+    let {mode} = this.state;
     let {className} = this.props;
     let preview = null;
 
@@ -38,11 +51,11 @@ export class Playground extends React.Component {
       <div className={className}>
         <div className='settings'>
           <section className='mode-select'>
-            <ModeSelect />
+            <ModeSelect onChange={this.onModeChange} mode={mode}/>
           </section>
           <section className='value-select'>
             <ValueSelect
-              mode={2} maxW={1400} maxH={1400}
+              mode={this.state.mode || 0} maxW={1400} maxH={1400}
               minW={100} minH={100}
               minPx={1000} maxPx={1000000}
             />
@@ -55,7 +68,8 @@ export class Playground extends React.Component {
 }
 
 Playground.propTypes = {
-  image: PropTypes.object
+  image: PropTypes.object,
+  mode: PropTypes.number.isRequired
 };
 
 const mapStateToProps = function (state) {

@@ -30,4 +30,23 @@
   }
 }
 
+.mode-group-item {
+  @include clearfix;
+  .icon, .label {
+    height: 100%;
+    padding: 0.4rem;
+    float: left;
+  }
+
+  .icon {
+    width: auto;
+    path {
+      fill: #BDBDBD;
+    }
+  }
+
+  .label {
+  }
+}
+
 @import "gravity-select";

@@ -30,7 +30,7 @@ export default class ModeSelect extends React.Component {
 
     this.modes = Object.keys(ModeMap).map((k) => {
       return {
-        value: parseInt(k),
+        value: k,
         name: ModeMap[k]
       };
     });
@@ -48,7 +48,7 @@ export default class ModeSelect extends React.Component {
   }
 
   onChange(mode) {
-    this.setState({selected: mode});
+    this.setState({selected: parseInt(mode)});
   }
 
   componentDidUpdate() {
@@ -56,10 +56,14 @@ export default class ModeSelect extends React.Component {
     onChange && onChange(this.state.selected);
   }
 
+  componentWillMount() {
+    this.setState({selected: this.props.mode});
+  }
+
   item(item) {
     const getIcon = (mode) => {
-      console.log(mode)
-      switch (mode) {
+      let m = parseInt(mode);
+      switch (m) {
         case 1:
         return (<IconResize/>);
         case 2:
@@ -78,7 +82,7 @@ export default class ModeSelect extends React.Component {
     };
 
     return (
-      <div>
+      <div className="mode-group-item">
         <div className="icon">{getIcon(item.value)}</div>
         <div className="label">{item.name}</div>
       </div>
@@ -87,8 +91,8 @@ export default class ModeSelect extends React.Component {
 
   render() {
     return (
-      <Dropdown auto={false} onChange={this.onChange} source={this.modes}
-        template={this.item} value={this.state.selected}
+      <Dropdown className="mode-group" auto={false} onChange={this.onChange} source={this.modes}
+        template={this.item} value={this.state.selected.toString()}
       >
       </Dropdown>
     );

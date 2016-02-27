@@ -7,32 +7,6 @@ import Figure from './Image';
 
 const RESIZE = 'resize';
 
-/* render helper for grid children */
-const renderFigure = (props, keys = [], ref = 'figure') => {
-  let {images, ...rest} = props;
-  return images.map((image, key) => {
-    return (
-      <GridItem image={image} key={key} ref={ref+key} keys={keys} {...rest} />
-    );
-  });
-};
-
-/* Wrapper component for the figure elements */
-class GridItem extends React.Component {
-  render() {
-    let {image, ref, key, keys, ...rest} = this.props;
-    return (
-        <div className="grid-item">
-          <Figure src={image.uri} ref={ref + key} width={image.width} height={image.height} {...rest}>
-          <div>
-            {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
-          </div>
-        </Figure>
-        </div>
-    );
-  }
-}
-
 /* The image grid in all its glory */
 export default class Grid extends React.Component {
   constructor(props) {
@@ -45,18 +19,33 @@ export default class Grid extends React.Component {
 
     this.domNode = null;
     this.masonry = null;
+    this.figures = [];
 
     this.onResize = debounce(this.updateMaxWidth.bind(this), 300);
     this.bindMasonry = this.bindMasonry.bind(this);
+    this.bindRefs = this.bindRefs.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  // handles click events grid items
+  handleClick() {
+    let {onClick} = this.props;
+    onClick && onClick.apply(null, arguments);
   }
 
   bindMasonry(ref) {
     this.masonry = ref.masonry;
   }
 
+  bindRefs(item) {
+    this.figures.push(item.refs.figure);
+  }
+
   updateMaxWidth() {
+    let baseRef = this.refs['figure0'] || false;
+    let ref = (baseRef && baseRef.refs) ? baseRef.refs.figure : (baseRef || false);
     let cwidth = this.domNode.clientWidth;
-    let fwidth = !this.refs['figure0'] ? cwidth : ReactDOM.findDOMNode(this.refs.figure0).clientWidth;
+    let fwidth = !ref ? cwidth : ReactDOM.findDOMNode(ref).clientWidth;
     let resizeCallback = this.props.onResize;
 
     this.setState({maxWidth: fwidth});
@@ -69,6 +58,8 @@ export default class Grid extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
+    this.figures = [];
+
     if (!this.state.loaded && nextProps.images.length !== this.props.images.length)  {
       this.setState({loaded: true});
     }
@@ -103,8 +94,8 @@ export default class Grid extends React.Component {
   // render empty ref for max width calculation
   renderEmpty() {
     return (
-      <div className="grid">
-        <div className="grid-item" ref="figure0"/>
+      <div className='grid'>
+        <div className='grid-item' ref='figure0'></div>
       </div>
     );
   }
@@ -114,13 +105,49 @@ export default class Grid extends React.Component {
       return this.renderEmpty();
     }
 
-    //let keys = ['name', 'width', 'height', 'type', 'uri']
-    let {masonry, captionKeys} = this.props;
+    let {masonry, captionKeys, images, ...rest} = this.props;
+    let refStr = 'figure'
 
     return (
-      <Masonry className="grid" ref={this.bindMasonry} options={masonry}>
-        {renderFigure(this.props, captionKeys, 'figure')}
-      </Masonry>
+      <Masonry className='grid' options={masonry} ref={this.bindMasonry}>{
+        images.map((image, key) => {
+          return (
+            <GridItem
+              ref={refStr + key} refPrefix={refStr} image={image}
+              key={key} index={key} keys={captionKeys} {...rest}
+            >
+            </GridItem>
+          );
+        })
+      }</Masonry>
+    );
+  }
+}
+
+/* Wrapper component for the figure elements */
+class GridItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick  = this.handleClick.bind(this);
+
+  }
+
+  handleClick() {
+    let {onClick, image} = this.props;
+    onClick && onClick(image, this.refs.figure);
+  }
+
+  render() {
+    let {image, refPrefix, index, keys, ...rest} = this.props;
+    return (
+        <div className="grid-item" onClick={this.handleClick}>
+          <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
+          <div>
+            {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
+          </div>
+          {this.props.children}
+        </Figure>
+        </div>
     );
   }
 }
@@ -143,4 +170,17 @@ Grid.defaultProps = {
     transitionDuration: '0.4s',
   },
   captionKeys: ['width', 'height']
+};
+
+GridItem.propTypes = {
+  image: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  keys: PropTypes.array,
+  refPrefix: PropTypes.string,
+  ref: PropTypes.string,
+  onClick: PropTypes.func
+};
+
+GridItem.defaultProps = {
+  onClick: null
 };

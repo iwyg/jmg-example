@@ -1,4 +1,6 @@
 @import "normalize";
+@import "mixins";
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -13,4 +15,13 @@ html, body {
 
 img {
   display: block;
+}
+
+.inbox {
+  @include inbox();
+}
+
+.container {
+  width: 100%;
+  max-width: 2400px;
 }

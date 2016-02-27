@@ -23,7 +23,6 @@ const store = configureStore();
 
 
 const mapStateToProps = function (state) {
-  console.log(state);
   const {fetchUrl, fetching, images} = state;
 
   return {

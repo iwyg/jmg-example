@@ -1,0 +1,33 @@
+@import "mixins";
+
+.playground {
+  @include inbox;
+  @include clearfix;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 0;
+}
+
+.settings {
+  float: left;
+  width: 30%;
+}
+
+.preview {
+  float: left;
+  width: 70%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+  img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+  }
+}
+
+@import "gravity-select";

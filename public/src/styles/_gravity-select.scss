@@ -1,14 +1,37 @@
+@import "mixins";
+
+$border-color: #EEEEEE;
+$border-size: 2px;
+$fill-color: $border-color;
+
 .gravity-select {
-  height: 40px;
-  width: 40px;
+
+  @include inbox(100px);
   @include clearfix();
   > * {
-    width: 33.3333%;
-    height: 33.3333%;
-    border: 1px solid #000;
+    @include inbox(33.3333339%);
+    cursor: pointer;
+    background-color: inherit;
     float: left;
-    &.active {
-      background: green;
+    transition: background-color .4s;
+    &.selected, &:hover {
+      background-color: rgba($fill-color, 1);
     }
+  }
+
+  .top {
+    border-bottom: $border-size solid $border-color;
+  }
+
+  .bottom {
+    border-top: $border-size solid $border-color;
+  }
+
+  .left {
+    border-right: $border-size solid $border-color;
+  }
+
+  .right {
+    border-left: $border-size solid $border-color;
   }
 }

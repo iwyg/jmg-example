@@ -5,3 +5,12 @@
     clear: both;
   }
 }
+
+@mixin inbox($value: 100%) {
+  height: $value;
+  width: $value;
+}
+
+@mixin transition($type: all, $time: 0.5s, $easing: 'easeInOut') {
+  transition: $type $time $easing;
+}

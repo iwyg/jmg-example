@@ -30,7 +30,6 @@ export class Image extends React.Component {
   }
 
   onLoad(err, wasLoaded) {
-    console.log('load callback', wasLoaded);
     if (err !== null) {
       this.onError(err);
       return;
@@ -40,7 +39,7 @@ export class Image extends React.Component {
   }
 
   onError(err) {
-    console.log(err);
+    new Error(err);
   }
 
   load() {

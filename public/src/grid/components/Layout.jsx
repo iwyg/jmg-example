@@ -1,18 +1,8 @@
 import React, {PropTypes} from 'react';
-import {fetchImages, selectOuery} from 'grid/modules/actions';
+import {fetchImages, selectOuery, selectImage} from 'grid/modules/actions';
 import MODES from 'grid/modules/modes';
-import Toolbar, {ToolGroup, ValueSelect} from './Toolbar';
 import Grid from './Grid';
-
-const ModeMap = {
-  [MODES.IM_NOSCALE]: 'pass through',
-  [MODES.IM_RESIZE]: 'resize',
-  [MODES.IM_SCALECROP]: 'scale an crop',
-  [MODES.IM_CROP]: 'crop',
-  [MODES.IM_RSIZEFIT]: 'best fit',
-  [MODES.IM_RSIZEPERCENT]: 'scale',
-  [MODES.IM_RSIZEPXCOUNT]: 'max pixel'
-};
+import Playground from './Playground';
 
 class LoadingBar extends React.Component {
   render() {
@@ -29,6 +19,7 @@ class Select extends React.Component {
       value: null
     };
   }
+
   componentDidUpdate(prevProps, prevState) {
 
     if (prevState.value === this.state.value) {
@@ -70,45 +61,6 @@ Select.propTypes = {
   disabled: PropTypes.bool,
 };
 
-class ModeSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.modes = Object.keys(MODES);
-    this.state = {
-      selected: null
-    };
-
-    this.onChange = this.onChange.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextState);
-    return nextState.selected !== this.state.selected;
-  }
-
-  onChange(event) {
-    let value = parseInt(event.target.value);
-    this.setState({selected: value});
-  }
-
-  render() {
-    return (
-      <select onChange={this.onChange} disabled={this.props.disabled}>
-        {this.modes.map((k, i) => {
-          return (<option key= {i} value={MODES[k]}>{ModeMap[MODES[k]]}</option>);
-        })}
-      </select>
-    );
-  }
-}
-
-ModeSelect.propTypes = {
-  disabled: PropTypes.bool.isRequired
-};
-
-ModeSelect.defaultProps = {
-  disabled: false
-};
 
 Select.defaultProps = {
   disabled: false
@@ -121,6 +73,7 @@ export default class Layout extends React.Component {
     super(props);
     this.updateQueryFromSelect = this.updateQueryFromSelect.bind(this);
     this.updateQueryFromResize = this.updateQueryFromResize.bind(this);
+    this.handleImageSelect = this.handleImageSelect.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -128,6 +81,7 @@ export default class Layout extends React.Component {
     if (this.props.fetching) {
       return;
     }
+
     if (typeof nextProps.fetchUrl.uri !== 'function') {
       return;
     }
@@ -161,6 +115,13 @@ export default class Layout extends React.Component {
     dispatch(selectOuery(query));
   }
 
+  handleImageSelect(meta, figure) {
+    let {name} = meta;
+
+    console.log(name);
+    this.props.dispatch(selectImage(name));
+  }
+
   updateQueryFromSelect(value) {
     let q = {}
     this.props.dispatch(selectOuery(q));
@@ -168,17 +129,11 @@ export default class Layout extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <Toolbar>
-          <ToolGroup>
-            <ValueSelect mode={2} />
-          </ToolGroup>
-        </Toolbar>
-        <Grid
-          images={this.props.images}
-          onResize={this.updateQueryFromResize}
-          captionKeys={['width', 'height', 'name', 'type', 'uri', 'hash']}
-          />
+      <div className='layout-container'>
+        <Playground className='playground'/>
+        <Grid images={this.props.images} onResize={this.updateQueryFromResize}
+          onClick={this.handleImageSelect} captionKeys={['width', 'height', 'name', 'type', 'uri', 'hash']}
+        />
       </div>
     );
   }
@@ -192,5 +147,5 @@ Layout.propTypes = {
 };
 
 Layout.defaultProps = {
-  limitImages: 20
+  limitImages: 30
 };

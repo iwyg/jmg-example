@@ -50,6 +50,10 @@ export const requiredParams = (mode) => {
   }
 };
 
+export const validateGravity = (gravity) => {
+  return gravity > 0 && 10 > gravity;
+}
+
 /**
  * parseValues
  *
@@ -59,7 +63,7 @@ export const requiredParams = (mode) => {
  */
 export const parseValues = (mode, value = {}) => {
   let decoder = requiredParams(mode);
-  return zipObject(Object.keys(value), Object.keys(decoder).map(function (key){
+  return zipObject(Object.keys(value), Object.keys(decoder).map((key) => {
     return decoder[key](value[key]);
   }));
 };

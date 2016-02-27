@@ -38,6 +38,7 @@ module.exports = {
       path.resolve(__dirname, './node_modules'),
       path.resolve(__dirname, './public/src'),
       path.resolve(__dirname, './public/src/scss'),
+      path.resolve(__dirname, './public/src/icons'),
       path.resolve(__dirname, './public/src/modules'),
       path.resolve(__dirname, './public/src/runtime'),
       path.resolve(__dirname, './public/src/components'),
@@ -45,6 +46,10 @@ module.exports = {
   },
   module: {
     loaders:[
+      // svg icons n stuff
+      { test: /\.svg$/,
+        loader: 'babel!svg-react?reactDOM=react'
+      },
       // simply parse global styles
       {
         test: /public\/src\/.*?\.(.css|.scss)$/,

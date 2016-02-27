@@ -1,25 +1,19 @@
 @import "base";
 @import "test";
-@import "mixins";
 @import "breakpoint";
+@import "media";
 
-$q-small: 400px;
-$q-medium: 800px;
-$q-big: 1400px;
-
-.container {
-  width: 100%;
-  max-width: 2400px;
-}
-
-.inbox {
-  height: 100%;
-  width: 100%;
-}
-
-$figpadding: .5rem;
+$figpadding: .1rem;
 @mixin figboarder {
   padding: $figpadding;
+}
+
+#main {
+  height: 100%;
+}
+
+.layout-container {
+  height: 100%;
 }
 
 .grid {
@@ -28,10 +22,12 @@ $figpadding: .5rem;
   @include clearfix();
 
   .grid-item {
+    width: 100%;
+
     color: #fff;
     float: left;
-    width: 100%;
     @include figboarder;
+
     @include breakpoint($q-small) {
       width: 50%;
     }
@@ -99,4 +95,4 @@ $figpadding: .5rem;
   }
 }
 
-@import "_gravity-select.scss";
+@import "playground";

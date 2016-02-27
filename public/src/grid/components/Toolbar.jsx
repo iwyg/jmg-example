@@ -1,29 +1,7 @@
-import React, {PropTypes} from 'react';
-import Slider from 'react-toolbox/lib/slider';
-import MODES from 'grid/modules/modes';
-import GravitySelect from './select/GravitySelect';
-
-
-export const SelectGroup = ({children}) => {
-  return (<div className="select-group">{children}</div>);
-}
-
 export const ToolGroup = ({children}) => {
   return (<div className="tool-group">{children}</div>);
 }
 
-const getInitialModes = () => {
-  let modes = {};
-  modes[MODES.IM_NOSCALE] = {width: null, height: null};
-  modes[MODES.IM_RESIZE] = {width: null, height: null};
-  modes[MODES.IM_SCALECROP] = {width: null, height: null, gravity: 5};
-  modes[MODES.IM_CROP] = {width: null, height: null, gravity: 5};
-  modes[MODES.IM_RSIZEFIT] = {width: null, height: null};
-  modes[MODES.IM_RSIZEPERCENT] = {width: null};
-  modes[MODES.IM_RSIZEPXCOUNT] = {width: null};
-
-  return modes;
-};
 
 
 export class ValueSelect extends React.Component {

@@ -25,6 +25,7 @@ class Generator
     private $recipes;
     private $url;
     private $cachePrefix;
+
     public function __construct(ImageResolverInterface $resolver, RecipeResolverInterface $rec, Url $url, $cpfx)
     {
         $this->resolver = $resolver;
@@ -143,7 +144,8 @@ class Generator
             'height' => $resource->getHeight(),
             'width'  => $resource->getWidth(),
             'type'   => $resource->getMimeType(),
-            'hash'   => $resource->getHash()
+            'hash'   => $resource->getHash(),
+            'color'   => $resource->getColorSpace()
         ];
     }
 

@@ -132,7 +132,7 @@ export default class Layout extends React.Component {
       <div className='layout-container'>
         <Playground className='playground' mode={0}/>
         <Grid images={this.props.images} onResize={this.updateQueryFromResize}
-          onClick={this.handleImageSelect} captionKeys={['width', 'height', 'name', 'type', 'uri', 'hash']}
+          onClick={this.handleImageSelect} captionKeys={['width', 'height', 'name', 'type', 'uri', 'hash', 'color']}
         />
       </div>
     );

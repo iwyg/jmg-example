@@ -10,6 +10,14 @@ const MODES = {
   IM_RSIZEPXCOUNT: 6
 };
 
+export default MODES;
+
+export const ModeNames = zipObject(Object.values(MODES), Object.keys(MODES));
+
+export const getModeName = (mode) => {
+  return ModeNames[mode] || new Error('Undefined mode.');
+};
+
 const parseGravity = (value) => {
     return Math.min(9, Math.max(0, parseInt(value)));
 };
@@ -20,7 +28,15 @@ const parseResize = {
 };
 
 const parseCrop = Object.assign({}, parseResize, {
-  gravity: parseGravity
+  gravity: parseGravity,
+  width: parseInt,
+  height: parseInt,
+  background: (v) => {return v.toString();}
+});
+const parseCropResize = Object.assign({}, parseResize, {
+  gravity: parseGravity,
+  width: parseInt,
+  height: parseInt
 });
 
 const parsePerc = {
@@ -38,7 +54,7 @@ export const requiredParams = (mode) => {
     case MODES.IM_RESIZE:
         return parseResize;
     case MODES.IM_SCALECROP:
-        return parseCrop;
+        return parseCropResize;
     case MODES.IM_CROP:
         return parseCrop;
     case MODES.IM_RSIZEFIT:
@@ -52,7 +68,45 @@ export const requiredParams = (mode) => {
 
 export const validateGravity = (gravity) => {
   return gravity > 0 && 10 > gravity;
+};
+
+const notZero = (parsed) => {
+  if (parsed.width < 1 || parsed.height < 1) {
+    throw new Error('Values can\'t be zero.');
+  }
 }
+
+export const validate = (mode, values = {}) => {
+  let parsed = parseValues(mode, values);
+  switch (mode) {
+    case MODES.IM_RESIZE:
+      if (Math.max(0, parsed.width, parsed.height) < 1) {
+        throw new Error('Both, width and height can\'t be zero.');
+      }
+      break;
+    case MODES.IM_CROP:
+    case MODES.IM_SCALECROP:
+      if (!validateGravity(parsed.gravity)) {
+        throw new Error('Invalid gravity');
+      }
+      notZero(parsed);
+      break;
+    case MODES.IM_RSIZEFIT:
+      notZero(parsed);
+      break;
+    case MODES.IM_RSIZEPERCENT:
+      if (parsed.width === 0) {
+        throw new Error('Invalid scale.');
+      }
+      break;
+    case MODES.IM_RSIZEPXCOUNT:
+      if (parsed.width < 1) {
+        throw new Error('Invalid pixel count.');
+      }
+      break;
+  }
+  return parsed;
+};
 
 /**
  * parseValues
@@ -79,4 +133,6 @@ export const initial = (mode) => {
   return Object.freeze(zipObject(keys, keys.map(() => null)));
 };
 
-export default MODES;
+export const helper = {
+  initial, parseValues, validate, validateGravity
+};

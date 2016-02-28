@@ -18,5 +18,13 @@ return [
     'jmg.caches' => [
         'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(dirname(__DIR__).'/resources/cache/media/q/images')
         //'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(publicPath() . '/cached/media/q/images')
+    ],
+    'jmg.mode_constraints' => [
+         1   => [2000, 2000],  // max width and height 2000px
+         2   => [2000, 2000],  // max width and height 2000px
+         3   => [2000, 2000],  // max width and height 2000px
+         4   => [2000, 2000],  // max width and height 2000px
+         5   => [200],         // max scaling 200%
+         6   => [4000000],     // max pixel count 4000000
     ]
 ];

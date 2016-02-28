@@ -25,6 +25,15 @@ export default class GravitySelect extends React.Component {
     this.setState({selected: this.props.selected});
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.selected === this.state.selected) {
+      return;
+    }
+
+    let {onChange} = nextProps;
+    onChange && onChange(nextState.selected);
+  }
+
   onSelect(selected, props) {
     this.setState({selected: selected});
   }
@@ -41,7 +50,8 @@ export default class GravitySelect extends React.Component {
             onClick={this.onSelect.bind(this, k, this.props)}
             key={i}
             className={GRAVITY[key]}
-          />
+          >
+          </GravitySelectItem>
         );
         })}
       </div>
@@ -50,7 +60,8 @@ export default class GravitySelect extends React.Component {
 }
 
 GravitySelect.propTypes = {
-  selected: PropTypes.number.isRequired
+  selected: PropTypes.number.isRequired,
+  onChange: PropTypes.func
 };
 
 GravitySelect.defaultProps = {
@@ -58,14 +69,23 @@ GravitySelect.defaultProps = {
 };
 
 class GravitySelectItem extends React.Component {
-  onClick(fn) {
-    fn(this.value);
+  constructor(props) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+
   }
+
+  onClick() {
+    let {onClick, value} = this.props;
+    onClick && onClick(value);
+  }
+
   render() {
     let cn = this.props.className || '';
     let className = this.props.selected ?  cn  + " " + this.props.activeClass : cn;
     return (
-      <div className={className.trim()} onClick={this.onClick.bind(this, this.props.onClick)}></div>
+      <div className={className.trim()} onClick={this.onClick}></div>
     );
   }
 }

@@ -1,13 +1,13 @@
 import React, {PropTypes} from 'react';
 import Dropdown from 'react-toolbox/lib/dropdown';
 import MODES from 'grid/modules/modes';
-import IconResize from 'icons/resize-10.svg';
-import IconPass from 'icons/fullscreen-12.svg';
-import IconScaleCrop from 'icons/crop-3.svg';
-import IconCrop from 'icons/crop-1.svg';
-import IconScale from 'icons/fullscreen-11.svg';
-import IconFit from 'icons/resize-9.svg';
-import IconPx from 'icons/resize-9.svg';
+import IconResize from 'icons/ic_photo_size_select_large_black_48px.svg';
+import IconPass from 'icons/ic_photo_size_select_actual_black_48px.svg';
+import IconScaleCrop from 'icons/ic_transform_black_48px.svg';
+import IconCrop from 'icons/ic_crop_black_48px.svg';
+import IconScale from 'icons/ic_image_aspect_ratio_black_48px.svg';
+import IconFit from 'icons/ic_photo_size_select_large_black_48px.svg';
+import IconPx from 'icons/ic_view_comfy_black_48px.svg';
 
 const ModeMap = {
   [MODES.IM_NOSCALE]: 'pass through',

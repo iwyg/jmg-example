@@ -1,0 +1,7 @@
+$gray_neutral: rgba(127, 127, 127, 1);
+
+$gray_darker: darken($gray_neutral, 10);
+$gray_dark: darken($gray_neutral, 20);
+
+$gray_lighter: lighten($gray_neutral, 10);
+$gray_light: lighten($gray_neutral, 20);

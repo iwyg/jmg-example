@@ -1,5 +1,14 @@
 @import "normalize";
 @import "mixins";
+@import "font_roboto_regular";
+@import "font_roboto_light";
+@import "font_roboto_thin";
+@import "colors";
+
+html, body {
+  font-family: 'robotolight', sans-serif;
+  font-weight: normal;
+}
 
 *, *:before, *:after {
   box-sizing: border-box;
@@ -15,6 +24,10 @@ html, body {
 
 img {
   display: block;
+}
+
+ul {
+  padding: 0;
 }
 
 .inbox {

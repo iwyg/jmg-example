@@ -44,6 +44,9 @@ $container['jmg.image_resolver'] = $container->share(function () use ($container
     $paths = $container->get('jmg.path_resolver');
     $loaderResolver = $container['jmg.loader_resolver'];
     $cacheResolver = $container['jmg.cache_resolver'];
+    $validator = new Thapp\Jmg\Validator\ModeConstraints(
+        $container['config']['jmg.mode_constraints']
+    );
 
     foreach ($container['config']['jmg.loaders'] as $alias => $loader) {
         $loaderResolver->add($alias, $loader);
@@ -53,7 +56,8 @@ $container['jmg.image_resolver'] = $container->share(function () use ($container
         $container['jmg.proc'],
         $paths,
         $loaderResolver,
-        $cacheResolver
+        $cacheResolver,
+        $validator
     );
 
 });

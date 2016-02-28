@@ -1,11 +1,12 @@
 @import "mixins";
 
-$border-color: #BDBDBD;
+$border-color: #fff;
 $border-size: 2px;
 $fill-color: $border-color;
 
 .gravity-select {
 
+  background: #bdbdbd;
   @include inbox(100px);
   @include clearfix();
   > * {

@@ -26,9 +26,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.jsx', '.js', '.scss', '.json'],
-    //root: [
-    //  path.resolve('./node_modules')
-    //],
+    root: [
+      path.resolve('./node_modules')
+    ],
     alias: {
       modernizr$: path.resolve(__dirname, srcDir + '/modernizr.json')
     },
@@ -39,6 +39,7 @@ module.exports = {
       path.resolve(__dirname, './public/src'),
       path.resolve(__dirname, './public/src/scss'),
       path.resolve(__dirname, './public/src/icons'),
+      path.resolve(__dirname, './public/src/fonts'),
       path.resolve(__dirname, './public/src/modules'),
       path.resolve(__dirname, './public/src/runtime'),
       path.resolve(__dirname, './public/src/components'),
@@ -46,6 +47,15 @@ module.exports = {
   },
   module: {
     loaders:[
+      //// fonts
+      {
+        test   : /fonts?\/.*\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        loader : 'file-loader?name=../dist/[path][name].[ext]'
+      },
+      //{
+      //  test   : /fonts?\/.*\.(ttf|eot|svg|woff(2))(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      //  loader : 'file-loader?name=/dist/[path][name].[ext]'
+      //},
       // svg icons n stuff
       { test: /\.svg$/,
         loader: 'babel!svg-react?reactDOM=react'
@@ -61,6 +71,7 @@ module.exports = {
           +'?includePaths[]=node_modules/normalize.css'
           +'&includePaths[]=node_modules/breakpoint-sass/stylesheets'
           +'&includePaths[]=node_modules/susy/sass'
+          +'&includePaths[]=src/fonts'
         )
       },
       // namespaced styles
@@ -83,7 +94,7 @@ module.exports = {
         query: {
           cacheDirectory: true,
           sourceMap: true,
-          presets: ['react', 'es2015'],
+          presets: ['react', 'es2015', 'stage-0'],
           //plugins: ['transform-object-rest-spread', 'transform-runtime'],
           plugins: ['transform-object-rest-spread'],
         }
@@ -127,5 +138,11 @@ module.exports = {
   ],
   devtool: [
     'source-map'
-  ]
+  ],
+
+  devServer: {
+  contentBase: 'dist/',
+    hot: true,
+    inline: true
+  }
 };

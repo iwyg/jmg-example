@@ -1,82 +1,115 @@
 import React, {PropTypes} from 'react';
 import debounce from 'lodash.debounce';
-import MODES from 'grid/modules/modes';
+import MODES, {ModeNames, helper} from 'grid/modules/modes';
 import SelectGroup from './SelectGroup';
+import ColorSelect from './ColorSelect';
 import {EditCrop, EditResize, EditResizeScale} from './EditGroups';
 
-const getInitialModes = () => {
+const getInitialModes = (minW, minH, minPx, minScale) => {
   let modes = {};
-  modes[MODES.IM_NOSCALE] = {width: null, height: null};
-  modes[MODES.IM_RESIZE] = {width: null, height: null};
-  modes[MODES.IM_SCALECROP] = {width: null, height: null, gravity: 5};
-  modes[MODES.IM_CROP] = {width: null, height: null, gravity: 5};
-  modes[MODES.IM_RSIZEFIT] = {width: null, height: null};
-  modes[MODES.IM_RSIZEPERCENT] = {width: null};
-  modes[MODES.IM_RSIZEPXCOUNT] = {width: null};
+  modes[MODES.IM_NOSCALE] = {};
+  modes[MODES.IM_RESIZE] = {width: 0, height: 0};
+  modes[MODES.IM_SCALECROP] = {width: minW, height: minH, gravity: 5};
+  modes[MODES.IM_CROP] = {width: minW, height: minH, gravity: 5, background: 'f7f7f7'};
+  modes[MODES.IM_RSIZEFIT] = {width: minW, height: minH};
+  modes[MODES.IM_RSIZEPERCENT] = {width: minScale};
+  modes[MODES.IM_RSIZEPXCOUNT] = {width: minPx};
 
   return modes;
 };
 
 export default class ValueSelect extends React.Component {
-  constructor(prop) {
-    super(prop);
+  constructor(props) {
+    super(props);
 
     this.state = {
-      modes: getInitialModes()
+      mode: null,
+      modes: getInitialModes(props.minW, props.minH, props.minPx, props.minScale)
     }
 
-    this.onChange = debounce((type, value, modeType) => {
-      console.log(type, value, modeType);
-    }, 100);
-
+    this.onChange = debounce(this.onValueChange.bind(this), 100);
+    this.onColorChange = debounce(this.onColorChange.bind(this), 100);
   }
 
-  getSliderValue(type, mode, value) {
-    let m = Object.assign({}, this.state.modes);
-    m[mode][type] = value;
-    this.setState({modes: m});
-    console.log(this.state);
+
+  onColorChange(color) {
+    this.onValueChange('background', color.hex, MODES.IM_CROP);
+  }
+
+  onValueChange(type, value, mode) {
+    let modes = Object.assign({}, this.state.modes);
+    modes[mode][type] = value;
+    modes[mode] = helper.validate(mode, modes[mode]);
+    this.setState({modes: modes, mode: mode});
+
+    let {onChange} = this.props;
+
+    onChange && onChange(modes[mode]);
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({mode: nextProps.mode});
+  }
+
+  componentWillMount() {
+    this.setState({mode: this.props.mode});
+  }
+
+  getMProp(type, mode = null) {
+    let m = mode || this.state.mode;
+    return this.state.modes[m][type];
+  }
+
+  getColorPicker(mode) {
+    if (mode !== MODES.IM_CROP) {
+      return;
+    }
+
+    return (
+      <ColorSelect hex={this.getMProp('background')} onChange={this.onColorChange} mode={this.props.color}/>
+    );
   }
 
   render() {
     let {mode, maxPx, minPx, ...props} = this.props;
-    let gravity = null;
-    switch (this.props.mode) {
-      case MODES.IM_NOSCALE:
-        return (
-          <SelectGroup>
-          </SelectGroup>
-        );
+    let m = this.state.mode;
+    switch (m) {
       case MODES.IM_RESIZE:
         return (
-          <EditResize {...props} type={MODES.IM_RESIZE} onChange={this.onChange} minW={0} minH={0}/>
+          <EditResize key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('width')}
+            {...props} type={m} onChange={this.onChange} minW={0} minH={0}
+          />
         );
       case MODES.IM_SCALECROP:
-        gravity = this.state.modes[MODES.IM_SCALECROP].gravity;
-        return (
-          <EditCrop gravity={gravity} {...props} type={MODES.IM_SCALECROP} onChange={this.onChange}/>
-        );
-
       case MODES.IM_CROP:
-        gravity = this.state.modes[MODES.IM_CROP].gravity;
         return (
-          <EditCrop gravity={gravity} {...props} type={MODES.IM_SCALECROP} onChange={this.onChange}/>
+            <EditCrop key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('height')}
+              gravity={this.getMProp('gravity')} {...props} type={m} onChange={this.onChange}>
+              {this.getColorPicker(m)}
+            </EditCrop>
         );
-
       case MODES.IM_RSIZEFIT:
         return (
-          <EditResize {...props} type={MODES.IM_RESIZE} onChange={this.onChange}/>
+          <EditResize key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('height')}
+            {...props} type={m} onChange={this.onChange}
+          />
         );
       case MODES.IM_RSIZEPERCENT:
         return (
-          <EditResizeScale maxW={1} minW={0.5} steps={0.1}/>
+          <EditResizeScale key={ModeNames[m]} start={this.getMProp('width')} maxW={this.props.maxScale}
+            minW={this.props.minScale} steps={10} type={m} onChange={this.onChange}
+          />
         );
       case MODES.IM_RSIZEPXCOUNT:
         return (
-          <EditResizeScale maxW={maxPx} minW={minPx} steps={100}/>
+          <EditResizeScale key={ModeNames[m]} start={this.getMProp('width') || parseInt(maxPx / 2)} maxW={maxPx} minW={minPx}
+            steps={100} type={m} onChange={this.onChange}
+          />
         );
+      case MODES.IM_NOSCALE:
       default:
-        return;
+        return null;
     };
   }
 };
@@ -88,10 +121,15 @@ ValueSelect.propTypes = {
   maxH: PropTypes.number.isRequired,
   minH: PropTypes.number.isRequired,
   maxPx: PropTypes.number.isRequired,
-  minPx: PropTypes.number.isRequired
+  minPx: PropTypes.number.isRequired,
+  maxScale: PropTypes.number.isRequired,
+  minScale: PropTypes.number.isRequired,
+  onChange: PropTypes.func,
+  color: PropTypes.string
 };
 
 ValueSelect.defaultProps = {
-  mode: MODES.IM_NOSCALE
+  mode: MODES.IM_NOSCALE,
+  color: null
 };
 

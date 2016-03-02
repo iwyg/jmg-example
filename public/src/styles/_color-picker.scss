@@ -1,0 +1,31 @@
+@import "mixins";
+
+$hm: 8;
+.color-preview {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-family: 'curier new', monospace;
+  width: 100%;
+  line-height: $hm * $base_font_size;
+  height: $hm * $base_font_size;
+}
+
+.channels {
+  padding: $base_font_size 0;
+}
+
+.channel {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.channel-name, .channel-value {
+  display: block;
+  line-height: 2 * $base_font_size;
+}
+
+.channel-select {
+  width: 100%;
+}

@@ -12,6 +12,7 @@ import {DEFAULT_STATE} from 'grid/modules/state';
 import {selectOuery} from 'grid/modules/actions';
 import rootReducer from 'grid/modules/reducer';
 import 'modernizr';
+import ObjectFit from 'object-fit';
 
 
 const configureStore = (initialState) => {
@@ -42,3 +43,10 @@ render(
   </Provider>,
   document.getElementById('main')
 );
+
+
+ObjectFit.polyfill({
+  selector: '.preview-image img',
+  fittype: 'contain',
+  disableCrossdomain: true
+});

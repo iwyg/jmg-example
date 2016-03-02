@@ -24,30 +24,63 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class RequestEvent extends Event
 {
+    /** @var Psr\Http\Message\ServerRequestInterface */
     private $request;
+
+    /** @var Psr\Http\Message\ResponseInterface */
     private $response;
 
+    /**
+     * Constructor.
+     *
+     * @param Request $request
+     * @param Response $response
+     */
     public function __construct(Request $request, Response $response = null)
     {
-        $this->request = $requst;
+        $this->request  = $request;
         $this->response = $response;
     }
 
+    /**
+     * Get the current Request
+     *
+     * @return Psr\Http\Message\ServerRequestInterface
+     */
     public function getRequest()
     {
         return $this->request;
     }
 
+    /**
+     * Get the current resopnse,
+     *
+     * @return Psr\Http\Message\ResponseInterface
+     */
     public function getResponse()
     {
         return $this->response;
     }
 
+    /**
+     * Set the current request.
+     *
+     * @param Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return void
+     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
     }
 
+    /**
+     * Set the current response
+     *
+     * @param Psr\Http\Message\ResponseInterface $resonse
+     *
+     * @return void
+     */
     public function setResponse(Response $resonse)
     {
         $this->response = $response;

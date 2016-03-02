@@ -4,11 +4,13 @@ import {Image} from './Image';
 import {selectImage, fetchImage as getImage} from 'grid/modules/actions';
 import ValueSelect from './select/ValueSelect';
 import ModeSelect from './select/ModeSelect';
+import {Button} from 'react-toolbox/lib/button';
 
 export class Playground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      select: false,
       image: null,
       mode: null,
       values: {}
@@ -17,6 +19,7 @@ export class Playground extends React.Component {
     this.onModeChange = this.onModeChange.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onApply = this.onApply.bind(this);
+    this.selectImage = this.selectImage.bind(this);
   }
 
   onApply() {
@@ -32,6 +35,10 @@ export class Playground extends React.Component {
     dispatch(selectImage(image.name, query));
   }
 
+  selectImage() {
+    this.setState({select: !this.state.select});
+  }
+
   onModeChange(mode) {
     this.setState({mode: mode});
   }
@@ -43,8 +50,11 @@ export class Playground extends React.Component {
   componentWillUpdate(nextProps) {
     let {dispatch, fetchImage} = nextProps;
 
+    if (this.props.image !== nextProps.image) {
+      this.setState({select: false});
+    }
+
     if (fetchImage.uri === this.props.fetchImage.uri) {
-      console.log('fooo');
       return;
     }
 
@@ -56,42 +66,75 @@ export class Playground extends React.Component {
     this.setState({mode: this.props.mode || 0});
   }
 
+  renderSettings(mode, image)
+  {
+    return (
+      <div className="panel">
+        <section className='mode-select'>
+          <label>Mode</label>
+          <ModeSelect onChange={this.onModeChange} mode={mode}/>
+        </section>
+        <section className='value-select'>
+          <label>Settings</label>
+          <ValueSelect
+            mode={mode || 0} maxW={1400} maxH={1400}
+            color={image.color}
+            minW={100} minH={100}
+            minPx={1000} maxPx={1000000}
+            minScale={10} maxScale={200}
+            onChange={this.onValueChange}
+          />
+        </section>
+        <section className='value-apply'>
+          <Button onClick={this.onApply}>Apply</Button>
+        </section>
+      </div>
+    );
+  }
+
+  renderPreview(image) {
+    let className = 'preview-image';
+    if (image === null) {
+      return (
+        <div className={className}>
+          <label>no image selected</label>
+        </div>
+      );
+    }
+
+    let {uri, ...props} = image;
+    let icl = image.width > image.height ? 'landscape' : 'portrait';
+
+    return (
+      <div className={className}>
+        <Image className={icl} src={uri} {...props}/>
+      </div>
+    );
+  }
+
   render() {
     let {mode} = this.state;
     let {className, image} = this.props;
-    let preview = null;
 
-    if (image !== null) {
-      let {uri, ...props} = image;
-      let icl = image.width > image.height ? 'landscape' : 'portrait';
-      preview = (<Image className={icl} src={uri} {...props}/>)
-    } else {
+    if (image === null) {
       className = (className +  ' empty').trim();
     }
+
+    let previewClass = this.state.select ? 'preview select' : 'preview';
+    let buttonClass = this.state.select ? 'abort select' : 'select';
 
     return (
       <div className={className}>
         <div className='settings'>
-          <section className='mode-select'>
-            <label>Select mode</label>
-            <ModeSelect onChange={this.onModeChange} mode={mode}/>
-          </section>
-          <section className='value-select'>
-            <label>Select values</label>
-            <ValueSelect
-              mode={this.state.mode || 0} maxW={1400} maxH={1400}
-              color={image ? image.color : null}
-              minW={100} minH={100}
-              minPx={1000} maxPx={1000000}
-              minScale={10} maxScale={200}
-              onChange={this.onValueChange}
-            />
-          </section>
-          <section className='value-apply'>
-            <button onClick={this.onApply}>Apply</button>
+          { image !== null ? this.renderSettings(mode, image) : null}
+          <section><label>select image</label>
+            <Button icon='+' className={buttonClass} floating={true} accent={true} onClick={this.selectImage}></Button>
           </section>
         </div>
-        <div className='preview'> {preview} </div>
+        <div className={previewClass}>
+          {this.renderPreview(image)}
+          {this.props.children}
+        </div>
       </div>
     );
   }

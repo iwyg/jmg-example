@@ -12,8 +12,8 @@ $container['ctrl.index'] = $container->share(function () use ($container) {
     return new App\Controller\IndexController($container['view']);
 });
 
-$container['ctrl.grid'] = $container->share(function () use ($container) {
-    return new App\Controller\GridController($container['view']);
+$container['ctrl.playground'] = $container->share(function () use ($container) {
+    return new App\Controller\PlaygroundController($container['view']);
 });
 
 $container['ctrl.api'] = $container->share(function () use ($container) {
@@ -42,16 +42,48 @@ $container['router.handler.mapped_types'] = $container->share(function () use ($
     ]);
 });
 
+$container['routes.cache_loader'] = $container->share(function () use ($container) {
+    $storePath = $container['config']['storage'].'/routing';
+    $storage = new Lucid\Mux\Cache\Storage\Filesystem($storePath);
+    return new Lucid\Mux\Cache\CacheLoader(
+        __DIR__.'/routes.php',
+        $storage,
+        $storePath,
+        true
+    );
+});
+
 
 $container['routes'] = null;
+$container['routes.builder'] = $container->share(function () use ($container) {
+    return new Lucid\Mux\RouteCollectionBuilder;
+
+});
+
+$container['routes.request_matcher'] = $container->share(function () use ($container) {
+    $mapDumper = new Lucid\Mux\Cache\Matcher\Dumper;
+    $storePath = $container['config']['storage'].'/routing';
+    $mapLoader = new Lucid\Mux\Cache\Matcher\MapLoader($mapDumper, $storePath);
+
+    return new Lucid\Mux\Cache\Matcher\FastMatcher($mapLoader);
+});
+
 $container['router'] = $container->share(function () use ($container) {
-    $loader = new PhpLoader(new Locator([__DIR__]));
-    $routes = $loader->loadRoutes('routes.php');
-    $container['routes'] = $routes;
+    $builder = $container['routes.builder'];
+    $loader = new PhpLoader($builder, $locator = new Locator([__DIR__, '/']));
+    $cacheLoader = $container['routes.cache_loader'];
+
+    //var_dump($locator->locate(__DIR__.'/routes.php'));
+    $container['routes'] = $routes = $cacheLoader->load($loader, true);
+
+    //var_dump($routes);
+    //die;
+    //$routes = $loader->loadRoutes('routes.php');
+    $matcher = $container->get('routes.request_matcher');
 
     return new Router(
         $routes,
-        null,
+        $matcher,
         new Dispatcher(
             new Lucid\Mux\Handler\Resolver($container),
             new Lucid\Mux\Handler\StrictParameterMapper($container['router.handler.mapped_types'])
@@ -74,6 +106,10 @@ $container['middleware.xhr_request'] = $container->share(function () use ($conta
 
 $container['middleware.content_type'] = $container->share(function () use ($container) {
     return new App\Middleware\ContentType($container->get('negotiation'), $container->get('events'));
+});
+
+$container['middleware.mux'] = $container->share(function () use ($container) {
+    return new App\Middleware\MuxMatch($container->get('router'), $container->get('events'));
 });
 
 require __DIR__.'/jmg.php';

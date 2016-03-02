@@ -1,0 +1,19 @@
+@import "colors";
+
+$base_font_size: 1.6rem;
+$base_line_height: 1;
+
+@mixin fontRegular() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+@mixin fontLight() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+@mixin fontThin() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+}

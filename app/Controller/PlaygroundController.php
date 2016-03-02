@@ -23,10 +23,10 @@ use Psr\Http\Message\ServerRequestInterface;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class GridController extends PageController
+class PlaygroundController extends PageController
 {
     public function __invoke(ServerRequestInterface $request, $response = null)
     {
-        return $this->renderTemplate('grid.php');
+        return $this->renderTemplate('playground.php');
     }
 }

@@ -4,6 +4,7 @@ import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import Masonry from 'react-masonry-component';
 import Figure from './Image';
+import {Button, IconButton} from 'react-toolbox/lib/button';
 
 const RESIZE = 'resize';
 
@@ -140,9 +141,12 @@ class GridItem extends React.Component {
   render() {
     let {image, refPrefix, index, keys, ...rest} = this.props;
     return (
-        <div className="grid-item" onClick={this.handleClick}>
+        <div className="grid-item" >
           <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
-          <div>
+          <div className='buttons'>
+            <Button icon='+' floating onClick={this.handleClick}></Button>
+          </div>
+          <div className='info'>
             {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
           </div>
           {this.props.children}

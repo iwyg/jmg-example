@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import Slider from 'react-toolbox/lib/slider';
 import Color from 'color';
+import {ucFirst} from 'lib/string';
 
 const channelToCompl = (c) => {
   return 255 - c;
@@ -25,6 +26,7 @@ const getCColor = (c) => {
 const mapCColor = (channels)  => {
   return Object.values(channels).map(getCColor);
 };
+
 
 export default class ColorSelect extends React.Component {
   constructor(props) {
@@ -105,38 +107,52 @@ export default class ColorSelect extends React.Component {
     this.setColor(hex);
   }
 
-  render() {
+  mapChannel(c) {
+    let key = c === 'gray' ? 'r' : c;
+    return this.state.rgb[key];
+  }
+
+  getStyle() {
     let {r, g, b} = this.state.rgb;
     let [cr, cg, cb] = mapCColor(this.state.rgb);
-    let style = {
+
+    return {
       backgroundColor: `rgb(${r}, ${g}, ${b})`,
       color: `rgb(${cr}, ${cg}, ${cb})`
     };
+  }
 
-    switch (this.props.mode) {
-      case 'RGB':
-        return (
-          <div>
-            <div className='color-preview' style={style}>#{this.state.hex}</div>
-            <Slider className='channel-select' key={'red'}
-              min={0} max={255} value={r} stepped step={1} onChange={this.setR}/>
-            <Slider className='channel-select' key={'green'}
-              min={0} max={255} value={g} stepped step={1} onChange={this.setG}/>
-            <Slider className='channel-select' key={'blue'}
-              min={0} max={255} value={b} stepped step={1} onChange={this.setB}/>
-          </div>
-      );
-      case 'GRAY':
-        return (
-          <div>
-            <div className='color-preview' style={style}>#{this.state.hex}</div>
-            <Slider className='channel-select' key={'gray'}
-              min={0} max={255} value={g} stepped step={1} onChange={this.setGray}/>
-          </div>
-        );
+  render() {
+
+    let mode = this.props.mode !== null ? this.props.mode.toLowerCase() : null;
+    let channels = mode === 'rgb' ? Object.keys(this.state.rgb) : (mode === 'gray' ? [mode] : null);
+    let cn = 'color-picker' + (this.props.className ? ' ' + this.props.className : '');
+
+    if (!channels) {
+      return null;
     }
 
-    return null;
+    return (
+      <div className={cn}>
+        <div className='color-preview' style={this.getStyle()}>#{this.state.hex}</div>
+        <div className='channels'>
+          {channels.map((c, i) => {
+            let updateFunc = ['set' + ucFirst(c)];
+            console.log(updateFunc);
+            let value = this.mapChannel(c);
+            return (
+              <div className='channel' key={'channel-'+c}>
+                <span className='channel-name'>{c.toUpperCase()}</span>
+                <Slider className='channel-select'
+                  min={0} max={255} value={value} stepped step={1} onChange={this[updateFunc]}>
+                </Slider>
+                <span className='channel-value'>{value}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   }
 }
 

@@ -1,14 +1,15 @@
 <?php
 
-$events = $container->get('events');
-//
-//$events->addHandler('accept.content_type', function ($event) {
-//    $contentType = $event->accepts(['text/html']);
-//});
-//
-//$events->addHandler('request.xhr', function ($e) {
-//});
-//
-$events->addHandler('kernel.response', function ($e) {
-    $response = $e->getResponse();
-});
+use App\Events\RequestEvent;
+
+return function (Interop\Container\ContainerInterface $container, Lucid\Signal\EventDispatcherInterface $events) {
+
+    $events->addHandler('kernel.response', function ($e) {
+        $response = $e->getResponse();
+    });
+
+    $events->addHandler('kernel.middleware', function (RequestEvent $event) use ($container) {
+        $container['request'] = $event->getRequest();
+        $container['response'] = $event->getResponse();
+    });
+};

@@ -4,6 +4,7 @@ return [
     'templates' => [
         realpath(__DIR__.'/../resources/templates')
     ],
+    'storage'  => realpath(__DIR__.'/../storage'),
 
     'images.path' => dirname(__DIR__).'/resources/images',
     'image_resolve.path' => dirname(__DIR__).'/resources/images',

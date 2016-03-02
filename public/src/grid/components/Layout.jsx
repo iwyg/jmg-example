@@ -11,62 +11,6 @@ class LoadingBar extends React.Component {
   }
 }
 
-class Select extends React.Component {
-  constructor(args) {
-    super(args);
-    this.state = {
-      values: [null, 150, 200, 250, 400, 600],
-      value: null
-    };
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-    if (prevState.value === this.state.value) {
-      return;
-    }
-
-    let {update} = this.props;
-
-    update(this.state.value);
-  }
-  onChange(event) {
-    let value = event.target.value;
-    let parsedValue = parseFloat(value) || null;
-    if (parsedValue === this.state.value) {
-      console.log('ON_CHANGE_NO_UPDATE');
-      return false;
-    }
-
-    console.log('ON_CHANGE_UPDATE');
-
-    this.setState({value: parsedValue});
-
-    return true;
-  }
-
-  render() {
-    return (
-      <select onChange={this.onChange.bind(this)} disabled={this.props.disabled}>
-        {this.state.values.map((value, key) => {
-          return (<option value={value || null} key={key}>{ value ? `value is ${value}` : '--'}</option>);
-        })}
-      </select>
-    );
-  }
-}
-
-Select.propTypes = {
-  update: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-
-Select.defaultProps = {
-  disabled: false
-};
-
-
 export default class Layout extends React.Component {
 
   constructor(props) {
@@ -90,7 +34,6 @@ export default class Layout extends React.Component {
     let currentUrl = this.props.fetchUrl.uri();
 
     if (currentUrl === nextUrl) {
-      console.log('no update');
       return;
     }
 
@@ -118,7 +61,6 @@ export default class Layout extends React.Component {
   handleImageSelect(meta, figure) {
     let {name} = meta;
 
-    console.log(name);
     this.props.dispatch(selectImage(name));
   }
 
@@ -130,10 +72,13 @@ export default class Layout extends React.Component {
   render() {
     return (
       <div className='layout-container'>
-        <Playground className='playground' mode={0}/>
-        <Grid images={this.props.images} onResize={this.updateQueryFromResize}
-          onClick={this.handleImageSelect} captionKeys={['width', 'height', 'name', 'type', 'uri', 'hash', 'color']}
-        />
+        <Playground className='playground' mode={0}>
+          <div className='grid-wrap'>
+            <Grid images={this.props.images} onResize={this.updateQueryFromResize}
+              onClick={this.handleImageSelect} captionKeys={['width', 'height']}
+            />
+          </div>
+        </Playground>
       </div>
     );
   }

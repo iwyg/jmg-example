@@ -3,23 +3,22 @@
 @import "font_roboto_regular";
 @import "font_roboto_light";
 @import "font_roboto_thin";
-@import "colors";
-
-html, body {
-  font-family: 'robotolight', sans-serif;
-  font-weight: normal;
-}
+@import "settings";
 
 *, *:before, *:after {
   box-sizing: border-box;
 }
 
 html {
-  box-sizing: border-box;
+  font-size: 62.5%;
+  height: 100%;
 }
 
-html, body {
-  height: 100%;
+body {
+  @include inbox();
+  @include fontLight();
+  font-size: $base_font_size;
+  line-height: $base_line_height;
 }
 
 img {
@@ -28,6 +27,11 @@ img {
 
 ul {
   padding: 0;
+}
+
+label {
+  @include fontRegular();
+  color: $gray_darker;
 }
 
 .inbox {

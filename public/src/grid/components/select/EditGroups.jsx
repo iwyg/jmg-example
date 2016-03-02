@@ -62,8 +62,16 @@ export class EditResize extends EditGroup {
     let {maxW, maxH, minW, minH} = this.props;
     return (
       <SelectGroup>
-        <Slider onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
-        <Slider onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
+        <div className='slider'>
+          <span className='slider-name'>{this.props.labelWidth}</span>
+          <Slider className='slider-ctrl' onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
+          <span className='slider-value'>{this.state.width}{this.props.unit}</span>
+        </div>
+        <div className='slider'>
+          <span className='slider-name'>{this.props.labelHeight}</span>
+          <Slider className='slider-ctrl' onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
+          <span className='slider-value'>{this.state.height}{this.props.unit}</span>
+        </div>
       </SelectGroup>
     );
   }
@@ -75,11 +83,17 @@ EditResize.propTypes = Object.assign({}, EditGroup.propTypes, {
   maxW: PropTypes.number.isRequired,
   maxW: PropTypes.number.isRequired,
   minH: PropTypes.number.isRequired,
-  minH: PropTypes.number.isRequired
+  minH: PropTypes.number.isRequired,
+  labelWidth: PropTypes.string,
+  labelHeight: PropTypes.string,
+  unit: PropTypes.string
 });
 
 EditResize.defaultProps = {
-  type: MODES.IM_RESIZE
+  type: MODES.IM_RESIZE,
+  labelWidth: 'width',
+  labelHeight: 'height',
+  unit: ''
 };
 
 
@@ -105,9 +119,19 @@ export class EditCrop extends EditResize {
 
     return (
       <SelectGroup>
-        <Slider onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
-        <Slider onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
-        <GravitySelect selected={this.state.gravity} onChange={this.onGravityChange}/>
+        <div className='slider'>
+          <span className='slider-name'>{this.props.labelWidth}</span>
+          <Slider className='slider-ctrl' onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
+          <span className='slider-value'>{this.state.width}{this.props.unit}</span>
+        </div>
+        <div className='slider'>
+          <span className='slider-name'>{this.props.labelHeight}</span>
+          <Slider className='slider-ctrl' onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
+          <span className='slider-value'>{this.state.height}{this.props.unit}</span>
+        </div>
+        <div className="gravity">
+          <GravitySelect selected={this.state.gravity} onChange={this.onGravityChange}/>
+        </div>
         {this.props.children}
       </SelectGroup>
     );
@@ -141,8 +165,11 @@ export class EditResizeScale extends EditGroup {
     let {maxW, minW, steps} = this.props;
     return (
       <SelectGroup>
-        <label>{this.state.width}</label>
-        <Slider onChange={this.onScaleChange} value={this.state.width} min={minW} stepped step={steps} max={maxW}/>
+        <div className='slider'>
+          <span className='slider-name'>{this.props.label}</span>
+          <Slider className='slider-ctrl' onChange={this.onScaleChange} value={this.state.width} min={minW} stepped step={steps} max={maxW}/>
+          <span className='slider-value'>{this.state.width}{this.props.unit}</span>
+        </div>
       </SelectGroup>
     );
   }
@@ -152,5 +179,12 @@ EditResizeScale.propTypes = Object.assign({}, EditGroup.propTypes, {
   start: PropTypes.number.isRequired,
   minW: PropTypes.number.isRequired,
   maxW: PropTypes.number.isRequired,
-  steps: PropTypes.number.isRequired
+  steps: PropTypes.number.isRequired,
+  label: PropTypes.string,
+  unit: PropTypes.string
 });
+
+EditResizeScale.defaultProps = {
+  label: 'scale',
+  unit: '%'
+};

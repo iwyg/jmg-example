@@ -61,9 +61,19 @@ export default class ValueSelect extends React.Component {
     return this.state.modes[m][type];
   }
 
+  getValueInfo(m) {
+    return (
+      <ul className="info">
+        {Object.keys(this.state.modes[m]).map((type) => {
+          return (<li key={m + type}><span>{type}</span><span>{this.state.modes[m][type]}</span></li>);
+        })}
+      </ul>
+    );
+  }
+
   getColorPicker(mode) {
     if (mode !== MODES.IM_CROP) {
-      return;
+      return null;
     }
 
     return (
@@ -79,13 +89,18 @@ export default class ValueSelect extends React.Component {
         return (
           <EditResize key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('width')}
             {...props} type={m} onChange={this.onChange} minW={0} minH={0}
+            labelWidth='W'
+            labelHeight='H'
           />
         );
       case MODES.IM_SCALECROP:
       case MODES.IM_CROP:
         return (
             <EditCrop key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('height')}
-              gravity={this.getMProp('gravity')} {...props} type={m} onChange={this.onChange}>
+              gravity={this.getMProp('gravity')} {...props} type={m} onChange={this.onChange}
+                labelWidth='W'
+                labelHeight='H'
+              >
               {this.getColorPicker(m)}
             </EditCrop>
         );
@@ -93,18 +108,22 @@ export default class ValueSelect extends React.Component {
         return (
           <EditResize key={ModeNames[m]} width={this.getMProp('width')} height={this.getMProp('height')}
             {...props} type={m} onChange={this.onChange}
+            labelWidth='Max W'
+            labelHeight='Max H'
           />
         );
       case MODES.IM_RSIZEPERCENT:
         return (
           <EditResizeScale key={ModeNames[m]} start={this.getMProp('width')} maxW={this.props.maxScale}
             minW={this.props.minScale} steps={10} type={m} onChange={this.onChange}
+            label='scale' unit='%'
           />
         );
       case MODES.IM_RSIZEPXCOUNT:
         return (
           <EditResizeScale key={ModeNames[m]} start={this.getMProp('width') || parseInt(maxPx / 2)} maxW={maxPx} minW={minPx}
             steps={100} type={m} onChange={this.onChange}
+            label='px' unit=''
           />
         );
       case MODES.IM_NOSCALE:

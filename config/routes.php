@@ -7,10 +7,10 @@ return [
         'handler' => 'ctrl.index'
     ],
 
-    'grid' => [
-        'pattern' => '/grid',
+    'playground' => [
+        'pattern' => '/playground',
         'methods' => ['GET'],
-        'handler' => 'ctrl.grid'
+        'handler' => 'ctrl.playground'
     ],
 
     'api' => [

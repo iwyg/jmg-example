@@ -72,6 +72,7 @@ module.exports = {
           +'&includePaths[]=node_modules/breakpoint-sass/stylesheets'
           +'&includePaths[]=node_modules/susy/sass'
           +'&includePaths[]=src/fonts'
+          +'!toolbox'
         )
       },
       // namespaced styles

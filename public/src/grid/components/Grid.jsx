@@ -6,6 +6,9 @@ import Masonry from 'react-masonry-component';
 import Figure from './Image';
 import {Button, IconButton} from 'react-toolbox/lib/button';
 
+import IconMasonry from 'ic_dashboard_black_24px.svg';
+import IconGrid from 'ic_view_module_black_24px.svg';
+
 const RESIZE = 'resize';
 
 /* The image grid in all its glory */
@@ -15,7 +18,8 @@ export default class Grid extends React.Component {
 
     this.state = {
       loaded: false,
-      maxWidth: null
+      maxWidth: null,
+      layout: null,
     }
 
     this.domNode = null;
@@ -71,7 +75,9 @@ export default class Grid extends React.Component {
       return;
     }
 
-    this.masonry.layout();
+    if (this.masonry) {
+      this.masonry.layout();
+    }
 
     if (nextProps.images.length !== this.props.images.length) {
     // do specified stuff here
@@ -101,29 +107,78 @@ export default class Grid extends React.Component {
     );
   }
 
+  //renderLayoutSelect() {
+  //  return (
+  //    <div>
+  //      <IconButton ref='layoutMasonry' onClick={this.switchLayoutMasonry}><IconMasonry/></IconButton>
+  //      <IconButton ref='layoutDefault' onClick={this.switchLayoutDefault}><IconGrid/></IconButton>
+  //    </div>
+  //  );
+  //}
+
+  renderItem(image, key, keys, refStr, props) {
+    let {...props} = props;
+    return (
+      <GridItem ref={refStr + key} refPrefix={refStr} image={image}
+        key={key} index={key} keys={keys} {...props}
+      >
+      </GridItem>
+    );
+  }
+
   render() {
     if (!this.state.loaded) {
       return this.renderEmpty();
     }
 
-    let {masonry, captionKeys, images, ...rest} = this.props;
+    let {layout, masonry, captionKeys, images, ...rest} = this.props;
     let refStr = 'figure'
 
+    const renderItems = () => {
+      return images.map((image, key) => {
+        return this.renderItem(image, key, captionKeys, refStr, rest);
+      })
+    };
+
+    if (layout !== 'masonry') {
+      return (
+        <div className='grid'>
+          {renderItems()}
+        </div>
+      );
+    }
+
     return (
-      <Masonry className='grid' options={masonry} ref={this.bindMasonry}>{
-        images.map((image, key) => {
-          return (
-            <GridItem
-              ref={refStr + key} refPrefix={refStr} image={image}
-              key={key} index={key} keys={captionKeys} {...rest}
-            >
-            </GridItem>
-          );
-        })
-      }</Masonry>
+      <Masonry className='grid' options={masonry} ref={this.bindMasonry}>
+        {renderItems()}
+      </Masonry>
     );
   }
 }
+
+Grid.propTypes = {
+  images: PropTypes.array.isRequired,
+  rows: PropTypes.number,
+  onResize: PropTypes.func,
+  onLayoutChange: PropTypes.func,
+  masonry: PropTypes.object,
+  captionKeys: PropTypes.array,
+  layout: PropTypes.oneOf(['masonry', 'default'])
+};
+
+Grid.defaultProps = {
+  images: [],
+  rows: 3,
+  masonry: {
+    gutter: 0,
+    resize: false,
+    initLayout: false,
+    transitionDuration: '0.4s',
+  },
+  captionKeys: ['width', 'height'],
+  layout: 'masonry'
+};
+
 
 /* Wrapper component for the figure elements */
 class GridItem extends React.Component {
@@ -144,7 +199,7 @@ class GridItem extends React.Component {
         <div className="grid-item" >
           <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
           <div className='buttons'>
-            <Button icon='+' floating onClick={this.handleClick}></Button>
+            <Button icon='+' floating={true} accent={true} onClick={this.handleClick}></Button>
           </div>
           <div className='info'>
             {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
@@ -155,26 +210,6 @@ class GridItem extends React.Component {
     );
   }
 }
-
-Grid.propTypes = {
-  images: PropTypes.array.isRequired,
-  rows: PropTypes.number,
-  onResize: PropTypes.func,
-  masonry: PropTypes.object,
-  captionKeys: PropTypes.array
-};
-
-Grid.defaultProps = {
-  images: [],
-  rows: 3,
-  masonry: {
-    gutter: 0,
-    resize: false,
-    initLayout: false,
-    transitionDuration: '0.4s',
-  },
-  captionKeys: ['width', 'height']
-};
 
 GridItem.propTypes = {
   image: PropTypes.object.isRequired,

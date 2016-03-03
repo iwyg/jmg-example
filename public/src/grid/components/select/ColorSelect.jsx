@@ -9,7 +9,7 @@ const channelToCompl = (c) => {
 
 const channelToHex = (c) => {
     let hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    return hex.length === 1 ? "0" + hex : hex;
 };
 
 const toHex = (channels) => {
@@ -32,7 +32,7 @@ export default class ColorSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hex: 'f7f7f7',
+      hex: null,
       rgb: {
         r: 127,
         g: 127,
@@ -102,6 +102,7 @@ export default class ColorSelect extends React.Component {
     let {hex} = this.props;
 
     if (hex !== null) {
+      this.setColor(toHex(this.state.rgb));
       return;
     }
     this.setColor(hex);

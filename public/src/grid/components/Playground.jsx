@@ -106,8 +106,11 @@ export class Playground extends React.Component {
     let icl = image.width > image.height ? 'landscape' : 'portrait';
 
     return (
-      <div className={className}>
-        <Image className={icl} src={uri} {...props}/>
+      <div className='preview-container'>
+        <InfoBar info={image} keys={['width', 'height', 'type', 'color', 'uri']}></InfoBar>
+        <div className={className}>
+          <Image className={icl} src={uri} {...props}/>
+        </div>
       </div>
     );
   }
@@ -126,10 +129,13 @@ export class Playground extends React.Component {
     return (
       <div className={className}>
         <div className='settings'>
-          { image !== null ? this.renderSettings(mode, image) : null}
-          <section><label>select image</label>
-            <Button icon='+' className={buttonClass} floating={true} accent={true} onClick={this.selectImage}></Button>
-          </section>
+          <div className='panel'>
+            <section>
+              <label>select image</label>
+              <Button icon='+' className={buttonClass} floating={true} accent={true} onClick={this.selectImage}></Button>
+            </section>
+          </div>
+          {image !== null ? this.renderSettings(mode, image) : null}
         </div>
         <div className={previewClass}>
           {this.renderPreview(image)}
@@ -143,6 +149,42 @@ export class Playground extends React.Component {
 Playground.propTypes = {
   image: PropTypes.object,
   mode: PropTypes.number.isRequired
+};
+
+export class InfoBar extends React.Component {
+  renderItem(name, index) {
+    let {info} = this.props;
+    return (
+      <div className={'item ' + name} key={index}>
+        <label>{name}</label><p>{info[name]}</p>
+      </div>
+    );
+  }
+
+  render() {
+    let {info, keys} = this.props;
+
+    let renderKeys = keys.filter((k) => {
+      return info[k] !== undefined;
+    });
+
+    return (
+      <div className={this.props.className}>
+        {renderKeys.map(this.renderItem.bind(this))}
+      </div>
+    );
+  }
+}
+
+InfoBar.propTypes = {
+  info: PropTypes.object.isRequired,
+  keys: PropTypes.array
+};
+
+InfoBar.defaultProps = {
+  info: {},
+  keys: ['width', 'height'],
+  className: 'info-bar'
 };
 
 const mapStateToProps = function (state) {

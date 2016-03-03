@@ -19,6 +19,7 @@ $figpadding: .1rem;
 .grid {
   position: relative;
   width: 100%;
+  min-height: 100%;
   @include clearfix();
   background-color: $base_flat;
 

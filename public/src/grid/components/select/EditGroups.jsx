@@ -118,22 +118,26 @@ export class EditCrop extends EditResize {
     let {maxW, maxH, minW, minH} = this.props;
 
     return (
-      <SelectGroup>
-        <div className='slider'>
-          <span className='slider-name'>{this.props.labelWidth}</span>
-          <Slider className='slider-ctrl' onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
-          <span className='slider-value'>{this.state.width}{this.props.unit}</span>
-        </div>
-        <div className='slider'>
-          <span className='slider-name'>{this.props.labelHeight}</span>
-          <Slider className='slider-ctrl' onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
-          <span className='slider-value'>{this.state.height}{this.props.unit}</span>
-        </div>
+      <div className='select-group-wrap'>
+        <SelectGroup>
+          <div className='slider'>
+            <span className='slider-name'>{this.props.labelWidth}</span>
+            <Slider className='slider-ctrl' onChange={this.onWidthChange} value={this.state.width} min={minW} stepped step={10} max={maxW}/>
+            <span className='slider-value'>{this.state.width}{this.props.unit}</span>
+          </div>
+          <div className='slider'>
+            <span className='slider-name'>{this.props.labelHeight}</span>
+            <Slider className='slider-ctrl' onChange={this.onHeightChange} value={this.state.height} min={minH} stepped step={10} max={maxH}/>
+            <span className='slider-value'>{this.state.height}{this.props.unit}</span>
+          </div>
+        </SelectGroup>
+        <SelectGroup label='gravity'>
         <div className="gravity">
           <GravitySelect selected={this.state.gravity} onChange={this.onGravityChange}/>
         </div>
+        </SelectGroup>
         {this.props.children}
-      </SelectGroup>
+      </div>
     );
   }
 }

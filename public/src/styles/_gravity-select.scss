@@ -1,8 +1,10 @@
 @import "mixins";
 
-$border-color: lighten($gray_neutral, 40);
-$border-size: 2px;
-$fill-color: $border-color;
+//$border-color: lighten($gray_neutral, 40);
+$border-color: $base_flat;
+$fill-color: $color-primary;
+
+$border-size: 1px;
 
 .gravity {
   background: $border-color;
@@ -16,6 +18,7 @@ $fill-color: $border-color;
   background: #fff;
   @include clearfix();
   @include inbox(8*$base_font_size);
+  /*border: 1px solid $fill-color;*/
 
   > * {
     cursor: pointer;
@@ -23,28 +26,34 @@ $fill-color: $border-color;
     background-color: inherit;
     float: left;
     transition: background-color .4s;
+    border: $border-size solid transparent;
     &.selected {
-      background-color: rgba($fill-color, 1);
+      //background-color: rgba($fill-color, 1);
+      //border: 1px solid rgba($fill-color, 1);
+    }
+
+    &.selected {
+      border-color: $fill-color;
     }
 
     &:hover {
-      background-color: rgba($fill-color, 0.5);
+      background-color: rgba($fill-color, 1);
     }
   }
 
   .top {
-    border-bottom: $border-size solid $border-color;
+    border-top-color: $fill-color;
   }
 
   .bottom {
-    border-top: $border-size solid $border-color;
+    border-bottom-color: $fill-color;
   }
 
   .left {
-    border-right: $border-size solid $border-color;
+    border-left-color: $fill-color;
   }
 
   .right {
-    border-left: $border-size solid $border-color;
+    border-right-color: $fill-color;
   }
 }

@@ -77,7 +77,9 @@ export default class ValueSelect extends React.Component {
     }
 
     return (
-      <ColorSelect hex={this.getMProp('background')} onChange={this.onColorChange} mode={this.props.color}/>
+      <SelectGroup label='canvas color'>
+        <ColorSelect hex={this.getMProp('background')} onChange={this.onColorChange} mode={this.props.color}/>
+      </SelectGroup>
     );
   }
 

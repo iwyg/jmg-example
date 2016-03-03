@@ -1,22 +1,88 @@
 @import "mixins";
 @import "colors";
 
+$settings-width: 48rem;
+$settings-width-small: 26rem;
+$info_bar_position: bottom;
+
+.select-group {
+  padding: 2rem 0;
+
+  label {
+    @include label_small;
+    display: inline-block;
+    padding: 1rem 0;
+  }
+}
+
+.slider-name, .slider-value, .channel-name, .channel-value {
+  @include label_small;
+}
+
+.channel-name {
+  &.r {
+  }
+}
+
+.info-bar {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  #{$info_bar_position}: 0;
+  max-height: 6rem;
+  @include clearfix;
+  font-size: 1.2rem;
+  line-height: .4rem;
+  color: $color-primary;
+
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+
+  .item {
+    padding: 1rem;
+    border-left: 1px solid darken($color-primary-dark, 5);
+  }
+
+  background-color: rgba(#000, 0.22);
+}
+
+.preview-container {
+  @include inbox;
+  padding-#{$info_bar_position}: 6rem;
+  position: relative;
+}
+
 .playground {
   @include inbox;
   @include clearfix;
   position: relative;
-
-  //@include breakpoint((min-width: $q-small, orientation: landscape)) {
-  //}
 }
 
-$settings-width: 48rem;
-$settings-width-small: 26rem;
 .settings {
   background-color: $base_flat;
   width: 100%;
 
+  .panel {
+    @include clearfix;
+    padding: 1rem;
+
+    button {
+      &.select {
+        position: relative;
+        right: calc(-100% + 9.8rem);
+        transform: rotate(0deg);
+        transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+      }
+      &.abort {
+        transform: rotate(45deg);
+        background: $gray_dark !important;
+      }
+    }
+  }
+
   section {
+    @include clearfix;
     margin: .5rem;
     padding: 1rem;
 
@@ -24,43 +90,40 @@ $settings-width-small: 26rem;
     }
   }
 
-  @include breakpoint($q-small) {
-    float: left;
+  @include breakpoint((min-width: $q-small, orientation: landscape)) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100%;
     width: $settings-width-small;
+    box-shadow: 1px 0px 6px 0 rgba(0, 0, 0, 0.5);
   }
 
-  @include breakpoint($q-medium) {
-    float: left;
+  @include breakpoint((min-width: $q-medium, orientation: landscape)) {
     width: $settings-width;
-  }
-}
-
-button {
-  &.select {
-    transform: rotate(0deg);
-    transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-    &.abort {
-      transform: rotate(45deg);
-      background: $gray_dark !important;
-    }
   }
 }
 
 .preview {
   transform: translate3d(0, 0, 0) scaleZ(1);
-  background-color: $gray_neutral;
+  //background-color: darken($gray_darker, 20);
+  background-color: darken($color-primary-dark, 5);
   @include inbox;
   position: relative;
   overflow: hidden;
+  width: 100%;
 
-  @include breakpoint($q-small) {
-    float: left;
-    width: calc(100% - #{$settings-width-small});
+  &, .grid-wrap {
+    @include breakpoint((min-width: $q-small, orientation: landscape)) {
+      padding-left: $settings-width-small;
+    }
   }
 
-  @include breakpoint($q-medium) {
-    float: left;
-    width: calc(100% - #{$settings-width});
+  &, .grid-wrap {
+    @include breakpoint((min-width: $q-medium, orientation: landscape)) {
+      padding-left: $settings-width;
+    }
   }
 
   .preview-image {
@@ -96,13 +159,15 @@ button {
     overflow: scroll;
     top: 0;
     left: 0;
+    opacity: 0;
     transform: translate3d(0, 100%, 0);
-    transition: transform .4s cubic-bezier(0.6, .12, .26, .96);
+    transition: all .4s cubic-bezier(0.6, .12, .26, .96);
     transition-delay: .1s;
   }
 
   &.select {
     .grid-wrap {
+      opacity: 1;
       transition-delay: 0s;
       transform: translate3d(0, 0, 0);
     }
@@ -113,8 +178,11 @@ button {
   @include clearfix;
   .icon, .label {
     height: 100%;
-    padding: 0.4rem;
     float: left;
+  }
+
+  .label {
+    padding: 0.4rem 2rem;
   }
 
   .icon {

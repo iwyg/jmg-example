@@ -14,3 +14,9 @@
 @mixin transition($type: all, $time: 0.5s, $easing: 'easeInOut') {
   transition: $type $time $easing;
 }
+
+@mixin label_small() {
+  font-size: 1.4rem;
+  font-weight: 300;
+  text-transform: lowercase;
+}

@@ -11,10 +11,37 @@ class LoadingBar extends React.Component {
   }
 }
 
+const requestGridImages = (dispatch, maxWidth, limit, layout) => {
+  let query;
+  if (layout === 'masonry') {
+    query = {
+      mode: MODES.IM_RESIZE,
+      width: maxWidth,
+      height: 0,
+      limit: limit
+    };
+  } else {
+    query = {
+      mode: MODES.IM_SCALECROP,
+      width: maxWidth,
+      height: maxWidth,
+      gravity: 5,
+      limit: limit
+    };
+  }
+
+  dispatch(selectOuery(query));
+};
+
 export default class Layout extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      gridLayout: 'masonry'
+    };
+
     this.updateQueryFromSelect = this.updateQueryFromSelect.bind(this);
     this.updateQueryFromResize = this.updateQueryFromResize.bind(this);
     this.handleImageSelect = this.handleImageSelect.bind(this);
@@ -48,14 +75,8 @@ export default class Layout extends React.Component {
 
   updateQueryFromResize(maxWidth) {
     let {dispatch, limitImages} = this.props;
-    let query = {
-      mode: MODES.IM_RESIZE,
-      width: maxWidth,
-      height: 0,
-      limit: limitImages
-    };
 
-    dispatch(selectOuery(query));
+    requestGridImages(dispatch, maxWidth, limitImages, this.state.gridLayout);
   }
 
   handleImageSelect(meta, figure) {
@@ -70,12 +91,18 @@ export default class Layout extends React.Component {
   }
 
   render() {
+    let layout = this.state.gridLayout;
     return (
       <div className='layout-container'>
         <Playground className='playground' mode={0}>
           <div className='grid-wrap'>
-            <Grid images={this.props.images} onResize={this.updateQueryFromResize}
-              onClick={this.handleImageSelect} captionKeys={['width', 'height']}
+            <Grid
+              images={this.props.images}
+              onResize={this.updateQueryFromResize}
+              onClick={this.handleImageSelect}
+              onLayoutChange={this.updateQueryFromLayout}
+              layout={layout}
+              captionKeys={['width', 'height']}
             />
           </div>
         </Playground>

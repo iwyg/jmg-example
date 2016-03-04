@@ -12,6 +12,8 @@
 namespace App\Model;
 
 use App\Api\Generator;
+use App\File\FileInfo;
+use App\File\PatternIterator;
 use Thapp\Jmg\Parameters as Params;
 use Thapp\Jmg\FilterExpression as Filters;
 use Thapp\Jmg\Resolver\PathResolverInterface;
@@ -66,9 +68,9 @@ class ImageRepository
             return [];
         }
 
-        return array_map(function ($src) use ($params, $filters, $prefix, $q) {
-            return $this->generator->fromParams($src, $params, $filters, $prefix, $q);
-        }, array_slice($this->glob($path), 0, $limit));
+        return array_map(function (FileInfo $file) use ($params, $filters, $prefix, $q) {
+            return $this->generator->fromParams($file->getRelativePathName(), $params, $filters, $prefix, $q);
+        }, $this->glob($path, $limit));
 
     }
 
@@ -80,13 +82,30 @@ class ImageRepository
      *
      * @return array
      */
-    private function glob($path)
+    private function glob($path, $limit)
     {
-        $flags = GLOB_NOSORT | GLOB_BRACE;
-        $wc = rtrim($path, '\\/') . '/*.{jpg,jpeg,png,gif}';
 
-        return array_map(function ($file) use ($path) {
-            return ltrim(mb_substr($file, mb_strlen($path)), '\\/');
-        }, glob($wc, $flags));
+        $c = 0;
+        $files = [];
+
+        foreach ($this->getIterator($path) as $p => $file) {
+            if (false === ($c < $limit)) {
+                break;
+            }
+            $files[] = $file;
+            $c++;
+        }
+
+        return $files;
+        //$flags = GLOB_NOSORT | GLOB_BRACE;
+        //$wc = rtrim($path, '\\/') . '/*.{jpg,jpeg,png,gif}';
+        //return array_map(function ($file) use ($path) {
+        //    return ltrim(mb_substr($file, mb_strlen($path)), '\\/');
+        //}, glob($wc, $flags));
+    }
+
+    private function getIterator($path)
+    {
+        return new PatternIterator($path, '~\.(jpe?g|png|gif)$~', 2);
     }
 }

@@ -35,7 +35,7 @@ class ApiController
     {
         $params = Parameters::fromQuery($q = $request->getQueryParams());
         $filter = FilterExpression::fromQuery($q);
-        $limit  = isset($q['limit']) ? max(1, min(30, (int)$q['limit'])) : 20;
+        $limit  = isset($q['limit']) ? max(1, min(100, (int)$q['limit'])) : 20;
 
         return $this->response($request, $this->createPayloadArray($request, $params, $filter, $limit));
     }

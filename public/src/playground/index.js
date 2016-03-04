@@ -1,19 +1,16 @@
-require('styles/grid');
+import 'styles/playground/main';
+import 'babel-polyfill';
+import 'modernizr';
 
-import "babel-polyfill";
+import ObjectFit from 'object-fit';
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider, connect} from 'react-redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import {createStore, applyMiddleware} from 'redux';
-import Layout from 'grid/components/Layout';
-import {DEFAULT_STATE} from 'grid/modules/state';
-import {selectOuery} from 'grid/modules/actions';
-import rootReducer from 'grid/modules/reducer';
-import 'modernizr';
-import ObjectFit from 'object-fit';
-
+import Layout from 'playground/components/Layout';
+import rootReducer from 'playground/modules/reducer';
 
 const configureStore = (initialState) => {
   const logger = createLogger();
@@ -21,7 +18,6 @@ const configureStore = (initialState) => {
 };
 
 const store = configureStore();
-
 
 const mapStateToProps = function (state) {
   const {fetchUrl, fetching, images} = state;
@@ -35,11 +31,9 @@ const mapStateToProps = function (state) {
 
 const App = connect(mapStateToProps)(Layout);
 
-//store.dispatch(selectOuery({}));
-
 render(
   <Provider store={store}>
-    <App/>
+    <App limitImages={50}/>
   </Provider>,
   document.getElementById('main')
 );

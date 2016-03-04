@@ -23,7 +23,7 @@ const getQueryString = (query = {}) => {
 };
 
 /* Action creators */
-export const selectOuery = (query = {}) => {
+export const selectQuery = (query = {}) => {
   return {
     type: SELECT_QUERY_ALL,
     payload: {
@@ -51,7 +51,7 @@ export const selectMode = (mode = MODES.IM_NOSCALE) => {
 };
 
 /* requests */
-export const fetchRequested = (url) => {
+export const fetchRequestedImages = (url) => {
   return {
     type: QUERY_ALL_RESULT_REQUEST,
     payload: {
@@ -72,7 +72,7 @@ export const fetchRequestedImage = (url) => {
 };
 
 /* success */
-export const fetchSucceeded = (payload = {}) => {
+export const fetchImagesSucceeded = (payload = {}) => {
   return {
     type: QUERY_ALL_RESULT_SUCCESS,
     payload: Object.assign({}, payload, {fetching: false})
@@ -88,7 +88,7 @@ export const fetchImageSucceeded = (payload = {}) => {
 
 /* errors */
 
-export const fetchFailed = (msg = 'fetching result failed.') => {
+export const fetchImagesFailed = (msg = 'fetching result failed.') => {
   return {
     type: QUERY_ALL_RESULT_ERROR,
     payload: msg instanceof Error ? msg : new Error(msg),
@@ -104,41 +104,41 @@ export const fetchImageFailed = (msg = 'fetching result failed.') => {
   };
 };
 
-export const fetchImage = (url) => {
-  return function (dispatch) {
-    dispatch(fetchRequestedImage(url));
-    return fetch(url)
-      .then(function (response) {
+const doFetchAssets = (parse, actionFetch, actionSuccess, actionError) => {
+  return (url) => {
+    return (dispatch) => {
+      dispatch(actionFetch(url));
+      return fetch(url).then((response) => {
         if (isError(response)) {
           return Promise.reject(response.statusText);
         }
         return response.json();
-      })
-      .then(function (json) {
-        let image = json.images && json.images.length ? json.images[0] : null;
-        if (image === null) {
-          return Promise.reject('response returned no image.');
-        }
-
-        return dispatch(fetchImageSucceeded({image}));
-      })
-      .catch(err => dispatch(fetchImageFailed(err)));
-  };
+      }).then((json) => {
+        let res = parse(json);
+        return dispatch(actionSuccess(res));
+      }).catch(err => dispatch(actionError));
+    };
+  }
 };
 
-export const fetchImages = (url) => {
-  return function (dispatch) {
-    dispatch(fetchRequested(url));
-    return fetch(url)
-      .then(function (response) {
-        if (isError(response)) {
-          return Promise.reject(response.statusText);
-        }
-        return response.json();
-      })
-      .then(function (json) {
-         return dispatch(fetchSucceeded(json));
-      })
-      .catch(err => dispatch(fetchFailed(err)));
-  };
-};
+export const fetchImages = doFetchAssets(
+  json => json,
+  fetchRequestedImages,
+  fetchImagesSucceeded,
+  fetchImagesFailed
+);
+
+export const fetchImage = doFetchAssets(
+  (json) => {
+    let image = json.images && json.images.length ? json.images[0] : null;
+    if (image === null) {
+      return Promise.reject('response returned no image.');
+    }
+    return {image};
+  },
+  fetchRequestedImage,
+  fetchImageSucceeded,
+  fetchImageFailed
+);
+
+

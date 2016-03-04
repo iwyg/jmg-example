@@ -15,7 +15,7 @@ var srcDir            = base + '/src';
 module.exports = {
   context: path.resolve(__dirname, './' + srcDir + '/'),
   entry: {
-    grid: 'grid/index.js',
+    playground: 'playground/index.js',
   },
   output: {
     path: __dirname + '/' + buildDir,

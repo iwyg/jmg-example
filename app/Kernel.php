@@ -39,6 +39,11 @@ class Kernel
     /** @var bool */
     private $booted;
 
+    /**
+     * Consructor.
+     *
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->booted = false;
@@ -46,22 +51,11 @@ class Kernel
         $this->emitter = new \Zend\Diactoros\Response\SapiEmitter;
     }
 
-    public function middleware(MiddlewareInterface $middleware)
-    {
-        $this->getMiddleware()->add($middleware);
-    }
-
-    public function handle(ServerRequestInterface $request)
-    {
-        list($request, $response) = $this->getMiddleware()->handle($request);
-
-        if (null !== $response) {
-            return $response;
-        }
-
-        return $response;
-    }
-
+    /**
+     * Boots the kernel.
+     *
+     * @return bool
+     */
     public function boot()
     {
         if ($this->booted) {
@@ -73,9 +67,35 @@ class Kernel
         return $this->booted = true;
     }
 
-    public function run()
+
+    /**
+     * handles a request
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    public function handle(ServerRequestInterface $request)
     {
-        $request = ServerRequestFactory::fromGlobals();
+        list($request, $response) = $this->getMiddleware()->handle($request);
+
+        if (null !== $response) {
+            return $response;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Runs the application.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return void
+     */
+    public function run(ServerRequestInterface $request = null)
+    {
+        $request = $request ?: ServerRequestFactory::fromGlobals();
 
         $this->boot();
         $response = $this->handle($request);
@@ -83,6 +103,23 @@ class Kernel
         $this->emitter->emit($response);
     }
 
+    /**
+     * Adds a middleware.
+     *
+     * @param MiddlewareInterface $middleware
+     *
+     * @return void
+     */
+    public function middleware(MiddlewareInterface $middleware)
+    {
+        $this->getMiddleware()->add($middleware);
+    }
+
+    /**
+     * registerEvents
+     *
+     * @return void
+     */
     protected function registerEvents()
     {
         $func = require dirname(__DIR__).'/config/events.php';

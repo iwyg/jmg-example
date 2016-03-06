@@ -54,6 +54,8 @@ class Queue implements QueueInterface
     public function add(MiddlewareInterface $middleware, $priority = null)
     {
         $this->queue->insert($middleware, $priority ?: $this->queue->count());
+
+        return $this;
     }
 
     /**
@@ -82,7 +84,7 @@ class Queue implements QueueInterface
      *
      * @return array [Request, Response]
      */
-    public function doHandle(Request $request, Response $response = null)
+    private function doHandle(Request $request, Response $response = null)
     {
         $this->events->dispatch($this->eventName, $event = new RequestEvent($request, $response));
 

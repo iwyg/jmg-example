@@ -19,7 +19,6 @@ use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Lucid\Mux\Request\Context as RequestContext;
-use App\Middleware\Stack;
 use App\Middleware\MiddlewareInterface;
 
 /**
@@ -31,8 +30,13 @@ use App\Middleware\MiddlewareInterface;
  */
 class Kernel
 {
+    /** @var ContainerInterface */
     private $container;
+
+    /** @var App\Middleware\QueueInterface */
     private $middleware;
+
+    /** @var bool */
     private $booted;
 
     public function __construct(ContainerInterface $container)
@@ -93,7 +97,7 @@ class Kernel
     protected function getMiddleware()
     {
         if (null === $this->middleware) {
-            $this->middleware = $this->container->get('middleware.stack');
+            $this->middleware = $this->container->get('kernel.middleware');
         }
 
         return $this->middleware;

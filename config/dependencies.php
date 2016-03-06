@@ -72,12 +72,8 @@ $container['router'] = $container->share(function () use ($container) {
     $loader = new PhpLoader($builder, $locator = new Locator([__DIR__, '/']));
     $cacheLoader = $container['routes.cache_loader'];
 
-    //var_dump($locator->locate(__DIR__.'/routes.php'));
     $container['routes'] = $routes = $cacheLoader->load($loader, true);
 
-    //var_dump($routes);
-    //die;
-    //$routes = $loader->loadRoutes('routes.php');
     $matcher = $container->get('routes.request_matcher');
 
     return new Router(
@@ -91,16 +87,16 @@ $container['router'] = $container->share(function () use ($container) {
     );
 });
 
+$container['kernel.middleware'] = $container->share(function () use ($container) {
+    return new App\Middleware\Queue($container->get('events'), 'kernel.middleware');
+});
+
 $container['events'] = $container->share(function () use ($container) {
     return new Lucid\Signal\ContainerAwareDispatcher($container);
 });
 
 $container['negotiation'] = $container->share(function () use ($container) {
     return new Negotiation\Negotiator;
-});
-
-$container['middleware.stack'] = $container->share(function () use ($container) {
-    return new App\Middleware\Stack($container->get('events'), 'kernel.middleware');
 });
 
 $container['middleware.xhr_request'] = $container->share(function () use ($container) {

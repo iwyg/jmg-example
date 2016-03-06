@@ -24,7 +24,7 @@ use SplPriorityQueue;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class Stack implements MiddlewareInterface
+class Queue implements QueueInterface
 {
     /** @var SplPriorityQueue */
     private $queue;
@@ -51,6 +51,14 @@ class Stack implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
+    public function add(MiddlewareInterface $middleware, $priority = null)
+    {
+        $this->queue->insert($middleware, $priority ?: $this->queue->count());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle(Request $request, Response $response = null)
     {
         $this->doHandle($request, $response);
@@ -58,25 +66,12 @@ class Stack implements MiddlewareInterface
         while ($this->queue->valid()) {
             list ($request, $response) =
                 call_user_func_array([$this, 'doHandle'], $this->queue->current()->handle($request, $response));
-
             $this->queue->next();
         }
 
         $this->queue->rewind();
 
         return [$request, $response];
-    }
-
-    /**
-     * add
-     *
-     * @param MiddlewareInterface $middleware
-     *
-     * @return void
-     */
-    public function add(MiddlewareInterface $middleware)
-    {
-        $this->queue->insert($middleware, $this->queue->count());
     }
 
     /**

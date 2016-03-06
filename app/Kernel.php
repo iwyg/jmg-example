@@ -19,6 +19,7 @@ use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Lucid\Mux\Request\Context as RequestContext;
+use App\Middleware\Stack;
 use App\Middleware\MiddlewareInterface;
 
 /**
@@ -39,39 +40,20 @@ class Kernel
         $this->booted = false;
         $this->container = $container;
         $this->emitter = new \Zend\Diactoros\Response\SapiEmitter;
-        $this->middleware = new \SplStack;
     }
 
     public function middleware(MiddlewareInterface $middleware)
     {
-        $this->middleware->push($middleware);
+        $this->getMiddleware()->add($middleware);
     }
 
     public function handle(ServerRequestInterface $request)
     {
-        //$this->container['request'] = $request;
-
-
-        list($request, $response) = $this->flushMiddleware($request);
+        list($request, $response) = $this->getMiddleware()->handle($request);
 
         if (null !== $response) {
             return $response;
         }
-
-        //$router = $this->container->get('router');
-        //$match = $router->match($rc = RequestContext::fromPsrRequest($request));
-
-        //if (!$match->isMatch()) {
-            //return new Response('php://temp', 404);
-        //}
-
-        //foreach ($match->getVars() as $key => $value) {
-            //$request = $request->withAttribute($key, $value);
-        //}
-
-        //$this->container['request'] = $request;
-
-        //$response = $router->dispatchMatch($match);
 
         return $response;
     }
@@ -103,32 +85,17 @@ class Kernel
         $func($this->container, $this->container->get('events'));
     }
 
-    private function flushMiddleware(ServerRequestInterface $request, ResponseInterface $response = null)
+    /**
+     * getMiddleware
+     *
+     * @return App\Middleware\Stack
+     */
+    protected function getMiddleware()
     {
-        $mdw = null;
-
-        $events = $this->container->get('events');
-        $this->dispatchMiddlewareEvent($events, $request, $response);
-
-        $this->middleware->rewind();
-        while ($this->middleware->valid()) {
-            $next = $this->middleware->current();
-            $this->middleware->next();
-            list($request, $response) = $next->handle($request, $response);
-            $this->dispatchMiddlewareEvent($events, $request, $response);
-            $mdw = $next;
+        if (null === $this->middleware) {
+            $this->middleware = $this->container->get('middleware.stack');
         }
 
-        $this->middleware->rewind();
-
-        return [$request, $response];
-    }
-
-    private function dispatchMiddlewareEvent(
-        EventDispatcherInterface $events,
-        ServerRequestInterface $request,
-        ResponseInterface $response = null
-    ) {
-        //$events->dispatch('kernel.middleware', new RequestEvent($request, $response));
+        return $this->middleware;
     }
 }

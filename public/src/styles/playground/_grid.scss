@@ -1,21 +1,4 @@
-@import "base";
-@import "test";
-@import "breakpoint";
-@import "media";
-
-$figpadding: .1rem;
-@mixin figboarder {
-  padding: $figpadding;
-}
-
-#main {
-  height: 100%;
-}
-
-.layout-container {
-  height: 100%;
-}
-
+@import "../media";
 .grid {
   position: relative;
   width: 100%;
@@ -35,7 +18,8 @@ $figpadding: .1rem;
     }
 
     @include breakpoint($q-medium) {
-      width: 33.33333333%;
+      // the exact value safari deals with
+      width: 33.333333%;
     }
 
     //@include breakpoint($q-big) {
@@ -46,4 +30,13 @@ $figpadding: .1rem;
   @import "figure";
 }
 
-@import "playground";
+.grid-loading {
+  position: absolute !important;
+
+  top: 50%;
+  left: 50%;
+
+  margin-top: -30px;
+  margin-left: -30px;
+  z-index: 10000;
+}

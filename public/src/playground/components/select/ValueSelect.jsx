@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import debounce from 'lodash.debounce';
-import MODES, {ModeNames, helper} from 'grid/modules/modes';
+import MODES, {ModeNames, helper} from 'playground/modules/modes';
 import SelectGroup from './SelectGroup';
 import ColorSelect from './ColorSelect';
 import {EditCrop, EditResize, EditResizeScale} from './EditGroups';

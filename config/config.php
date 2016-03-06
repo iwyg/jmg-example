@@ -10,14 +10,14 @@ return [
     'image_resolve.path' => dirname(__DIR__).'/resources/images',
 
     'jmg.paths' => [
-        'media/q/images' => dirname(__DIR__).'/resources/images'
+        'images' => dirname(__DIR__).'/resources/images'
     ],
     'jmg.loaders' => [
-        'media/q/images' => new Thapp\Jmg\Loader\FilesystemLoader
+        'images' => new Thapp\Jmg\Loader\FilesystemLoader
     ],
     'jmg.cache_prefix' => 'cached',
     'jmg.caches' => [
-        'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(dirname(__DIR__).'/resources/cache/media/q/images')
+        'images' => new Thapp\Jmg\Cache\FilesystemCache(dirname(__DIR__).'/resources/cache/media/q/images')
         //'media/q/images' => new Thapp\Jmg\Cache\FilesystemCache(publicPath() . '/cached/media/q/images')
     ],
     'jmg.mode_constraints' => [

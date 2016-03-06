@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Image} from './Image';
-import {selectImage, fetchImage as getImage} from 'grid/modules/actions';
+import {selectImage, fetchImage as getImage} from 'playground/modules/actions';
 import ValueSelect from './select/ValueSelect';
 import ModeSelect from './select/ModeSelect';
 import {Button} from 'react-toolbox/lib/button';

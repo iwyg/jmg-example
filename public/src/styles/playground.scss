@@ -1,0 +1,19 @@
+@import "breakpoint";
+@import "base";
+@import "media";
+
+$figpadding: .1rem;
+
+@mixin figboarder {
+  padding: $figpadding;
+}
+
+#main {
+  height: 100%;
+}
+
+.layout-container {
+  height: 100%;
+}
+
+@import "playground/main";

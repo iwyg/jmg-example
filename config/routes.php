@@ -47,11 +47,11 @@ return [
     ],
 
     'imagequery' => [
-        'pattern' => '/{alias}/{src}',
+        'pattern' => '/media/q/{alias}:{src}',
         'methods' => ['GET'],
         'handler' => 'ctrl.jmg@imageQueryAction',
         'requirements' => [
-            'alias' => 'media/q/images',
+            'alias' => '(.*?)',
             'src' => '.*\.(jpe?g|png|gif)'
         ]
     ]

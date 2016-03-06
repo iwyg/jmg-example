@@ -1,4 +1,4 @@
-import 'styles/playground/main';
+import 'styles/playground';
 import 'babel-polyfill';
 import 'modernizr';
 

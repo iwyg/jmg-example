@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import Dropdown from 'react-toolbox/lib/dropdown';
-import MODES from 'grid/modules/modes';
+import MODES from '../../modules/modes';
 import IconResize from 'icons/ic_photo_size_select_large_black_48px.svg';
 import IconPass from 'icons/ic_photo_size_select_actual_black_48px.svg';
 import IconScaleCrop from 'icons/ic_transform_black_48px.svg';

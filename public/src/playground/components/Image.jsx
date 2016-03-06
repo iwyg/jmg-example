@@ -1,12 +1,42 @@
 import React, {PropTypes} from 'react';
-import loaded from 'image-loaded';
+import ProgressBar from 'react-toolbox/lib/progress_bar';
+import {isFunc} from 'lib/assert';
+import loadImage from 'lib/loadImage';
 
 export default class Figure extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loaded: false
+    };
+
+    this.onLoaded = this.onLoaded.bind(this);
+  }
+
+  onLoaded(loaded) {
+
+    if (loaded === this.state.loaded) {
+      return;
+    }
+
+    console.log('callback');
+    this.setState({loaded: loaded});
+  }
+
   render() {
     let {src, style, ref, ...props} = this.props;
+    let isLoaded = this.state.loaded;
     return (
       <figure style={style} ref={ref}>
-        <Image src={src} {...props} />
+        <Image ref='image' src={src} {...props} onLoaded={this.onLoaded}/>
+        {
+          (function() {
+            return isLoaded ? null : (
+              <ProgressBar className='loading' type='circular' mode='indeterminate' />
+            )
+          }())
+        }
         <figcaption>{this.props.children}</figcaption>
       </figure>
     );
@@ -17,8 +47,8 @@ export class Image extends React.Component {
   constructor(props) {
     super(props);
     this.className = null;
-    this.onLoad = this.onLoad.bind(this);
     this.state = {
+      loaded: false,
       src: null,
       className: null
     };
@@ -29,29 +59,44 @@ export class Image extends React.Component {
     return this.image;
   }
 
-  onLoad(err, wasLoaded) {
-    if (err !== null) {
-      this.onError(err);
-      return;
+  load(src) {
+    let {onLoaded} = this.props;
+
+    if (isFunc(onLoaded)) {
+      onLoaded(this.state.loaded);
     }
 
-    this.setState({className: this.className + ' ' + this.props.loadedClass});
-  }
-
-  onError(err) {
-    new Error(err);
-  }
-
-  load() {
-    let img = this.getImage();
-    img.src = this.props.src;
-    this.setState({className: this.className + ' ' + this.props.loadingClass});
-    loaded(img, this.onLoad);
+    loadImage(src).then(() => {
+      console.log('image was loaded');
+      this.setState({
+        loaded: true,
+        className: this.className + ' ' + this.props.loadedClass
+      });
+    }).catch((err) => {
+        console.log('image was not loaded');
+        throw new Error(err);
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.src === this.props) {
+    if (nextProps.src === this.props.src) {
       return;
+    }
+
+    this.setState({loaded: false, className: this.className + ' ' + this.props.loadingClass});
+    this.load(nextProps.src);
+  }
+
+  isLoaded() {
+    return this.state.loaded;
+  }
+
+  componentDidUpdate() {
+    let {onLoaded} = this.props;
+
+    if (isFunc(onLoaded)) {
+      onLoaded(this.state.loaded);
     }
   }
 
@@ -62,7 +107,8 @@ export class Image extends React.Component {
   }
 
   componentDidMount() {
-    this.load();
+    this.load(this.props.src);
+
   }
 
   render() {
@@ -88,7 +134,8 @@ Figure.defaultProps = {
 Image.propTypes = {
   src: PropTypes.string.isRequired,
   loadingClass: PropTypes.string,
-  loadedClass: PropTypes.string
+  loadedClass: PropTypes.string,
+  onLoaded: PropTypes.func
 };
 
 Image.defaultProps = {

@@ -1,4 +1,4 @@
-@import "mixins";
+@import "../mixins";
 
 //$border-color: lighten($gray_neutral, 40);
 $border-color: $base_flat;
@@ -18,22 +18,24 @@ $border-size: 1px;
   background: #fff;
   @include clearfix();
   @include inbox(8*$base_font_size);
-  /*border: 1px solid $fill-color;*/
+  border: 1px solid $fill-color;
 
   > * {
     cursor: pointer;
-    @include inbox(33.3333334%);
+    position: relative;
+    @include inbox(33.333333%);
     background-color: inherit;
+    display: inline;
     float: left;
     transition: background-color .4s;
-    border: $border-size solid transparent;
     &.selected {
       //background-color: rgba($fill-color, 1);
       //border: 1px solid rgba($fill-color, 1);
     }
 
     &.selected {
-      border-color: $fill-color;
+      border: $border-size solid $fill-color;
+      /*border-color: $fill-color;*/
     }
 
     &:hover {
@@ -42,18 +44,18 @@ $border-size: 1px;
   }
 
   .top {
-    border-top-color: $fill-color;
+    border-top: none;
   }
 
   .bottom {
-    border-bottom-color: $fill-color;
+    border-bottom: none;
   }
 
   .left {
-    border-left-color: $fill-color;
+    border-left: none;
   }
 
   .right {
-    border-right-color: $fill-color;
+    border-right: none;
   }
 }

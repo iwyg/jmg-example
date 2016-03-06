@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import Slider from 'react-toolbox/lib/slider';
 import SelectGroup from './SelectGroup';
 import GravitySelect from './GravitySelect';
-import MODES from 'grid/modules/modes';
+import MODES from '../../modules/modes';
 
 /**
  * EditGroup

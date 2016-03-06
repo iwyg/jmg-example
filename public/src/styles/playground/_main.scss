@@ -1,5 +1,6 @@
-@import "mixins";
-@import "colors";
+@import "../mixins";
+@import "../colors";
+@import "grid";
 
 $settings-width: 36rem;
 $settings-width-small: 26rem;
@@ -104,6 +105,18 @@ $info_bar_position: bottom;
 
   @include breakpoint((min-width: $q-medium, orientation: landscape)) {
     width: $settings-width;
+  }
+}
+
+
+.grid-loading {
+
+  @include breakpoint((min-width: $q-small, orientation: landscape)) {
+    left: calc(50% + #{$settings-width-small / 2});
+  }
+
+  @include breakpoint((min-width: $q-medium, orientation: landscape)) {
+    left: calc(50% + #{$settings-width / 2});
   }
 }
 
@@ -229,4 +242,5 @@ ul {
     width: 100%;
   }
 }
+
 @import "gravity-select";

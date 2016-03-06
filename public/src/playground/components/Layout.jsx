@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import {fetchImages, selectQuery, selectImage} from 'grid/modules/actions';
-import MODES from 'grid/modules/modes';
+import {fetchImages, selectQuery, selectImage} from 'playground/modules/actions';
+import MODES from 'playground/modules/modes';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 import Grid from './Grid';
 import Playground from './Playground';
@@ -76,7 +76,7 @@ export default class Layout extends React.Component {
   render() {
     const progressBar = (fetching) => {
       return fetching ?
-        (<ProgressBar type='circular' mode='indeterminate'/>) :
+        (<ProgressBar className='grid-loading' type='circular' mode='indeterminate'/>) :
         null;
     };
 

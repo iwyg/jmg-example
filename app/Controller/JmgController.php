@@ -11,11 +11,12 @@
 
 namespace App\Controller;
 
-use Zend\Diactoros\Response;
-use Zend\Diactoros\Response\JsonResponse;
 use Thapp\Jmg\Parameters;
+use Zend\Diactoros\Response;
+use Thapp\Jmg\FilterExpression;
 use Thapp\Jmg\Http\Psr7\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
+use Thapp\Jmg\Resolver\ImageResolverInterface;
 
 /**
  * @class JmgController
@@ -26,38 +27,100 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class JmgController
 {
-    public function __construct($imageResolver)
+    /**
+     * Constructor.
+     *
+     * @param ImageResolverInterface $imageResolver
+     */
+    public function __construct(ImageResolverInterface $imageResolver)
     {
         $this->imageResolver = $imageResolver;
         $this->responseFactory = new ResponseFactory;
     }
 
-    public function imageCachedAction(ServerRequestInterface $request)
+    /**
+     * Resolves an image query.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return Psr\Http\Message\ResponseInterface
+     */
+    public function imageQueryAction(ServerRequestInterface $request)
     {
+        $query = $request->getQueryParams();
+        $src   = $request->getAttribute('src');
         $alias = $request->getAttribute('alias');
-        $id = $request->getAttribute('id');
-        $ext = $request->getAttribute('ext');
 
-        if (!$resource = $this->imageResolver->resolveCached($alias, $id.$ext)) {
+        if (isset($query['jmg'])) {
+            $resource = $this->chainedQueryAction($src, $alias, $query);
+        } else {
+            $resource = $this->singleQueryAction($src, $alias, $query);
+        }
 
+        if (!$resource) {
+            return $this->resourceNotFound($request);
         }
 
         return $this->responseFactory->getResponse($request, $resource);
     }
 
-    public function imageQueryAction(ServerRequestInterface $request)
+    /**
+     * Resolves a cached image resource.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return Psr\Http\Message\ResponseInterface
+     */
+    public function imageCachedAction(ServerRequestInterface $request)
     {
-        $params = Parameters::fromQuery($request->getQueryParams());
+        $alias = $request->getAttribute('alias');
+        $id    = $request->getAttribute('id');
+        $ext   = $request->getAttribute('ext');
 
-        if (!$resource = $this->imageResolver->resolve(
-            $request->getAttribute('src'),
-            $params,
-            null,
-            $request->getAttribute('alias')
-        )) {
-            return new Response('php://temp', 404);
+        if (!$resource = $this->imageResolver->resolveCached($alias, $id.$ext)) {
+            return $this->resourceNotFound();
         }
 
         return $this->responseFactory->getResponse($request, $resource);
+    }
+
+    /**
+     * Resolves a sindle query action with `mode` key.
+     *
+     * @param string $src
+     * @param string $alias
+     * @param array $query
+     *
+     * @return Thapp\Jmg\Resource\ImageResourceInterface
+     */
+    private function singleQueryAction($src, $alias, array $query)
+    {
+        $params = Parameters::fromQuery($query);
+        $filter = FilterExpression::fromQuery($query);
+
+        return $this->imageResolver->resolve($params, $filter, $alias);
+    }
+
+    /**
+     * Resolves a chained query action with `mode` key.
+     *
+     * @param string $src
+     * @param string $alias
+     * @param array $query
+     *
+     * @return Thapp\Jmg\Resource\ImageResourceInterface
+     */
+    private function chainedQueryAction($src, $alias, array $query)
+    {
+        $params = Parameters::fromChainedQuery($query);
+
+        return $this->imageResolver->resolveChained($src, $params, $alias);
+    }
+
+
+
+    private function resourceNotFound()
+    {
+        return new Response('php://temp', 404);
     }
 }

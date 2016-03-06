@@ -52,6 +52,8 @@
     "color": "^0.11.1",
     "image-loaded": "0.0.2",
     "isomorphic-fetch": "^2.2.1",
+    "lazy-promise": "^3.0.1",
+    "load-image": "^1.0.0",
     "lodash.debounce": "^4.0.3",
     "lodash.zipobject": "^4.1.2",
     "modernizr": "^3.3.1",

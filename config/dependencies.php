@@ -27,7 +27,6 @@ $container['image_repo'] = $container->share(function () use ($container) {
     );
 });
 
-
 $container['view'] = $container->share(function () use ($container) {
     $paths = (array)$container['config']['templates'];
     return new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
@@ -100,6 +99,10 @@ $container['negotiation'] = $container->share(function () use ($container) {
     return new Negotiation\Negotiator;
 });
 
+$container['middleware.stack'] = $container->share(function () use ($container) {
+    return new App\Middleware\Stack($container->get('events'), 'kernel.middleware');
+});
+
 $container['middleware.xhr_request'] = $container->share(function () use ($container) {
     return new App\Middleware\XhrRequest($container->get('events'));
 });
@@ -113,7 +116,3 @@ $container['middleware.mux'] = $container->share(function () use ($container) {
 });
 
 require __DIR__.'/jmg.php';
-
-//$src = $container->get('jmg.jmg')->take('image_0001.jpg', 'media/q/images', false)->get();
-//var_dump($src);
-//die;

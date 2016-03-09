@@ -18,10 +18,11 @@ return [
         [
             'mediaq' => [
                 'methods' => ['GET'],
-                'pattern' => '/{alias}/{src?}',
+                'pattern' => '/media/q/{alias}/{src?}',
                 'handler' => 'ctrl.api@actionIndex',
                 'requirements' => [
-                    'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
+                    'alias' => '(images|thumbs)',
+                    //'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
                     'src' => '.*\.(jpe?g|png|gif)'
                 ]
             ],
@@ -53,6 +54,15 @@ return [
         'requirements' => [
             'alias' => '(.*?)',
             'src' => '.*\.(jpe?g|png|gif)'
+        ]
+    ],
+
+    'error' => [
+        'pattern' => '/error.{code}',
+        'methods' => ['GET'],
+        'handler' => 'ctrl.error',
+        'requirements' => [
+            'code' => '\d+'
         ]
     ]
 ];

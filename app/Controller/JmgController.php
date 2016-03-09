@@ -11,9 +11,8 @@
 
 namespace App\Controller;
 
-use Thapp\Jmg\Parameters;
+use Thapp\Jmg\ParamGroup;
 use Zend\Diactoros\Response;
-use Thapp\Jmg\FilterExpression;
 use Thapp\Jmg\Http\Psr7\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Thapp\Jmg\Resolver\ImageResolverInterface;
@@ -85,23 +84,6 @@ class JmgController
     }
 
     /**
-     * Resolves a sindle query action with `mode` key.
-     *
-     * @param string $src
-     * @param string $alias
-     * @param array $query
-     *
-     * @return Thapp\Jmg\Resource\ImageResourceInterface
-     */
-    private function singleQueryAction($src, $alias, array $query)
-    {
-        $params = Parameters::fromQuery($query);
-        $filter = FilterExpression::fromQuery($query);
-
-        return $this->imageResolver->resolve($params, $filter, $alias);
-    }
-
-    /**
      * Resolves a chained query action with `mode` key.
      *
      * @param string $src
@@ -110,14 +92,14 @@ class JmgController
      *
      * @return Thapp\Jmg\Resource\ImageResourceInterface
      */
-    private function chainedQueryAction($src, $alias, array $query)
+    private function queryAction($src, $alias, array $query)
     {
-        $params = Parameters::fromChainedQuery($query);
+        $params = ParamGroup::fromQuery($query);
+        var_dump($params);
+        die;
 
-        return $this->imageResolver->resolveChained($src, $params, $alias);
+        return $this->imageResolver->resolve($src, $params, $alias);
     }
-
-
 
     private function resourceNotFound()
     {

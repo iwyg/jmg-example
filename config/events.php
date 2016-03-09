@@ -1,15 +1,16 @@
 <?php
 
-use App\Events\RequestEvent;
+use App\Events\KernelEvents;
 
 return function (Interop\Container\ContainerInterface $container, Lucid\Signal\EventDispatcherInterface $events) {
 
-    $events->addHandler('kernel.response', function ($e) {
-        $response = $e->getResponse();
-    });
+    $setContainer = function ($key, $impl) use ($container) {
+        return $container[$key] = $impl;
+    };
 
-    $events->addHandler('kernel.middleware', function (RequestEvent $event) use ($container) {
-        $container['request'] = $event->getRequest();
-        $container['response'] = $event->getResponse();
-    });
+    $events->addHandler(KernelEvents::MIDDLEWARE, new App\EventHandler\Middleware($setContainer));
+    $events->addHandler(KernelEvents::REQUEST_ERROR, new App\EventHandler\KernelResponse(
+        $events,
+        $container['negotiation']
+    ));
 };

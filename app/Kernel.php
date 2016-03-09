@@ -11,15 +11,17 @@
 
 namespace App;
 
+use App\Events\KernelEvents;
 use App\Events\RequestEvent;
-use Lucid\Signal\EventDispatcherInterface;
-use Zend\Diactoros\Response;
+use App\Events\RequestExceptionEvent;
+use App\Middleware\MiddlewareInterface;
 use Interop\Container\ContainerInterface;
+use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Lucid\Signal\EventDispatcherInterface;
 use Lucid\Mux\Request\Context as RequestContext;
-use App\Middleware\MiddlewareInterface;
 
 /**
  * @class Kernel
@@ -75,12 +77,23 @@ class Kernel
      *
      * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request, ResponseInterface $response = null)
     {
-        list($request, $response) = $this->getMiddleware()->handle($request);
+        try {
+            list($request, $response) = $this->getMiddleware()->handle($request, $response);
+            $this->getEvents()->dispatch(
+                KernelEvents::REQUEST_OK,
+                $event = new RequestEvent($request, $response)
+            );
+        } catch (\Exception $e) {
+            $this->getEvents()->dispatch(
+                KernelEvents::REQUEST_ERROR,
+                $event = new RequestExceptionEvent($e, $request, $response)
+            );
+        }
 
-        if (null !== $response) {
-            return $response;
+        if (null === ($response = $event->getResponse())) {
+            $response = $this->notFound($request);
         }
 
         return $response;
@@ -127,6 +140,16 @@ class Kernel
     }
 
     /**
+     * getEvents
+     *
+     * @return Lucid\Signal\EventDispatcherInterface
+     */
+    protected function getEvents()
+    {
+        return $this->container->get('events');
+    }
+
+    /**
      * getMiddleware
      *
      * @return App\Middleware\Stack
@@ -138,5 +161,10 @@ class Kernel
         }
 
         return $this->middleware;
+    }
+
+    protected function notFound(ServerRequestInterface $request)
+    {
+        return new Response('php://temp', 404);
     }
 }

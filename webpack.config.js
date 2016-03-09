@@ -15,6 +15,7 @@ var srcDir            = base + '/src';
 module.exports = {
   context: path.resolve(__dirname, './' + srcDir + '/'),
   entry: {
+    index: 'index/index.js',
     playground: 'playground/index.js',
   },
   output: {
@@ -50,6 +51,11 @@ module.exports = {
       //// fonts
       {
         test   : /fonts?\/.*\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        loader : 'file-loader?name=../dist/[path][name].[ext]'
+      },
+
+      {
+        test   : /images?\/.*\.(jpe?g|png|gif)(\?[a-z0-9]+)?$/,
         loader : 'file-loader?name=../dist/[path][name].[ext]'
       },
       //{

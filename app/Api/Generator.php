@@ -11,6 +11,7 @@
 
 namespace App\Api;
 
+use Thapp\Jmg\ParamGroup;
 use Thapp\Jmg\Parameters as Params;
 use Thapp\Jmg\FilterExpression as Filters;
 use Thapp\Jmg\Resolver\ImageResolverInterface;
@@ -45,13 +46,13 @@ class Generator
      *
      * @return void
      */
-    public function fromParams($src, Params $params, Filters $filters = null, $prefix = '', $q = false)
+    public function fromParams($src, ParamGroup $params, $prefix = '', $q = false)
     {
-        if (!$resource = $this->resolve($src, $params, $filters, $prefix)) {
+        if (!$resource = $this->resolver->resolve($src, $params, $prefix)) {
             return [];
         }
 
-        return $this->getParsed($resource, $src, $prefix, $params, $filters, null, $q);
+        return $this->getParsed($resource, $src, $prefix, $params, null, $q);
     }
 
     /**
@@ -64,50 +65,17 @@ class Generator
      */
     public function fromRecipe($recipe, $src)
     {
-        list($prefix, $params, $filters) = $recipe->resolve($recipe);
+        list($prefix, $params) = $recipe->resolve($recipe);
 
         if (null === $params) {
             return [];
         }
 
-        if (!$resource = $this->resolve($src, $params, $filters, $prefix)) {
+        if (!$resource = $this->resolver->resolve($src, $params, $prefix)) {
             return [];
         }
 
-        return $this->getParsed($resource, $src, $prefix, $params, $filters, $recipe, $q);
-    }
-
-    /**
-     * getCachedUri
-     *
-     * @param CachedResourceInterface $resource
-     * @param mixed $src
-     * @param mixed $prefix
-     *
-     * @return void
-     */
-    private function getCachedUri(CachedResourceInterface $resource, $prefix)
-    {
-        return $this->url->getCachedUri($resource, $prefix, $this->cachePrefix);
-    }
-
-    /**
-     * getUri
-     *
-     * @param mixed $src
-     * @param mixed $prefix
-     * @param Params $params
-     * @param Filters $filter
-     * @param mixed $recipe
-     * @param mixed $q
-     *
-     * @return void
-     */
-    private function getUri($src, $prefix, Params $params, Filters $filter = null, $recipe = null, $q = false)
-    {
-        $q = null !== $recipe ? (bool)$q : false;
-        return null !== $recipe ? $this->url->getRecipeUri($src, $recipe, $params, $filter) :
-            $this->url->getUri($src, $params, $filter, $prefix, true);
+        return $this->getParsed($resource, $src, $prefix, $params, $recipe, $q);
     }
 
     /**
@@ -127,15 +95,16 @@ class Generator
         ResourceInterface $resource,
         $src,
         $prefix,
-        Params $params,
-        Filters $filters = null,
+        ParamGroup $params,
         $recipe = null,
         $asQuery = false
     ) {
         if ($resource instanceof CachedResourceInterface) {
-            $uri = $this->getCachedUri($resource, $prefix);
+            $uri = $this->url->fromCached($resource, $this->cachePrefix, $prefix);
+        } elseif (null !== $recipe) {
+            $uri = $this->url->fromRecipe($recipe, $src);
         } else {
-            $uri = $this->geteUri($src, $prefix, $params, $filters, $recipe, $asQuery);
+            $uri = $this->url->withQuery($prefix, $src, $params);
         }
 
         return [
@@ -147,24 +116,5 @@ class Generator
             'hash'   => $resource->getHash(),
             'color'   => $resource->getColorSpace()
         ];
-    }
-
-    /**
-     * resolve
-     *
-     * @param mixed $src
-     * @param Params $params
-     * @param Filters $filters
-     * @param mixed $prefix
-     *
-     * @return void
-     */
-    private function resolve($src, Params $params, Filters $filters = null, $prefix = null)
-    {
-        if (!$resource = $this->resolver->resolve($src, $params, $filters, $prefix)) {
-            return false;
-        }
-
-        return $resource;
     }
 }

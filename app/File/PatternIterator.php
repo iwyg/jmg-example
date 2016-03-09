@@ -31,11 +31,13 @@ class PatternIterator extends RegexIterator
      * @param string $path
      * @param string $pattern
      * @param int    $depth
+     * @param int    $limit
      * @param int    $flags
      * @param int    $dirFlags
      */
-    public function __construct($path, $pattern, $depth = null, $flags = self::MATCH, $dirFlags = null)
+    public function __construct($path, $pattern, $depth = null, $limit = -1, $flags = self::MATCH, $dirFlags = null)
     {
+        $this->limit = $limit;
         parent::__construct($this->createInnerIterator($path, $depth, $dirFlags), $pattern, $flags);
     }
 
@@ -54,12 +56,42 @@ class PatternIterator extends RegexIterator
     /**
      * getMaxDepth
      *
-     *
      * @return int
      */
     public function getMaxDepth()
     {
         return $this->getInnerIterator->getMaxDept();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid()
+    {
+        if ($this->limit > -1 && $this->max === $this->limit) {
+            return false;
+        }
+
+        return parent::valid();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
+    {
+        $this->max++;
+
+        return parent::next();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        $this->max = 0;
+        parent::rewind();
     }
 
     /**

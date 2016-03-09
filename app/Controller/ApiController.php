@@ -11,7 +11,7 @@
 
 namespace App\Controller;
 
-use Thapp\Jmg\Parameters;
+use Thapp\Jmg\ParamGroup;
 use Thapp\Jmg\FilterExpression;
 use Zend\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -33,19 +33,16 @@ class ApiController
 
     public function actionIndex(Request $request)
     {
-        $params = Parameters::fromQuery($q = $request->getQueryParams());
-        $filter = FilterExpression::fromQuery($q);
+        $query  = $request->getQueryParams();
+
+        $params = ParamGroup::fromQuery($query);
         $limit  = isset($q['limit']) ? max(1, min(100, (int)$q['limit'])) : 20;
 
-        return $this->response($request, $this->createPayloadArray($request, $params, $filter, $limit));
+        list ($response, $status) = $this->createPayloadArray($request, $params, $limit);
+        return $this->response($request, $response, $status);
     }
 
-    public function triggerError(Request $request)
-    {
-        return $this->response($request, ['error' => 500], 500);
-    }
-
-    private function createPayloadArray(Request $request, Parameters $params, FilterExpression $filter, $limit)
+    private function createPayloadArray(Request $request, ParamGroup $params, $limit)
     {
         list($src, $alias) = [null, null];
         extract($request->getAttributes(), EXTR_IF_EXISTS);
@@ -54,9 +51,11 @@ class ApiController
             $src = null;
         }
 
-        $filter = 0 === count($filter->all()) ? null : $filter;
-
-        return ['images' => $this->repository->fetch($alias, $params, $filter, $src, $limit, true)];
+        try {
+            return [['images' => $this->repository->fetch($alias, $params, $src, $limit, true)], 200];
+        } catch (\Exception $e) {
+            return [['error' => $e->getMessage(), 500]];
+        }
     }
 
     private function response(Request $request, $response = [], $status = 200)

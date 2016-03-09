@@ -81,7 +81,7 @@ class RequestEvent extends Event
      *
      * @return void
      */
-    public function setResponse(Response $resonse)
+    public function setResponse(Response $response)
     {
         $this->response = $response;
     }

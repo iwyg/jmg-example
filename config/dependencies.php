@@ -20,6 +20,12 @@ $container['ctrl.api'] = $container->share(function () use ($container) {
     return new App\Controller\ApiController($container->get('image_repo'));
 });
 
+$container['ctrl.error'] = $container->share(function () use ($container) {
+    return new App\Controller\ErrorController(
+        $container->get('view')
+    );
+});
+
 $container['image_repo'] = $container->share(function () use ($container) {
     return new App\Model\ImageRepository(
         $container->get('jmg.api'),
@@ -37,7 +43,8 @@ $container['router.response_mapper'] = $container->share(function () use ($conta
 
 $container['router.handler.mapped_types'] = $container->share(function () use ($container) {
     return new Lucid\Mux\Handler\TypeMapCollection([
-        new App\Bridge\Mux\RequestTypeMap($container, 'request')
+        new App\Bridge\Mux\TypeMap($container, 'request', 'Psr\Http\Message\ServerRequestInterface'),
+        new App\Bridge\Mux\TypeMap($container, 'response', 'Psr\Http\Message\ResponseInterface'),
     ]);
 });
 

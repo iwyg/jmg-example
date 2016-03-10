@@ -22,7 +22,8 @@
     "lucid/template": "dev-master",
     "lucid/signal": "dev-develop",
     "symfony/polyfill-mbstring": "^1.1",
-    "willdurand/negotiation": "^2.0"
+    "willdurand/negotiation": "^2.0",
+    "cebe/markdown": "~1.0.1"
   },
 
   "require-dev": {

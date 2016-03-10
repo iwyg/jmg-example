@@ -8,6 +8,11 @@ use Lucid\Mux\Handler\Dispatcher;
 
 $container['config'] = require __DIR__.'/config.php';
 
+/*
+ * ---------------------------------------------------
+ * Controller
+ * ---------------------------------------------------
+ */
 $container['ctrl.index'] = $container->share(function () use ($container) {
     return new App\Controller\IndexController($container['view']);
 });
@@ -26,6 +31,52 @@ $container['ctrl.error'] = $container->share(function () use ($container) {
     );
 });
 
+/*
+ * ---------------------------------------------------
+ * View
+ * ---------------------------------------------------
+ */
+$container['view'] = $container->share(function () use ($container) {
+    $paths = (array)$container['config']['templates'];
+    $view = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
+
+    $container->get('events')->dispatch('register_view', new App\Events\RegisterView($view));
+
+    return $view;
+});
+
+$container['view.markdown'] = $container->share(function () use ($container) {
+    return new App\Bridge\Template\MarkdownExtension($container->get('markdown.render'));
+});
+
+$container['markdown.render'] = $container->share(function () use ($container) {
+    return new App\Markdown\Renderer(
+        $container->get('markdown.adapter'),
+        $container->get('markdown.loader'),
+        $container->get('markdown.cache')
+    );
+});
+
+$container['markdown.adapter'] = $container->share(function () use ($container) {
+    return new App\Markdown\Adapter\Cebe(new cebe\markdown\GithubMarkdown);
+});
+
+$container['markdown.loader'] = $container->share(function () use ($container) {
+    return new App\Markdown\Loader\Filesystem($container['config']['markdown']);
+});
+
+$container['markdown.cache'] = $container->share(function () use ($container) {
+    return new App\Markdown\Cache\Filesystem($container['config']['storage'].'/markdown');
+});
+
+$container['router.response_mapper'] = $container->share(function () use ($container) {
+});
+
+/*
+ * ---------------------------------------------------
+ * Model
+ * ---------------------------------------------------
+ */
 $container['image_repo'] = $container->share(function () use ($container) {
     return new App\Model\ImageRepository(
         $container->get('jmg.api'),
@@ -33,14 +84,11 @@ $container['image_repo'] = $container->share(function () use ($container) {
     );
 });
 
-$container['view'] = $container->share(function () use ($container) {
-    $paths = (array)$container['config']['templates'];
-    return new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
-});
-
-$container['router.response_mapper'] = $container->share(function () use ($container) {
-});
-
+/*
+ * ---------------------------------------------------
+ * Routing
+ * ---------------------------------------------------
+ */
 $container['router.handler.mapped_types'] = $container->share(function () use ($container) {
     return new Lucid\Mux\Handler\TypeMapCollection([
         new App\Bridge\Mux\TypeMap($container, 'request', 'Psr\Http\Message\ServerRequestInterface'),
@@ -94,12 +142,22 @@ $container['router'] = $container->share(function () use ($container) {
     );
 });
 
-$container['kernel.middleware'] = $container->share(function () use ($container) {
-    return new App\Middleware\Queue($container->get('events'), 'kernel.middleware');
-});
-
+/*
+ * ---------------------------------------------------
+ * Events
+ * ---------------------------------------------------
+ */
 $container['events'] = $container->share(function () use ($container) {
     return new Lucid\Signal\ContainerAwareDispatcher($container);
+});
+
+/*
+ * ---------------------------------------------------
+ * Middleware
+ * ---------------------------------------------------
+ */
+$container['kernel.middleware'] = $container->share(function () use ($container) {
+    return new App\Middleware\Queue($container->get('events'), 'kernel.middleware');
 });
 
 $container['negotiation'] = $container->share(function () use ($container) {

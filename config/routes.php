@@ -41,7 +41,8 @@ return [
         'methods' => ['GET'],
         'handler' => 'ctrl.jmg@imageCachedAction',
         'requirements' => [
-            'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
+            'alias' => '(images|thumbs)',
+            //'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
             'id' => '[0-9A-Fa-f]{8}/(\w+)_?[0-9A-Fa-f]{18}',
             'ext' => '\.(jpe?g|png|gif)'
         ]

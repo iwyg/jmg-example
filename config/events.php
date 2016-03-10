@@ -13,4 +13,8 @@ return function (Interop\Container\ContainerInterface $container, Lucid\Signal\E
         $events,
         $container['negotiation']
     ));
+
+    $events->addHandler('register_view', function ($event) use ($container) {
+        $event->getView()->registerExtension($container->get('view.markdown'));
+    });
 };

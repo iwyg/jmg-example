@@ -44,11 +44,13 @@ class Filesystem implements CacheInterface
      */
     public function has(ResourceInterface $resource)
     {
-        if (!$resource->isValid(time())) {
+        $path = $this->getPath($this->getHash($resource));
+
+        if (!file_exists($path) || !$resource->isValid(filemtime($path))) {
             return false;
         }
 
-        return file_exists($this->getPath($this->getHash($resource)));
+        return true;
     }
 
     /**
@@ -66,7 +68,7 @@ class Filesystem implements CacheInterface
     {
         $path = $this->ensurePath($this->getHash($resource));
 
-        return file_put_contents($path, $rendered);
+        return file_put_contents($path, $rendered, LOCK_EX);
     }
 
     /**

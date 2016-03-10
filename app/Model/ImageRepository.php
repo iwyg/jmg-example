@@ -83,9 +83,9 @@ class ImageRepository
      */
     private function glob($path, $limit, $maxDepth = 1)
     {
-        return array_map(function ($info) {
+        return array_values(array_map(function ($info) {
             return $info->getRelativePathName();
-        }, iterator_to_array($this->getIterator($path, $maxDepth, $limit)));
+        }, iterator_to_array($this->getIterator($path, $maxDepth, $limit))));
     }
 
     /**

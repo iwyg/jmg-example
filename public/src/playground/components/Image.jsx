@@ -20,7 +20,6 @@ export default class Figure extends React.Component {
       return;
     }
 
-    console.log('callback');
     this.setState({loaded: loaded});
   }
 
@@ -55,26 +54,30 @@ export class Image extends React.Component {
     this.image = null;
   }
 
+  imageDidLoad(loaded) {
+    let {onLoaded} = this.props;
+    isFunc(onLoaded) && onLoaded(loaded);
+  }
+
   getImage() {
     return this.image;
   }
 
   load(src) {
-    let {onLoaded} = this.props;
-
-    if (isFunc(onLoaded)) {
-      onLoaded(this.state.loaded);
-    }
+    let {onLoad} = this.props;
+    isFunc(onLoad) && onLoad(src);
 
     loadImage(src).then(() => {
-      console.log('image was loaded');
       this.setState({
         loaded: true,
         className: this.className + ' ' + this.props.loadedClass
       });
+
+      this.imageDidLoad(this.state.loaded);
+
     }).catch((err) => {
-        console.log('image was not loaded');
         throw new Error(err);
+        this.imageDidLoad(false);
       }
     );
   }
@@ -90,14 +93,6 @@ export class Image extends React.Component {
 
   isLoaded() {
     return this.state.loaded;
-  }
-
-  componentDidUpdate() {
-    let {onLoaded} = this.props;
-
-    if (isFunc(onLoaded)) {
-      onLoaded(this.state.loaded);
-    }
   }
 
   componentWillMount() {
@@ -135,6 +130,7 @@ Image.propTypes = {
   src: PropTypes.string.isRequired,
   loadingClass: PropTypes.string,
   loadedClass: PropTypes.string,
+  onLoad: PropTypes.func,
   onLoaded: PropTypes.func
 };
 

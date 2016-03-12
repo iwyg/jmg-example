@@ -48,9 +48,9 @@ class Kernel
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->booted = false;
+        $this->booted    = false;
         $this->container = $container;
-        $this->emitter = new \Zend\Diactoros\Response\SapiEmitter;
+        $this->emitter   = new \Zend\Diactoros\Response\SapiEmitter;
     }
 
     /**
@@ -163,6 +163,13 @@ class Kernel
         return $this->middleware;
     }
 
+    /**
+     * notFound
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
     protected function notFound(ServerRequestInterface $request)
     {
         return new Response('php://temp', 404);

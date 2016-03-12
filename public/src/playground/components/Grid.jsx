@@ -1,13 +1,13 @@
-import {CONTEXT} from 'runtime/constants';
 import debounce from 'lodash.debounce';
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import Masonry from 'react-masonry-component';
 import Figure from './Image';
-import {Button, IconButton} from 'react-toolbox/lib/button';
-
+import {ButtonAdd} from './Buttons';
+import {className} from 'lib/react-helper';
+import {isFunc, isObject} from 'lib/assert';
 import IconMasonry from 'ic_dashboard_black_24px.svg';
-import IconGrid from 'ic_view_module_black_24px.svg';
+import {CONTEXT} from 'runtime/constants';
 
 const RESIZE = 'resize';
 
@@ -39,7 +39,11 @@ export default class Grid extends React.Component {
   }
 
   bindMasonry(ref) {
-    this.masonry = ref.masonry;
+    if (isObject(ref)) {
+      this.masonry = ref.masonry;
+    } else {
+      this.masonry = null;
+    }
   }
 
   bindRefs(item) {
@@ -62,7 +66,7 @@ export default class Grid extends React.Component {
     resizeCallback(this.state.maxWidth);
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate(nextProps, nextState) {
     this.figures = [];
 
     if (!this.state.loaded && nextProps.images.length !== this.props.images.length)  {
@@ -98,77 +102,98 @@ export default class Grid extends React.Component {
     this.setState({loaded: false, maxWidth: null});
   }
 
+  getClassName() {
+    let baseClass = 'grid';
+  }
+
   // render empty ref for max width calculation
-  renderEmpty() {
+  renderEmpty(gridClass) {
     return (
-      <div className='grid'>
-        <div className='grid-item' ref='figure0'></div>
+      <div className={gridClass}>
+        <div className='grid'>
+          <div className='grid-item' ref='figure0'></div>
+        </div>
       </div>
     );
   }
 
-  //renderLayoutSelect() {
-  //  return (
-  //    <div>
-  //      <IconButton ref='layoutMasonry' onClick={this.switchLayoutMasonry}><IconMasonry/></IconButton>
-  //      <IconButton ref='layoutDefault' onClick={this.switchLayoutDefault}><IconGrid/></IconButton>
-  //    </div>
-  //  );
-  //}
-
+  /**
+   * Renders a grid item.
+   *
+   * @return ReactElement
+   */
   renderItem(image, key, keys, refStr, props) {
-    let {...props} = props;
+    //let {...props} = props;
     return (
       <GridItem ref={refStr + key} refPrefix={refStr} image={image}
-        key={key} index={key} keys={keys} {...props}
-      >
+        onClick={this.props.onSelect} key={key} index={key} keys={keys} {...props} >
       </GridItem>
     );
   }
 
-  render() {
-    if (!this.state.loaded) {
-      return this.renderEmpty();
-    }
-
-    let {layout, masonry, captionKeys, images, ...rest} = this.props;
+  renderItems(props) {
+    let {captionKeys, images, ...rest} = props;
     let refStr = 'figure'
 
-    const renderItems = () => {
-      return images.map((image, key) => {
-        return this.renderItem(image, key, captionKeys, refStr, rest);
-      })
-    };
+    return images.map((image, key) => {
+      return this.renderItem(image, key, captionKeys, refStr, rest);
+    })
+  };
 
-    if (layout !== 'masonry') {
-      return (
-        <div className='grid'>
-          {renderItems()}
-        </div>
-      );
+  renderLayout(layout, items, masonry = {}) {
+    switch (layout) {
+      case 'masonry':
+        return (
+          <Masonry className='grid' options={masonry} ref={this.bindMasonry}>
+            {items}
+          </Masonry>
+        );
+      default:
+        return (
+          <div className='grid'>
+            {items}
+          </div>
+        );
+    }
+  }
+
+  /**
+   * Render the grid.
+   *
+   * @return ReactElement
+   */
+  render() {
+    let gridClass = className('grid-wrap', {className: this.props.visible ? 'visible' : undefined});
+
+    if (!this.state.loaded) {
+      return this.renderEmpty(gridClass);
     }
 
+    let {layout, masonry, ...props} = this.props;
+    const items = this.renderItems(props);
+
     return (
-      <Masonry className='grid' options={masonry} ref={this.bindMasonry}>
-        {renderItems()}
-      </Masonry>
+      <div className={gridClass}>
+        {this.renderLayout(layout, items, masonry)}
+      </div>
     );
   }
 }
 
 Grid.propTypes = {
   images: PropTypes.array.isRequired,
-  rows: PropTypes.number,
   onResize: PropTypes.func,
+  onSelect: PropTypes.func,
   onLayoutChange: PropTypes.func,
   masonry: PropTypes.object,
   captionKeys: PropTypes.array,
+  visible: PropTypes.bool,
   layout: PropTypes.oneOf(['masonry', 'default'])
 };
 
 Grid.defaultProps = {
   images: [],
-  rows: 3,
+  visible: false,
   masonry: {
     gutter: 0,
     resize: false,
@@ -179,8 +204,10 @@ Grid.defaultProps = {
   layout: 'masonry'
 };
 
-
-/* Wrapper component for the figure elements */
+/**
+ * class GridItem
+ * Wrapper component for the figure elements
+ */
 class GridItem extends React.Component {
   constructor(props) {
     super(props);
@@ -196,17 +223,17 @@ class GridItem extends React.Component {
   render() {
     let {image, refPrefix, index, keys, ...rest} = this.props;
     return (
-        <div className="grid-item" >
-          <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
+      <div className='grid-item'>
+        <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
           <div className='buttons'>
-            <Button icon='+' floating={true} accent={true} onClick={this.handleClick}></Button>
+            <ButtonAdd onClick={this.handleClick}></ButtonAdd>
           </div>
           <div className='info'>
             {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
           </div>
           {this.props.children}
         </Figure>
-        </div>
+      </div>
     );
   }
 }

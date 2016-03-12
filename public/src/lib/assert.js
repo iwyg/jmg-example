@@ -11,7 +11,7 @@ export const isString = (thing) => {
 };
 
 export const isObject = (thing) => {
-  return typeOf(thing, 'object');
+  return null !== thing && typeOf(thing, 'object');
 };
 
 export const isArray = (thing) => {
@@ -25,3 +25,7 @@ export const isNumber = (thing) => {
 export const stringable = (thing) => {
   return isFunc(thing.toString);
 };
+
+export const isDefined = (thing) => {
+  return !typeOf(thing, 'undefined');
+}

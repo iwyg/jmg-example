@@ -14,6 +14,9 @@ export const SELECT_QUERY_IMAGE         = 'SELECT_QUERY_IMAGE';
 
 export const SELECT_MODE                = 'SELECT_MODE';
 
+export const TOGGLE_GRID                = 'TOGGLE_GRID';
+export const SET_IMAGE_PARAMS           = 'SET_IMAGE_PARAMS';
+
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
 };
@@ -23,7 +26,7 @@ const getQueryString = (query = {}) => {
 };
 
 /* Action creators */
-export const selectQuery = (query = {}) => {
+export const selectQuery = (query = []) => {
   return {
     type: SELECT_QUERY_ALL,
     payload: {
@@ -32,11 +35,11 @@ export const selectQuery = (query = {}) => {
   };
 };
 
-export const selectImage = (image = null, query = {}) => {
+export const selectImage = (image = null, query = []) => {
   return {
     type: SELECT_QUERY_IMAGE,
     payload: {
-      image, query
+      image : image, query
     }
   };
 };
@@ -141,4 +144,17 @@ export const fetchImage = doFetchAssets(
   fetchImageFailed
 );
 
+export const setImageParams = (params = []) => {
+  return {
+    type: SET_IMAGE_PARAMS,
+    payload: params
+  };
+}
+
+export const toggleGrid = (visible) => {
+  return {
+    type: TOGGLE_GRID,
+    payload: visible
+  };
+}
 

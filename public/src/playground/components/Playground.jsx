@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Image} from './Image';
-import {selectImage, fetchImage as getImage} from 'playground/modules/actions';
+import {selectImage, fetchImage as getImage, toggleGrid} from 'playground/modules/actions';
 import ValueSelect from './select/ValueSelect';
 import ModeSelect from './select/ModeSelect';
 import {Button} from 'react-toolbox/lib/button';
@@ -36,7 +36,9 @@ export class Playground extends React.Component {
   }
 
   selectImage() {
-    this.setState({select: !this.state.select});
+    let {dispatch, gridVisible} = this.props;
+    dispatch(toggleGrid(gridVisible));
+    this.setState({select: gridVisible});
   }
 
   onModeChange(mode) {
@@ -48,9 +50,13 @@ export class Playground extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    let {dispatch, fetchImage} = nextProps;
+    let {dispatch, fetchImage, gridVisible} = nextProps;
 
+
+      //this.setState({select: false});
     if (this.props.image !== nextProps.image) {
+      //this.selectImage();
+      //dispatch(toggleGrid(this.state.select));
       this.setState({select: false});
     }
 
@@ -188,7 +194,7 @@ InfoBar.defaultProps = {
 };
 
 const mapStateToProps = function (state) {
-  const {fetchImage, fetching, image} = state;
+  const {fetchImage, fetching, image, gridVisible} = state;
 
   return {
     fetchImage,

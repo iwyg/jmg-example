@@ -19,6 +19,8 @@ body {
   @include fontLight();
   font-size: $base_font_size;
   line-height: $base_line_height;
+  -webkit-font-smoothing: subpixel-antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 img {

@@ -16,6 +16,7 @@ use Zend\Diactoros\Response;
 use Thapp\Jmg\Http\Psr7\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Thapp\Jmg\Resolver\ImageResolverInterface;
+use Thapp\Jmg\Resolver\RecipeResolverInterface;
 
 /**
  * @class JmgController
@@ -26,14 +27,25 @@ use Thapp\Jmg\Resolver\ImageResolverInterface;
  */
 class JmgController
 {
+    /** @var ResponseFactory */
+    private $responseFactory;
+
+    /** @var ImageResolverInterface */
+    private $imageResolver;
+
+    /** @var RecipeResolverInterface */
+    private $recipes;
+
     /**
      * Constructor.
      *
      * @param ImageResolverInterface $imageResolver
+     * @param RecipeResolverInterface $recipes
      */
-    public function __construct(ImageResolverInterface $imageResolver)
+    public function __construct(ImageResolverInterface $imageResolver, RecipeResolverInterface $recipes)
     {
-        $this->imageResolver = $imageResolver;
+        $this->imageResolver   = $imageResolver;
+        $this->recipes         = $recipes;
         $this->responseFactory = new ResponseFactory;
     }
 
@@ -84,6 +96,31 @@ class JmgController
     }
 
     /**
+     * Handles a recipe request
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    public function imageRecipeAction(ServerRequestInterface $request)
+    {
+        $recipe = $request->getAttribute('recipe');
+        $src   = $request->getAttribute('src');
+
+        if (!$res = $this->recipes->resolve($recipe)) {
+            return $this->resourceNotFound();
+        }
+
+        list ($alias, $params) = $res;
+
+        if (!$resource = $this->imageResolver->resolve($src, $params, $alias)) {
+            return $this->resourceNotFound();
+        }
+
+        return $this->responseFactory->getResponse($request, $resource);
+    }
+
+    /**
      * Resolves a chained query action with `mode` key.
      *
      * @param string $src
@@ -95,8 +132,6 @@ class JmgController
     private function queryAction($src, $alias, array $query)
     {
         $params = ParamGroup::fromQuery($query);
-        var_dump($params);
-        die;
 
         return $this->imageResolver->resolve($src, $params, $alias);
     }

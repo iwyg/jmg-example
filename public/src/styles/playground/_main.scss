@@ -62,27 +62,28 @@ $info_bar_position: bottom;
   position: relative;
 }
 
+.panel {
+  @include clearfix;
+  padding: 1rem;
+
+  button {
+    &.select-image {
+      position: relative;
+      right: calc(-100% + 9.8rem);
+      transform: rotate(0deg);
+      transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+    }
+    &.selecting {
+      transform: rotate(45deg);
+      background: $gray_dark !important;
+    }
+  }
+}
+
 .settings {
   background-color: $base_flat;
   width: 100%;
 
-  .panel {
-    @include clearfix;
-    padding: 1rem;
-
-    button {
-      &.select {
-        position: relative;
-        right: calc(-100% + 9.8rem);
-        transform: rotate(0deg);
-        transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-      }
-      &.abort {
-        transform: rotate(45deg);
-        background: $gray_dark !important;
-      }
-    }
-  }
 
   section {
     @include clearfix;
@@ -177,14 +178,18 @@ $info_bar_position: bottom;
     transform: translate3d(0, 100%, 0);
     transition: transform .4s cubic-bezier(0.6, .12, .26, .96);
     transition-delay: .1s;
-  }
-
-  &.select {
-    .grid-wrap {
+    &.visible {
       transition-delay: 0s;
       transform: translate3d(0, 0, 0);
     }
   }
+
+  //&.select {
+  //  .grid-wrap {
+  //    transition-delay: 0s;
+  //    transform: translate3d(0, 0, 0);
+  //  }
+  //}
 }
 
 .mode-group-item {
@@ -244,3 +249,62 @@ ul {
 }
 
 @import "gravity-select";
+
+
+.snackbar {
+  z-index: 100000;
+}
+
+.preview-image {
+  img {
+    //display: none;
+    transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+    transition-delay: .8s;
+    opacity: 0;
+    &.loaded {
+      //display: block;
+      opacity: 1;
+    }
+  }
+}
+
+.tabs {
+  margin: 0;
+  list-style: none;
+  @include clearfix();
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+}
+
+.tab {
+  cursor: pointer;
+  width: 25%;
+  float: left;
+  display: block;
+
+  label {
+    cursor: pointer;
+    display: block;
+  }
+
+  .icon {
+    height: 24px;
+    display: block;
+    svg {
+      fill: $gray_neutral;
+      height: 100%;
+      width: auto;
+    }
+
+  }
+  &.active {
+    .icon {
+      svg {
+        fill: $gray_darker;
+      }
+    }
+  }
+}

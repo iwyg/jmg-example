@@ -3,7 +3,8 @@ import MODES from 'playground/modules/modes';
 import {IconButton} from 'react-toolbox/lib/button';
 import Tooltip from 'react-toolbox/lib/tooltip';
 import {className, callIfFunc} from 'lib/react-helper';
-import ValueSelect, {Resize} from './select/ValueSelect';
+import {Resize, CropScale, Crop, ResizeFit, Scale} from './select/ValueSelect';
+import debounce from 'lodash.debounce';
 
 import {
   IconModePass, IconModeResize, IconModeScaleCrop, IconModeCrop,
@@ -49,7 +50,14 @@ const mapTabToMode = (index) => {
   return MODES[ModeIndexMap[index]];
 };
 
-//const TooltipButton = Tooltip(IconButton);
+const mapModeToIndex = (function(){
+  let map = {};
+  Object.keys(MODES).forEach((mode, i) => {
+    map[MODES[mode]] = i;
+  });
+
+  return (mode => map[mode]);
+}());
 
 const Icn = ({children, ...props}) => {
   let cName = className('icon', props);
@@ -62,8 +70,13 @@ export class Settings extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      filter: []
+    };
+
     this.onUpdate = this.onUpdate.bind(this);
     this.onModeChange = this.onModeChange.bind(this);
+    this.settingDidChange = this.settingDidChange.bind(this);
   }
 
   onModeChange(i, tab) {
@@ -76,21 +89,85 @@ export class Settings extends React.Component {
     onUpdate()
   }
 
-  renderContent(index) {
-    return (<ValueSelect ref='values' mode={index}
-      maxW={2400} maxH={2400}
-      minW={200} minH={200}
-      maxPx={400000} minPx={1000}
-      maxScale={200} minScale={10}
-      color='RGB'
-    />);
+  settingDidChange(mode, params) {
+    let {onUpdate, index} = this.props;
+    onUpdate(index, mode, params);
+  }
+
+  renderResize(params, constr) {
+    console.log('RESIZE', params);
+    let key = 'resize-'+this.props.index;
+    return (
+      <Resize key={key} {...constr} {...params} onChange={this.settingDidChange} />
+    );
+  }
+
+  renderScaleCrop(params, constr) {
+    let key = 'scale-crop-'+this.props.index;
+    return (
+      <CropScale key={key} {...constr} {...params} onChange={this.settingDidChange} />
+    );
+  }
+
+  renderCrop(params, constr) {
+    let key = 'crop-'+this.props.index;
+    return (
+      <Crop key={key} {...constr} {...params} onChange={this.settingDidChange} />
+    );
+  }
+
+  renderResizeFit(params, constr) {
+    let key = 'fit-'+this.props.index;
+    return (
+      <ResizeFit key={key} {...constr} {...params} onChange={this.settingDidChange} />
+    );
+  }
+
+  renderScale(params, constr) {
+    let key = 'scale-'+this.props.index;
+    let {minScale, maxScale, ...c} = constr;
+    return (
+      <Scale key={key} label='Scale' {...c} {...params} minW={minScale} maxW={maxScale}
+      mode={MODES.IM_RSIZEPERCENT}
+      onChange={this.settingDidChange} unit={'%'}/>
+    );
+  }
+
+  renderPx(params, constr) {
+    let key = 'pixel-'+this.props.index;
+    let {minPx, maxPx, ...c} = constr;
+    return (
+      <Scale key={key} label='Px' {...c} {...params} minW={minPx} maxW={maxPx}
+      mode={MODES.IM_RSIZEPXCOUNT}
+      onChange={this.settingDidChange} unit={''}/>
+    );
+  }
+
+  renderContent(mode) {
+    let {params, constraints} = this.props;
+    switch (mode) {
+      case MODES.IM_RESIZE:
+        return this.renderResize(params[mode], constraints[mode]);
+      case MODES.IM_SCALECROP:
+        return this.renderScaleCrop(params[mode], constraints[mode]);
+      case MODES.IM_CROP:
+        return this.renderCrop(params[mode], constraints[mode]);
+      case MODES.IM_RSIZEFIT:
+        return this.renderResizeFit(params[mode], constraints[mode]);
+      case MODES.IM_RSIZEPERCENT:
+        return this.renderScale(params[mode], constraints[mode]);
+      case MODES.IM_RSIZEPXCOUNT:
+        return this.renderPx(params[mode], constraints[mode]);
+      default:
+        return null;
+    }
   }
 
   render() {
     return (
       <section className={className('setting', this.props)}>
         <header>
-          <Pane onTabChange={this.onModeChange}></Pane>
+          <Pane onTabChange={this.onModeChange} activeTab={mapModeToIndex(this.props.mode)}></Pane>
         </header>
         <div className='setting-content'>{this.renderContent(this.props.mode)}</div>
       </section>
@@ -99,6 +176,7 @@ export class Settings extends React.Component {
 }
 
 Settings.propTypes = {
+  constraints: PropTypes.object.isRequired,
   mode: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   onUpdate: PropTypes.func.isRequired,
@@ -116,40 +194,28 @@ export class Pane extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      activeTab: 0
-    };
-
     this.onTabChange = this.onTabChange.bind(this);
-    this.transposeTabs = this.transposeTabs.bind(this);
-  }
-
-  transposeTabs() {
   }
 
   onTabChange(index) {
-    console.log(index, this);
     let {onTabChange} = this.props;
     onTabChange(index);
   }
 
-  componentWillMount() {
-    this.setState({activeTab: this.props.activeTab});
-  }
-
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.activeTab === this.state.activeTab) {
+    if (nextProps.activeTab === this.props.activeTab) {
       return;
     }
-    callIfFunc(this.props.onTabChange, null, nextState.activeTab, this.refs['tab-' + (1 + nextState.activeTab)]);
+
+    //callIfFunc(this.props.onTabChange, null, nextProps.activeTab, this.refs['tab-' + (1 + nextProps.activeTab)]);
   }
 
   renderTabs() {
 
-    let {activeTab} = this.state;
+    let {activeTab} = this.props;
 
     return (
-      <Tabs activeTap={activeTab} refs={this.transposeTabs}>{
+      <Tabs activeTab={activeTab}>{
         Object.keys(labelMap).map((key, i) => {
           let {...props} = labelMap[key];
           return (<Tab key={i} ref={'tab-' + (1 + i)} index={i} active={activeTab === i} onClick={this.onTabChange} {...props} ></Tab>)
@@ -210,10 +276,6 @@ class Tabs extends React.Component {
     );
   }
 }
-
-Tabs.propTypes = {
-  refs: PropTypes.func.isRequired
-};
 
 class Tab extends React.Component {
   constructor(props) {

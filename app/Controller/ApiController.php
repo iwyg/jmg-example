@@ -16,6 +16,7 @@ use Thapp\Jmg\FilterExpression;
 use Zend\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Exception\NoResultException;
 
 /**
  * @class ApiController
@@ -44,8 +45,8 @@ class ApiController
 
     private function createPayloadArray(Request $request, ParamGroup $params, $limit)
     {
-        list($src, $alias) = [null, null];
-        extract($request->getAttributes(), EXTR_IF_EXISTS);
+        $src   = urldecode($request->getAttribute('src'));
+        $alias = urldecode($request->getAttribute('alias'));
 
         if (empty($src)) {
             $src = null;
@@ -53,8 +54,10 @@ class ApiController
 
         try {
             return [['images' => $this->repository->fetch($alias, $params, $src, $limit, true)], 200];
+        } catch (NoResultException $e) {
+            return [['error' => $e->getMessage()], 404];
         } catch (\Exception $e) {
-            return [['error' => $e->getMessage(), 500]];
+            return [['error' => $e->getMessage()], 500];
         }
     }
 

@@ -14,7 +14,7 @@ namespace App\Controller;
 use Zend\Diactoros\Stream;
 use Zend\Diactoros\Response;
 use Psr\Http\Message\ResponseInterface;
-use Lucid\Template\EngineInterface as View;
+use Lucid\Template\RenderInterface as View;
 
 /**
  * @trait ViewControllerTrait

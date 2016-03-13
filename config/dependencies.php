@@ -6,7 +6,17 @@ use Lucid\Resource\Locator;
 use Lucid\Mux\Loader\PhpLoader;
 use Lucid\Mux\Handler\Dispatcher;
 
-$container['config'] = require __DIR__.'/config.php';
+/*
+ * ---------------------------------------------------
+ * Controller
+ * ---------------------------------------------------
+ */
+$container['config'] = $container->share(function () use ($container) {
+    $config = new App\Config\Config(__DIR__);
+    $config->load(['config.default.php', 'config.php']);
+
+    return $config;
+});
 
 /*
  * ---------------------------------------------------
@@ -38,9 +48,10 @@ $container['ctrl.error'] = $container->share(function () use ($container) {
  */
 $container['view'] = $container->share(function () use ($container) {
     $paths = (array)$container['config']['templates'];
-    $view = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
+    $engine = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
+    $view = new Lucid\Template\View($engine);
 
-    $container->get('events')->dispatch('register_view', new App\Events\RegisterView($view));
+    $container->get('events')->dispatch('view.register', new App\Events\RegisterView($view, $engine));
 
     return $view;
 });

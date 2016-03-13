@@ -166,6 +166,7 @@ class App extends React.Component {
           onSelectImage={this.toggleGrid}
           selecting={this.props.isSelectingImage}
           image={this.props.image}
+          constraints={this.props.defaults}
         />
         <div className='preview'>
           <Preview image={this.props.image}>
@@ -182,6 +183,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  defaults: PropTypes.object.isRequired,
   fetchingImage: PropTypes.bool.isRequired,
   fetchingImages: PropTypes.bool.isRequired,
   fetchImage: PropTypes.object.isRequired,

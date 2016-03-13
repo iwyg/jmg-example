@@ -14,6 +14,7 @@ namespace App\Model;
 use App\Api\Generator;
 use App\File\FileInfo;
 use App\File\PatternIterator;
+use App\Exception\NoResultException;
 use Thapp\Jmg\Parameters as Params;
 use Thapp\Jmg\ParamGroup;
 use Thapp\Jmg\FilterExpression as Filters;
@@ -61,17 +62,28 @@ class ImageRepository
     public function fetch($prefix, ParamGroup $params, $src = null, $limit = -1, $q = false)
     {
         if (null !== $src) {
-            return [$this->generator->fromParams($src, $params, $prefix, $q)];
+            $image = [$result = $this->generator->fromParams($src, $params, $prefix, $q)];
+
+            if (empty($result)) {
+                throw new NoResultException(sprintf('%s not found.', $src));
+            }
+
+            return $image;
         }
 
         if (!$path = $this->paths->resolve($prefix)) {
-            return [];
+            throw new NoResultException(sprintf('Path %s not found.', $path));
         }
 
-        return array_map(function ($file) use ($params, $prefix, $q) {
+        $result = array_map(function ($file) use ($params, $prefix, $q) {
             return $this->generator->fromParams($file, $params, $prefix, $q);
         }, $this->glob($path, $limit));
 
+        if (empty($result)) {
+            throw new NoResultException('No result found.');
+        }
+
+        return $result;
     }
 
     /**

@@ -8,11 +8,11 @@ import {
   SELECT_QUERY_ALL, SELECT_QUERY_IMAGE, SELECT_MODE,
   SET_IMAGE_PARAMS,
   TOGGLE_GRID,
-  SETTINGS_ADD, SETTINGS_UPDATE, SETTINGS_REMOVE, SETTINGS_CHANGE_MODE
+  SETTINGS_ADD, SETTINGS_UPDATE, SETTINGS_REMOVE, SETTINGS_CHANGE_MODE,
+  SETTINGS_UPDATE_PARAMS
 } from './actions';
 
 const getUrl = (query = [], image = null, base = DEFAULT_URL) => {
-  console.log('QUERY', query);
   let uri = image ? base + '/' + image : base;
   if (query.length === 0) {
     return uri;
@@ -58,21 +58,25 @@ export const imageParams = (state = [], action) => {
 };
 
 export const fetchImages = (state = defaultUrl, action) => {
-  if (action.type === SELECT_QUERY_ALL) {
-    const {query} = action.payload;
-    const uri = createUrlFactory(query);
-    return {query, uri};
+  switch (action.type) {
+    case SELECT_QUERY_ALL:
+      const {query} = action.payload;
+      const uri = createUrlFactory(query);
+      return {query, uri};
+    default:
+      return state;
   }
-  return state;
 };
 
 export const fetchImage = (state = {query: null, uri: null}, action) => {
-  if (action.type === SELECT_QUERY_IMAGE) {
-    const {image, query} = action.payload;
-    const uri = createUrlFactory(query, image);
-    return {query, uri};
+  switch (action.type) {
+    case SELECT_QUERY_IMAGE:
+      const {image, query} = action.payload;
+      const uri = createUrlFactory(query, image);
+      return {query, uri};
+    default:
+      return state;
   }
-  return state;
 };
 
 export const fetchingImages  = (state = false, action) => {
@@ -138,7 +142,6 @@ export const gridVisible = (state = false, action) => {
 }
 
 const modeChange = (state, action) => {
-  console.log('I CAN HAZ ANAL?');
   switch (action.type) {
       case SETTINGS_CHANGE_MODE:
         return {...state, index: action.payload.index}
@@ -150,7 +153,7 @@ const modeChange = (state, action) => {
 export const settings = (state = [], action) => {
   switch (action.type) {
       case SETTINGS_CHANGE_MODE:
-          let setting = Object.assign({}, state[action.payload.index], {mode: action.payload.mode});
+        let setting = Object.assign({}, state[action.payload.index], {mode: action.payload.mode});
         return [
           ...state.slice(0, action.payload.index),
           setting,
@@ -168,6 +171,15 @@ export const settings = (state = [], action) => {
         return [
           ...state.slice(0, action.payload.index),
           action.payload.setting,
+          ...state.slice(action.payload.index + 1),
+        ];
+
+      case SETTINGS_UPDATE_PARAMS:
+        let params = Object.assign({}, state[action.payload.index].params);
+        params[action.payload.mode] = action.payload.params;
+        return [
+          ...state.slice(0, action.payload.index),
+          Object.assign({}, state[action.payload.index], {params: params}),
           ...state.slice(action.payload.index + 1),
         ];
       default:

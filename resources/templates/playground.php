@@ -9,6 +9,7 @@
     <script type="text/javascript">
         (function (exports, undefined) {
             exports.DEFAULT_URL = '/api/v1/media/q/images';
+            exports.JMG_CONFIG = <?=$jmg_config?>;
         }(this));
     </script>
     <script src="dist/playground/index.js"></script>

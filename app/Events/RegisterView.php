@@ -12,7 +12,8 @@
 namespace App\Events;
 
 use Lucid\Signal\Event;
-use Lucid\Template\EngineInterface as View;
+use Lucid\Template\ViewManagerInterface as View;
+use Lucid\Template\EngineInterface as Engine;
 
 /**
  * @class RegisterView
@@ -25,15 +26,18 @@ class RegisterView extends Event
 {
     /** @var View */
     private $view;
+    /** @var Engine */
+    private $engine;
 
     /**
      * Constructor.
      *
      * @param View $view
      */
-    public function __construct(View $view)
+    public function __construct(View $view, Engine $engine)
     {
         $this->view = $view;
+        $this->engine = $engine;
     }
 
     /**
@@ -44,5 +48,15 @@ class RegisterView extends Event
     public function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * getView
+     *
+     * @return View
+     */
+    public function getEngine()
+    {
+        return $this->engine;
     }
 }

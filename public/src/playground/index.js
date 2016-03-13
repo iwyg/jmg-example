@@ -21,7 +21,7 @@ const store = configureStore();
 
 render(
   <Provider store={store}>
-    <App limitImages={50}/>
+    <App limitImages={50} defaults={JMG_CONFIG}/>
   </Provider>,
   document.getElementById('main')
 );

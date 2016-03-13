@@ -19,12 +19,14 @@ const toHex = (channels) => {
 };
 
 const getCColor = (c) => {
-  //return c > 127 ? Math.min(c, 127) : Math.max(c, 255);
-  return c > 127 ? Math.max(c - 255, 0) : Math.max(c - 255, 255);
+  return c > 127 ? Math.min(c, 127) : Math.max(c, 255);
+  //return c > 127 ? Math.max(c - 255, 0) : Math.max(c - 255, 255);
 };
 
 const mapCColor = (channels)  => {
-  return Object.values(channels).map(getCColor);
+  let c = getCColor(channels.r);
+  return [c, c, c];
+  //return Object.values(channels).map(getCColor);
 };
 
 

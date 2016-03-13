@@ -25,6 +25,7 @@ export const SETTINGS_ADD               = 'SETTINGS_ADD';
 export const SETTINGS_REMOVE            = 'SETTINGS_REMOVE';
 export const SETTINGS_UPDATE            = 'SETTINGS_UPDATE';
 export const SETTINGS_CHANGE_MODE       = 'SETTINGS_CHANGE_MODE'
+export const SETTINGS_UPDATE_PARAMS     = 'SETTINGS_UPDATE_PARAMS';
 
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
@@ -192,5 +193,12 @@ export const changeSettingsMode = (index, mode) => {
   return {
     type: SETTINGS_CHANGE_MODE,
     payload: {index, mode}
+  };
+}
+
+export const updateParams = (mode, params, index) => {
+  return {
+    type: SETTINGS_UPDATE_PARAMS,
+    payload: {mode, params, index}
   };
 }

@@ -14,7 +14,9 @@ return function (Interop\Container\ContainerInterface $container, Lucid\Signal\E
         $container['negotiation']
     ));
 
-    $events->addHandler('register_view', function ($event) use ($container) {
-        $event->getView()->registerExtension($container->get('view.markdown'));
+    $events->addHandler('view.register', function ($event) use ($container) {
+        $view = $event->getView();
+        $event->getEngine()->registerExtension($container->get('view.markdown'));
+        $view->addListener('playground.php', new App\View\RenderAppSettingsListener($container->get('config')));
     });
 };

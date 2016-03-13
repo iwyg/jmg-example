@@ -8,6 +8,7 @@ import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
 import {
   addSettings, updateSettings,
+  updateParams,
   removeSettings, changeSettingsMode
 } from 'playground/modules/actions';
 
@@ -49,6 +50,7 @@ export class Panel extends React.Component {
     this.selectImage = this.selectImage.bind(this);
     this.addSettings = this.addSettings.bind(this);
     this.onSettingSupdate = this.onSettingSupdate.bind(this);
+    this.onParamsUpdate   = this.onParamsUpdate.bind(this);
     this.settingChangedMode = this.settingChangedMode.bind(this);
   }
 
@@ -64,6 +66,13 @@ export class Panel extends React.Component {
 
   updateSettings() {
     alert('add settings you shmock');
+  }
+
+  onParamsUpdate(index, mode, params) {
+    console.log(arguments);
+    let {dispatch} = this.props;
+
+    dispatch(updateParams(mode, params, index));
   }
 
   selectImage() {
@@ -115,19 +124,20 @@ export class Panel extends React.Component {
   }
 
   renderSettings() {
-    let {settings} = this.props;
+    let {settings, ...props} = this.props;
     if (!settings.length || !this.state.selected) {
       return null;
     }
     return (<div>{settings.map((setting, i) => {
         let {mode, params, filters, ...rest} = setting;
-        console.log(params, setting);
-        return (<Settings onUpdate={function () {}} onModeChange={this.settingChangedMode}
+        return (<Settings onUpdate={this.onParamsUpdate} onModeChange={this.settingChangedMode}
           index={i}
           key={i}
           mode={mode}
           params={params}
           filters={filters}
+          {...props}
+          className={'my'}
           {...rest}>
         </Settings>);
       })}</div>);

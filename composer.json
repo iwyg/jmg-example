@@ -21,6 +21,7 @@
     "lucid/resource":"dev-develop",
     "lucid/template": "dev-master",
     "lucid/signal": "dev-develop",
+    "lucid/common": "dev-develop",
     "symfony/polyfill-mbstring": "^1.1",
     "willdurand/negotiation": "^2.0",
     "cebe/markdown": "~1.0.1"
@@ -35,8 +36,10 @@
       "App\\": "app/"
     }
   },
+
   "scripts": {
     "serve": "./bin/serve.sh"
   },
+
   "minimum-stability": "dev"
 }

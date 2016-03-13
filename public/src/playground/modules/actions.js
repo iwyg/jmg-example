@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import MODES, {initial, parseValues} from './modes';
+import {defaultSettings} from './settings';
 
 export const QUERY_ALL_RESULT_REQUEST   = 'QUERY_ALL_RESULT_REQUEST';
 export const QUERY_ALL_RESULT_SUCCESS   = 'QUERY_ALL_RESULT_SUCCESS';
@@ -16,6 +17,14 @@ export const SELECT_MODE                = 'SELECT_MODE';
 
 export const TOGGLE_GRID                = 'TOGGLE_GRID';
 export const SET_IMAGE_PARAMS           = 'SET_IMAGE_PARAMS';
+
+/*
+ * edit actions
+ */
+export const SETTINGS_ADD               = 'SETTINGS_ADD';
+export const SETTINGS_REMOVE            = 'SETTINGS_REMOVE';
+export const SETTINGS_UPDATE            = 'SETTINGS_UPDATE';
+export const SETTINGS_CHANGE_MODE       = 'SETTINGS_CHANGE_MODE'
 
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
@@ -158,3 +167,30 @@ export const toggleGrid = (visible) => {
   };
 }
 
+export const addSettings = (setting = defaultSettings) => {
+  return {
+    type: SETTINGS_ADD,
+    payload: {setting}
+  };
+}
+
+export const removeSettings = (index) => {
+  return {
+    type: SETTINGS_REMOVE,
+    payload: {index}
+  };
+}
+
+export const updateSettings = (setting, index) => {
+  return {
+    type: SETTINGS_UPDATE,
+    payload: {index, setting}
+  };
+}
+
+export const changeSettingsMode = (index, mode) => {
+  return {
+    type: SETTINGS_CHANGE_MODE,
+    payload: {index, mode}
+  };
+}

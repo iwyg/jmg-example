@@ -36,6 +36,10 @@ label {
   color: $gray_darker;
 }
 
+figure {
+  margin: 0 0;
+}
+
 .inbox {
   @include inbox();
 }

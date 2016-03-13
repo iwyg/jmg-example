@@ -3,8 +3,13 @@ import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
 import {isFunc, isObject} from 'lib/assert';
 import {IconSettings} from './Icons';
-import {Pane} from './Settings';
+import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
+import {connect} from 'react-redux';
+import {
+  addSettings, updateSettings,
+  removeSettings, changeSettingsMode
+} from 'playground/modules/actions';
 
 /**
  * class PanelHeader
@@ -32,21 +37,32 @@ class PanelFooter extends React.Component {
 /**
  * class Panel
  */
-export default class Panel extends React.Component {
+export class Panel extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       selecting: false,
-      selected: false,
-      settings: []
+      selected: false
     };
 
     this.selectImage = this.selectImage.bind(this);
     this.addSettings = this.addSettings.bind(this);
+    this.onSettingSupdate = this.onSettingSupdate.bind(this);
+    this.settingChangedMode = this.settingChangedMode.bind(this);
   }
 
   addSettings() {
+    let {dispatch} = this.props;
+    dispatch(addSettings());
+  }
+
+  removeSettings(index) {
+    let {dispatch} = this.props;
+    dispatch(removeSettings(index));
+  }
+
+  updateSettings() {
     alert('add settings you shmock');
   }
 
@@ -57,6 +73,18 @@ export default class Panel extends React.Component {
 
   hasImage() {
     return isObject(this.props.image) && 0 < Object.keys(this.props.image).length;
+  }
+
+  onSettingSupdate(i, index, params, filters = []) {
+    console.log(i, index, params, filters);
+
+    let {dispatch} = this.props;
+    dispatch(updateSettings({index, params, filters}, i));
+  }
+
+  settingChangedMode(index, mode) {
+    let {dispatch} = this.props;
+    dispatch(changeSettingsMode(index, mode));
   }
 
   componentDidUpdate(prevProps) {
@@ -86,13 +114,32 @@ export default class Panel extends React.Component {
     );
   }
 
+  renderSettings() {
+    let {settings} = this.props;
+    if (!settings.length || !this.state.selected) {
+      return null;
+    }
+    return (<div>{settings.map((setting, i) => {
+        let {mode, params, filters, ...rest} = setting;
+        console.log(params, setting);
+        return (<Settings onUpdate={function () {}} onModeChange={this.settingChangedMode}
+          index={i}
+          key={i}
+          mode={mode}
+          params={params}
+          filters={filters}
+          {...rest}>
+        </Settings>);
+      })}</div>);
+  }
+
   render() {
     return (
       <div className={className('panel', this.props)}>
         <PanelHeader>
           {this.renderButtons()}
         </PanelHeader>
-        <Pane/>
+        {this.renderSettings()}
         {this.props.children}
 
         <PanelHeader>
@@ -112,3 +159,9 @@ Panel.defaultProps = {
   selecting: false
 };
 
+
+const mapStateToProps = (state) => {
+  return {settings: state.settings};
+};
+
+export default connect(mapStateToProps)(Panel);

@@ -26,7 +26,7 @@ export default class Preview extends React.Component {
   imageDidLoad(loaded) {
     setTimeout(() => {
       this.setState({loading: false});
-    }, 1000);
+    }, 50);
   }
 
   render() {
@@ -49,13 +49,11 @@ export default class Preview extends React.Component {
     return (
       <div className={className('preview-container', this.props)}>
         <InfoBar info={image} keys={['width', 'height', 'type', 'color', 'uri']}></InfoBar>
-        <div className={defaultClass}>
+        <figure className={defaultClass}>
           {spinner}
-          <Image className={icl} src={uri} {...props}
-            onLoad={this.imageWillLoad}
-            onLoaded={this.imageDidLoad}
-          />
-        </div>
+          <Image className={icl} src={uri} {...props} onLoad={this.imageWillLoad} onLoaded={this.imageDidLoad} >
+          </Image>
+        </figure>
       </div>
     );
   }

@@ -154,3 +154,29 @@ ValueSelect.defaultProps = {
   color: null
 };
 
+export class Resize extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: null,
+      height: null,
+    };
+
+    this.update = debounce(this.update.bind(this), 100);
+  }
+
+  update() {
+  }
+
+  render() {
+    let {...props} = this.props;
+    return (
+      <EditResize key={ModeNames[1]} width={this.state.width} height={this.state.height}
+        {...props} type={1} onChange={this.update} minW={0} minH={0}
+        labelWidth='W'
+        labelHeight='H'
+      />
+    );
+  }
+}
+

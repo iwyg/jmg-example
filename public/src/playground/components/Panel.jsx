@@ -2,14 +2,15 @@ import React, {PropTypes} from 'react';
 import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
 import {isFunc, isObject} from 'lib/assert';
-import {IconSettings} from './Icons';
+import {IconSettings, IconCheck} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
 import {
   addSettings, updateSettings,
   updateParams,
-  removeSettings, changeSettingsMode
+  removeSettings, changeSettingsMode,
+  toggleSettingVisible
 } from 'playground/modules/actions';
 
 /**
@@ -28,9 +29,9 @@ class PanelHeader extends React.Component {
 class PanelFooter extends React.Component {
   render() {
     return (
-      <Footer className={className('panel-footer', this.props)}>
+      <footer className={className('panel-footer', this.props)}>
         {this.props.children}
-      </Footer>
+      </footer>
     );
   }
 }
@@ -47,11 +48,13 @@ export class Panel extends React.Component {
       selected: false
     };
 
-    this.selectImage = this.selectImage.bind(this);
-    this.addSettings = this.addSettings.bind(this);
-    this.onSettingSupdate = this.onSettingSupdate.bind(this);
-    this.onParamsUpdate   = this.onParamsUpdate.bind(this);
+    this.selectImage        = this.selectImage.bind(this);
+    this.addSettings        = this.addSettings.bind(this);
+    this.removeSettings     = this.removeSettings.bind(this);
+    this.onSettingSupdate   = this.onSettingSupdate.bind(this);
+    this.onParamsUpdate     = this.onParamsUpdate.bind(this);
     this.settingChangedMode = this.settingChangedMode.bind(this);
+    this.toggleSettings     = this.toggleSettings.bind(this);
   }
 
   addSettings() {
@@ -68,8 +71,12 @@ export class Panel extends React.Component {
     alert('add settings you shmock');
   }
 
+  toggleSettings(index, visible) {
+    let {dispatch} = this.props;
+    dispatch(toggleSettingVisible(index, visible));
+  }
+
   onParamsUpdate(index, mode, params) {
-    console.log(arguments);
     let {dispatch} = this.props;
 
     dispatch(updateParams(mode, params, index));
@@ -85,8 +92,6 @@ export class Panel extends React.Component {
   }
 
   onSettingSupdate(i, index, params, filters = []) {
-    console.log(i, index, params, filters);
-
     let {dispatch} = this.props;
     dispatch(updateSettings({index, params, filters}, i));
   }
@@ -128,19 +133,33 @@ export class Panel extends React.Component {
     if (!settings.length || !this.state.selected) {
       return null;
     }
-    return (<div>{settings.map((setting, i) => {
+    return settings.map((setting, i) => {
         let {mode, params, filters, ...rest} = setting;
         return (<Settings onUpdate={this.onParamsUpdate} onModeChange={this.settingChangedMode}
+          onRemove={this.removeSettings}
+          onToggle={this.toggleSettings}
           index={i}
           key={i}
           mode={mode}
           params={params}
           filters={filters}
           {...props}
-          className={'my'}
+          className={null}
           {...rest}>
         </Settings>);
-      })}</div>);
+      });
+  }
+
+  renderFooter() {
+    if (!this.props.settings.length) {
+      return null;
+    }
+    return (
+      <Button onClick={() => {alert('you clicked.')}}>
+        <IconCheck></IconCheck>
+        Apply
+      </Button>
+    );
   }
 
   render() {
@@ -151,9 +170,9 @@ export class Panel extends React.Component {
         </PanelHeader>
         {this.renderSettings()}
         {this.props.children}
-
-        <PanelHeader>
-        </PanelHeader>
+        <PanelFooter>
+        {this.renderFooter()}
+        </PanelFooter>
       </div>
     );
   }

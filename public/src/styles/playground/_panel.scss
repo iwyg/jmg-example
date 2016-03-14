@@ -1,0 +1,24 @@
+.setting {
+  @include clearfix;
+  margin: .5rem 0;
+  padding: 1rem 0;
+
+  & > label {
+  }
+}
+
+.modes-wrap {
+  width: 100%;
+}
+
+.modes {
+  width: calc(100% - #{$icon_width * 1.2})
+}
+
+.collapsable {
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-content: stretch;
+  }
+}

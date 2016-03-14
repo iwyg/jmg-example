@@ -9,7 +9,7 @@ import {
   SET_IMAGE_PARAMS,
   TOGGLE_GRID,
   SETTINGS_ADD, SETTINGS_UPDATE, SETTINGS_REMOVE, SETTINGS_CHANGE_MODE,
-  SETTINGS_UPDATE_PARAMS
+  SETTINGS_UPDATE_PARAMS, SETTINGS_TOGGLE_VISIBLE
 } from './actions';
 
 const getUrl = (query = [], image = null, base = DEFAULT_URL) => {
@@ -150,6 +150,26 @@ const modeChange = (state, action) => {
   }
 };
 
+const settingVisibility = (state, action) => {
+  switch (action.type) {
+      case SETTINGS_TOGGLE_VISIBLE:
+        let {visible, ...props} = state;
+        return Object.assign({}, props, {visible: !visible});
+      default:
+        return state;
+  }
+};
+
+const settingUpdate = (state, action) => {
+  switch (action.type) {
+    case SETTINGS_UPDATE:
+      let values = action.payload.setting;
+      return Object.assign({}, state, {...values});
+    default:
+      return state;
+  }
+};
+
 export const settings = (state = [], action) => {
   switch (action.type) {
       case SETTINGS_CHANGE_MODE:
@@ -170,7 +190,7 @@ export const settings = (state = [], action) => {
       case SETTINGS_UPDATE:
         return [
           ...state.slice(0, action.payload.index),
-          action.payload.setting,
+          settingUpdate(state[action.payload.index], action),
           ...state.slice(action.payload.index + 1),
         ];
 
@@ -180,6 +200,12 @@ export const settings = (state = [], action) => {
         return [
           ...state.slice(0, action.payload.index),
           Object.assign({}, state[action.payload.index], {params: params}),
+          ...state.slice(action.payload.index + 1),
+        ];
+      case SETTINGS_TOGGLE_VISIBLE:
+        return [
+          ...state.slice(0, action.payload.index),
+          settingVisibility(state[action.payload.index], action),
           ...state.slice(action.payload.index + 1),
         ];
       default:

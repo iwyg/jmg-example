@@ -1,14 +1,18 @@
 import React, {PropTypes} from 'react';
-import MODES from 'playground/modules/modes';
 import {IconButton} from 'react-toolbox/lib/button';
-import Tooltip from 'react-toolbox/lib/tooltip';
+import MODES, {ModeNames, helper} from 'playground/modules/modes';
 import {className, callIfFunc} from 'lib/react-helper';
-import {Resize, CropScale, Crop, ResizeFit, Scale} from './select/ValueSelect';
 import debounce from 'lodash.debounce';
-
+import {assignFromObj} from 'lib/utils';
+import SelectGroup from './select/SelectGroup';
+import ColorSelect from './select/ColorSelect';
+import {EditResize, EditResizeScale, EditCrop} from './select/EditGroups';
+import {Tabs, Tab} from './Tabs';
+import Collapsable from './Collapsable';
 import {
   IconModePass, IconModeResize, IconModeScaleCrop, IconModeCrop,
-  IconModeScale, IconModeFit, IconModePx,
+  IconModeScale, IconModeFit, IconModePx, IconMoreHr,
+  IconClose
 } from './Icons';
 
 const labelMap = (function () {
@@ -37,6 +41,11 @@ const labelMap = (function () {
   return map;
 }());
 
+
+const tabClickNull = () => {
+  return null;
+};
+
 const ModeIndexMap = (function () {
   let map = {};
   Object.keys(MODES).forEach((mode, i) => {
@@ -59,24 +68,28 @@ const mapModeToIndex = (function(){
   return (mode => map[mode]);
 }());
 
-const Icn = ({children, ...props}) => {
-  let cName = className('icon', props);
-  return (<span {...props} className={cName}>{children}</span>);
-};
 
-const TooltipIcon = Tooltip(Icn);
 
 export class Settings extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      filter: []
-    };
-
     this.onUpdate = this.onUpdate.bind(this);
     this.onModeChange = this.onModeChange.bind(this);
-    this.settingDidChange = this.settingDidChange.bind(this);
+    this.settingDidChange = debounce(this.settingDidChange.bind(this), 200);
+    this.onToggle = this.onToggle.bind(this);
+    this.onRemove = this.onRemove.bind(this);
+  }
+
+  onToggle(visible) {
+    let {index, onToggle} = this.props;
+    onToggle(index, visible);
+    //this.setState({visible});
+  }
+
+  onRemove() {
+    let {index, onRemove} = this.props;
+    onRemove(index);
   }
 
   onModeChange(i, tab) {
@@ -95,10 +108,9 @@ export class Settings extends React.Component {
   }
 
   renderResize(params, constr) {
-    console.log('RESIZE', params);
     let key = 'resize-'+this.props.index;
     return (
-      <Resize key={key} {...constr} {...params} onChange={this.settingDidChange} />
+      <Resize key={key} {...constr} {...params} onChange={this.settingDidChange} minW={0} minH={0}/>
     );
   }
 
@@ -138,8 +150,9 @@ export class Settings extends React.Component {
     let {minPx, maxPx, ...c} = constr;
     return (
       <Scale key={key} label='Px' {...c} {...params} minW={minPx} maxW={maxPx}
-      mode={MODES.IM_RSIZEPXCOUNT}
-      onChange={this.settingDidChange} unit={''}/>
+        mode={MODES.IM_RSIZEPXCOUNT}
+        unitVal={(val) => (val / 10e5).toFixed(1)}
+      onChange={this.settingDidChange} unit={'M'}/>
     );
   }
 
@@ -164,12 +177,35 @@ export class Settings extends React.Component {
   }
 
   render() {
+
+    let closeBtn = (<IconButton className='icon close' onClick={this.onRemove}> <IconClose></IconClose></IconButton>);
+    let header = this.props.visible ? (<Pane
+        contentBefore={closeBtn}
+        onTabChange={this.onModeChange}
+        activeTab={mapModeToIndex(this.props.mode)}>
+      </Pane>) : (<div className='modes-wrap'>
+      {closeBtn}
+      <Tabs className='modes'>
+        <Tab index={0} onClick={tabClickNull}
+          active={true}
+          icon={labelMap[this.props.mode].icon}
+          label={null}
+        ></Tab>
+        <Tab index={1} onClick={tabClickNull}
+          icon={IconMoreHr}
+          label={null}
+        ></Tab>
+      </Tabs>
+    </div>
+    );
     return (
       <section className={className('setting', this.props)}>
-        <header>
-          <Pane onTabChange={this.onModeChange} activeTab={mapModeToIndex(this.props.mode)}></Pane>
-        </header>
-        <div className='setting-content'>{this.renderContent(this.props.mode)}</div>
+        <Collapsable label={labelMap[this.props.mode].label}
+          headerContent={header}
+          visible={this.props.visible}
+          onToggle={this.onToggle}>
+          <div className='setting-content'>{this.renderContent(this.props.mode)}</div>
+        </Collapsable>
       </section>
     );
   }
@@ -180,6 +216,8 @@ Settings.propTypes = {
   mode: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired,
   onModeChange: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired,
   filters: PropTypes.array
@@ -193,7 +231,6 @@ Settings.defaultProps = {
 export class Pane extends React.Component {
   constructor(props) {
     super(props);
-
     this.onTabChange = this.onTabChange.bind(this);
   }
 
@@ -206,135 +243,235 @@ export class Pane extends React.Component {
     if (nextProps.activeTab === this.props.activeTab) {
       return;
     }
-
-    //callIfFunc(this.props.onTabChange, null, nextProps.activeTab, this.refs['tab-' + (1 + nextProps.activeTab)]);
   }
 
-  renderTabs() {
-
-    let {activeTab} = this.props;
-
-    return (
-      <Tabs activeTab={activeTab}>{
+  render() {
+    let {activeTab, contentBefore, contentAfter} = this.props;
+    return (<div className={className('modes-wrap', this.props)}>
+      {contentBefore}
+      <Tabs activeTab={activeTab} className='modes'>{
         Object.keys(labelMap).map((key, i) => {
           let {...props} = labelMap[key];
           return (<Tab key={i} ref={'tab-' + (1 + i)} index={i} active={activeTab === i} onClick={this.onTabChange} {...props} ></Tab>)
         })
-      }</Tabs>
-    )
-  }
-
-  render() {
-    return (
-      <section>
-        <header>
-          {this.renderTabs()}
-        </header>
-      </section>
-    );
+        }
+      </Tabs>
+      {contentAfter}
+    </div>);
   }
 }
 
 Pane.propTypes = {
   activeTab: PropTypes.number,
-  onTabChange: PropTypes.func.isRequired
+  onTabChange: PropTypes.func.isRequired,
+  contentBefore: PropTypes.node,
+  contentAfter: PropTypes.node,
 };
 
 Pane.defaultProps = {
   activeTab: 0
 };
 
-class Tabs extends React.Component {
+
+class Setting extends React.Component {
   constructor(props) {
     super(props);
-    this.tabs = [];
-    this.state = {
-      index: 0
-    };
+    this.update = this.update.bind(this);
+    this.state  = {};
+    this.mode   = undefined;
   }
 
-  componentDidMount() {
-    console.log('TABS', this);
+  updateState(props) {
+    this.setState(assignFromObj(this.state, props));
   }
 
-  findTabs(children) {
-    return React.Children.toArray(children).filter((c) => {
-      return c.type === Tab || c.type.prototype.constructor === Tab;
-    });
+  update(prop, value) {
+    let state = {};
+    state[prop] = value;
+    this.setState(state);
+    setTimeout(() => {
+      this.props.onChange(this.mode, this.state);
+    }, 0);
   }
 
-  componentWillUpdate(nextProps)  {
-    this.tabs = this.findTabs(nextProps.children);
-    console.log(this.tabs);
+  componentWillMount() {
+    this.updateState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.updateState(nextProps);
   }
 
   render() {
-    return (
-      <ul className={className('tabs', this.props)}>
-        {this.props.children}
-      </ul>
-    );
+    throw new Error('Did you forget to add a render method?');
   }
 }
 
-class Tab extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.willBeActive = this.willBeActive.bind(this);
-  }
-
-  willBeActive() {
-    if (this.props.active) {
-      return;
-    }
-
-    callIfFunc(this.props.onClick, null, this.props.index);
-  }
-
-  renderLabel() {
-    let {label, iconOnly} = this.props;
-    let MyIcon = this.props.icon;
-
-    if (iconOnly) {
-      return (
-        <label>
-          <TooltipIcon flat={true} tooltip={label}>
-            <MyIcon/>
-          </TooltipIcon>
-        </label>
-      );
-    }
-
-    return (
-      <label>
-        <span className='icon'>
-          <MyIcon/>
-        </span>{label}
-      </label>
-    );
-  }
-
-  render() {
-    let label = this.renderLabel();
-    return (
-      <li onClick={this.willBeActive} className={className('tab', this.props) + (this.props.active ? ' active' : '')}>
-        {label}
-      </li>
-    );
-  }
-}
-
-Tab.propTypes = {
-  active: PropTypes.bool.isRequired,
-  index: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-  icon: PropTypes.func,
-  label: PropTypes.string.isRequired,
-  iconOnly: PropTypes.bool
+const sharedProps = {
+  minW: PropTypes.number.isRequired,
+  maxW: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-Tab.defaultProps = {
-  active: false,
-  iconOnly: true
+const commonProps = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  maxW: PropTypes.number.isRequired,
+  maxH: PropTypes.number.isRequired,
+};
+
+const cropProps = {
+  gravity: PropTypes.oneOf([1, 2, 3, 4, 5, 6, 7, 8, 9]).isRequired
+};
+
+Setting.propTypes = {
+  ...sharedProps
+};
+
+export class Resize extends Setting {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: null,
+      height: null,
+    };
+
+    this.mode = MODES.IM_RESIZE;
+  }
+
+
+  render() {
+    let {...props} = this.props;
+    return (
+      <EditResize key={ModeNames[this.mode]} width={this.state.width} height={this.state.height}
+        {...props} type={1} onChange={this.update}
+        labelWidth='W'
+        labelHeight='H'
+      />
+    );
+  }
+}
+
+Resize.propTypes = {
+  ...sharedProps,
+  ...commonProps
+};
+
+export class ResizeFit extends Resize {
+  constructor(props) {
+    super(props);
+    this.mode = MODES.IM_RSIZEFIT;
+  }
+}
+
+export class CropScale extends Resize {
+  constructor(props) {
+    super(props);
+    this.mode = MODES.IM_SCALECROP;
+    this.state.gravity = null;
+  }
+
+  renderChildren(props) {
+    return null;
+  }
+
+  render() {
+    let {...props} = this.props;
+    return (
+      <EditCrop key={ModeNames[this.mode]} width={this.state.width} height={this.state.height}
+        gravity={this.state.gravity} {...props} type={this.mode} onChange={this.update}
+          labelWidth='W'
+          labelHeight='H'
+        >
+        {this.renderChildren(props)}
+      </EditCrop>
+    )
+  }
+}
+
+CropScale.propTypes = {
+  ...sharedProps,
+  ...commonProps,
+  ...cropProps
+};
+
+export class Crop extends CropScale {
+  constructor(props) {
+    super(props);
+    this.mode = MODES.IM_CROP;
+    this.state.background = null;
+  }
+
+  renderChildren(props) {
+    let {colorMode, background} = props;
+    return (
+      <SelectGroup label='canvas color'>
+        <ColorSelect hex={background} onChange={this.update} mode='RGB'>
+        </ColorSelect>
+      </SelectGroup>
+    );
+  }
+}
+
+Crop.propTypes = {
+  ...sharedProps,
+  ...commonProps,
+  ...cropProps,
+  background: PropTypes.string.isRequired
+};
+
+export class Scale extends Setting {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: null
+    };
+    this.mode = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.mode = nextProps.mode;
+    Setting.prototype.componentWillReceiveProps.apply(this, arguments);
+  }
+
+  componentWillMount() {
+    this.mode = this.props.mode;
+    Setting.prototype.componentWillMount.apply(this, arguments);
+  }
+
+  render() {
+    let {mode, steps, width, onUpdate, ...props} = this.props;
+
+    if (!steps) {
+      steps = Math.min(2, (this.props.maxW - this.props.minW) / 100);
+    }
+
+    let key = ModeNames[this.mode];
+
+    return (
+      <EditResizeScale
+        key={key}
+        steps={steps}
+        type={this.mode}
+        onChange={this.update}
+        width={this.state.width}
+        {...props}
+      />
+    );
+  }
+}
+
+Scale.propTypes = {
+  ...sharedProps,
+  steps: PropTypes.number,
+  label: PropTypes.string.isRequired,
+  unit: PropTypes.string,
+  mode: PropTypes.oneOf([
+    MODES.IM_RSIZEPERCENT,
+    MODES.IM_RSIZEPXCOUNT
+  ]).isRequired
+}
+
+Scale.defaultProps = {
+  unit: ''
 };

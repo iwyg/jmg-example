@@ -1,0 +1,8 @@
+button {
+  &.icon-button {
+    svg {
+      height: $icon_height;
+      width: auto;
+    }
+  }
+}

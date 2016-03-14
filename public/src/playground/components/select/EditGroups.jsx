@@ -162,33 +162,42 @@ export class EditResizeScale extends EditGroup {
   }
 
   componentWillMount() {
-    this.setState({width: this.props.start});
+    let {width} = this.props;
+    this.setState({width});
   }
 
   render() {
-    let {maxW, minW, steps} = this.props;
+    let {maxW, minW, steps, label, unit, unitVal} = this.props;
+    console.log('STEPS', steps, this.state);
     return (
       <SelectGroup>
         <div className='slider'>
-          <span className='slider-name'>{this.props.label}</span>
-          <Slider className='slider-ctrl' onChange={this.onScaleChange} value={this.state.width} min={minW} stepped step={steps} max={maxW}/>
-          <span className='slider-value'>{this.state.width}{this.props.unit}</span>
+          <span className='slider-name'>{label}</span>
+          <Slider className='slider-ctrl' onChange={this.onScaleChange}
+            min={minW} max={maxW} value={this.state.width}
+            stepped={true} step={100}
+            />
+          <span className='slider-value'>{unitVal(this.state.width)}{unit}</span>
         </div>
       </SelectGroup>
     );
   }
 }
 
+console.log(PropTypes);
+
 EditResizeScale.propTypes = Object.assign({}, EditGroup.propTypes, {
-  start: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
   minW: PropTypes.number.isRequired,
   maxW: PropTypes.number.isRequired,
   steps: PropTypes.number.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  unitVal: PropTypes.func.isRequired,
   unit: PropTypes.string
 });
 
 EditResizeScale.defaultProps = {
   label: 'scale',
-  unit: '%'
+  unit: '%',
+  unitVal: val => val
 };

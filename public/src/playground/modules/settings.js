@@ -17,6 +17,7 @@ const initialModes = getInitialModes(JMG_CONFIG);
 
 export const defaultSettings = (function () {
   return {
+    visible: true,
     mode: MODES.IM_NOSCALE,
     params: initialModes,
     filters: []

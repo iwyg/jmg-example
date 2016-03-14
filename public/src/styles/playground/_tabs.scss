@@ -1,0 +1,29 @@
+.tabs {
+  margin: 0;
+  list-style: none;
+  @include clearfix();
+
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+}
+
+.tab {
+  cursor: pointer;
+  width: 25%;
+  float: left;
+  display: block;
+
+  label {
+    cursor: pointer;
+    display: block;
+  }
+
+  &.active {
+    .icon {
+      svg {
+        fill: $gray_darker;
+      }
+    }
+  }
+}

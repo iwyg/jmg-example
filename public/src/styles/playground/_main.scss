@@ -38,9 +38,7 @@ $info_bar_position: bottom;
   line-height: .4rem;
   color: $color-primary;
 
-  display: flex;
-  justify-content: space-between;
-  align-content: stretch;
+  @include flex(space-between);
 
   .item {
     padding: 1rem;
@@ -83,16 +81,6 @@ $info_bar_position: bottom;
 .settings {
   background-color: $base_flat;
   width: 100%;
-
-
-  section {
-    @include clearfix;
-    margin: .5rem;
-    padding: 1rem;
-
-    & > label {
-    }
-  }
 
   @include breakpoint((min-width: $q-small, orientation: landscape)) {
     position: absolute;
@@ -147,9 +135,7 @@ $info_bar_position: bottom;
     @include inbox();
     position: relative;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex(center, center);
 
     img {
       margin: auto;
@@ -231,25 +217,8 @@ ul {
 .color-picker {
   @import "color-picker";
 }
-
-.slider {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-
-  .slider-name, .slider-value {
-    white-space: nowrap;
-    display: block;
-    line-height: 2 * $base_font_size;
-  }
-
-  .slider-ctrl {
-    width: 100%;
-  }
-}
-
+@import "slider";
 @import "gravity-select";
-
 
 .snackbar {
   z-index: 100000;
@@ -268,52 +237,26 @@ ul {
   }
 }
 
-.tabs {
-  margin: 0;
-  list-style: none;
-  @include clearfix();
-  width: 100%;
-
-  display: flex;
-  justify-content: space-between;
-  align-content: stretch;
+.modes-wrap {
+  @include flex();
+  .modes {
+    padding: .5rem 2rem;
+    width: 100%;
+  }
 }
 
-.tab {
-  cursor: pointer;
-  width: 25%;
-  float: left;
-  display: block;
-
-  label {
-    cursor: pointer;
-    display: block;
-  }
-
-  .icon {
-    height: 24px;
-    display: block;
-    svg {
-      fill: $gray_neutral;
-      height: 100%;
-      width: auto;
-    }
-
-  }
-  &.active {
-    .icon {
-      svg {
-        fill: $gray_darker;
+.collapsed {
+  .modes-wrap {
+    .modes {
+      justify-content: flex-start;
+      .tab {
+        width: #{(100 / 7)}%;
       }
     }
   }
 }
 
-button {
-  &.icon-button {
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
-}
+@import "icons";
+@import "buttons";
+@import "panel";
+@import "tabs";

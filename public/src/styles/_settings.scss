@@ -3,6 +3,21 @@
 $base_font_size: 1.6rem;
 $base_line_height: 1;
 
+$icon_width: 24px;
+$icon_height: 24px;
+
+@mixin icon($fill: $gray_neutral) {
+  display: block;
+  width: $icon_width;
+  height: $icon_height;
+
+  svg {
+    fill: $fill;
+    height: 100%;
+    width: auto;
+  }
+}
+
 @mixin fontRegular() {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;

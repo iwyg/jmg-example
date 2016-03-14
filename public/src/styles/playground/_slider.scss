@@ -1,0 +1,13 @@
+.slider {
+  @include flex(space-between, stretch);
+  .slider-name, .slider-value {
+    white-space: nowrap;
+    display: block;
+    line-height: 2 * $base_font_size;
+    width: 4rem;
+  }
+
+  .slider-ctrl {
+    width: 100%;
+  }
+}

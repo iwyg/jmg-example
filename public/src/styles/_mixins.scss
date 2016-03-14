@@ -20,3 +20,9 @@
   font-weight: 300;
   text-transform: lowercase;
 }
+
+@mixin flex($justify: center, $align: stretch) {
+  display: flex;
+  justify-content: $justify;
+  align-content: $align;
+}

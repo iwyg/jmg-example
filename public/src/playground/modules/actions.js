@@ -27,6 +27,8 @@ export const SETTINGS_UPDATE            = 'SETTINGS_UPDATE';
 export const SETTINGS_CHANGE_MODE       = 'SETTINGS_CHANGE_MODE'
 export const SETTINGS_UPDATE_PARAMS     = 'SETTINGS_UPDATE_PARAMS';
 
+export const SETTINGS_TOGGLE_VISIBLE    = 'SETTINGS_TOGGLE_VISIBLE';
+
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
 };
@@ -193,6 +195,13 @@ export const changeSettingsMode = (index, mode) => {
   return {
     type: SETTINGS_CHANGE_MODE,
     payload: {index, mode}
+  };
+}
+
+export const toggleSettingVisible = (index) => {
+  return {
+    type: SETTINGS_TOGGLE_VISIBLE,
+    payload: {index}
   };
 }
 

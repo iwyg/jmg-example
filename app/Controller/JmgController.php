@@ -62,13 +62,7 @@ class JmgController
         $src   = $request->getAttribute('src');
         $alias = $request->getAttribute('alias');
 
-        if (isset($query['jmg'])) {
-            $resource = $this->chainedQueryAction($src, $alias, $query);
-        } else {
-            $resource = $this->singleQueryAction($src, $alias, $query);
-        }
-
-        if (!$resource) {
+        if (!$resource = $this->queryAction($src, $alias, $query)) {
             return $this->resourceNotFound($request);
         }
 

@@ -9,10 +9,11 @@ import ColorSelect from './select/ColorSelect';
 import {EditResize, EditResizeScale, EditCrop} from './select/EditGroups';
 import {Tabs, Tab} from './Tabs';
 import Collapsable from './Collapsable';
+import Tooltip from 'react-toolbox/lib/tooltip';
 import {
   IconModePass, IconModeResize, IconModeScaleCrop, IconModeCrop,
   IconModeScale, IconModeFit, IconModePx, IconMoreHr,
-  IconClose
+  IconClose, IconRemove, IconRemoveCirc
 } from './Icons';
 
 const labelMap = (function () {
@@ -41,9 +42,15 @@ const labelMap = (function () {
   return map;
 }());
 
-
 const tabClickNull = () => {
   return null;
+};
+
+const transformPxVal = (val) => {
+  if (val < 10e5) {
+    return (val / 1000).toFixed(1) + 'K';
+  }
+  return (val / 10e5).toFixed(1) + 'M';
 };
 
 const ModeIndexMap = (function () {
@@ -123,6 +130,7 @@ export class Settings extends React.Component {
 
   renderCrop(params, constr) {
     let key = 'crop-'+this.props.index;
+    console.log('CROP', params.background);
     return (
       <Crop key={key} {...constr} {...params} onChange={this.settingDidChange} />
     );
@@ -151,8 +159,8 @@ export class Settings extends React.Component {
     return (
       <Scale key={key} label='Px' {...c} {...params} minW={minPx} maxW={maxPx}
         mode={MODES.IM_RSIZEPXCOUNT}
-        unitVal={(val) => (val / 10e5).toFixed(1)}
-      onChange={this.settingDidChange} unit={'M'}/>
+        unitVal={transformPxVal}
+      onChange={this.settingDidChange} unit={''}/>
     );
   }
 
@@ -177,14 +185,12 @@ export class Settings extends React.Component {
   }
 
   render() {
-
-    let closeBtn = (<IconButton className='icon close' onClick={this.onRemove}> <IconClose></IconClose></IconButton>);
+    let closeBtn = (<IconButton className='icon close' onClick={this.onRemove} accent={true}> <IconRemove/></IconButton>);
     let header = this.props.visible ? (<Pane
-        contentBefore={closeBtn}
+        contentAfter={closeBtn}
         onTabChange={this.onModeChange}
         activeTab={mapModeToIndex(this.props.mode)}>
       </Pane>) : (<div className='modes-wrap'>
-      {closeBtn}
       <Tabs className='modes'>
         <Tab index={0} onClick={tabClickNull}
           active={true}
@@ -196,6 +202,7 @@ export class Settings extends React.Component {
           label={null}
         ></Tab>
       </Tabs>
+      {closeBtn}
     </div>
     );
     return (
@@ -203,7 +210,8 @@ export class Settings extends React.Component {
         <Collapsable label={labelMap[this.props.mode].label}
           headerContent={header}
           visible={this.props.visible}
-          onToggle={this.onToggle}>
+          onToggle={this.onToggle}
+          toggleLeft={true}>
           <div className='setting-content'>{this.renderContent(this.props.mode)}</div>
         </Collapsable>
       </section>
@@ -339,11 +347,11 @@ export class Resize extends Setting {
     this.mode = MODES.IM_RESIZE;
   }
 
-
   render() {
-    let {...props} = this.props;
+    let {onChange, ...props} = this.props;
+    let {width, height} = this.state;
     return (
-      <EditResize key={ModeNames[this.mode]} width={this.state.width} height={this.state.height}
+      <EditResize key={ModeNames[this.mode]} width={width} height={height}
         {...props} type={1} onChange={this.update}
         labelWidth='W'
         labelHeight='H'
@@ -376,7 +384,7 @@ export class CropScale extends Resize {
   }
 
   render() {
-    let {...props} = this.props;
+    let {onChange, ...props} = this.props;
     return (
       <EditCrop key={ModeNames[this.mode]} width={this.state.width} height={this.state.height}
         gravity={this.state.gravity} {...props} type={this.mode} onChange={this.update}
@@ -400,13 +408,18 @@ export class Crop extends CropScale {
     super(props);
     this.mode = MODES.IM_CROP;
     this.state.background = null;
+    this.onColorChange = debounce(this.onColorChange.bind(this), 100);
+  }
+
+  onColorChange(color) {
+    this.update('background', color.hex);
   }
 
   renderChildren(props) {
-    let {colorMode, background} = props;
+    let {colorMode, background, onChange} = props;
     return (
       <SelectGroup label='canvas color'>
-        <ColorSelect hex={background} onChange={this.update} mode='RGB'>
+        <ColorSelect hex={this.state.background} onChange={this.onColorChange} mode='RGB'>
         </ColorSelect>
       </SelectGroup>
     );
@@ -440,7 +453,7 @@ export class Scale extends Setting {
   }
 
   render() {
-    let {mode, steps, width, onUpdate, ...props} = this.props;
+    let {mode, steps, width, onChange, ...props} = this.props;
 
     if (!steps) {
       steps = Math.min(2, (this.props.maxW - this.props.minW) / 100);
@@ -449,12 +462,8 @@ export class Scale extends Setting {
     let key = ModeNames[this.mode];
 
     return (
-      <EditResizeScale
-        key={key}
-        steps={steps}
-        type={this.mode}
+      <EditResizeScale key={key} steps={steps} type={this.mode} width={this.state.width}
         onChange={this.update}
-        width={this.state.width}
         {...props}
       />
     );

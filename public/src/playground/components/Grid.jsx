@@ -8,8 +8,10 @@ import {className} from 'lib/react-helper';
 import {isFunc, isObject} from 'lib/assert';
 import IconMasonry from 'ic_dashboard_black_24px.svg';
 import {CONTEXT} from 'runtime/constants';
+import {callIfFunc} from 'lib/react-helper';
 
 const RESIZE = 'resize';
+
 
 /* The image grid in all its glory */
 export default class Grid extends React.Component {
@@ -55,26 +57,29 @@ export default class Grid extends React.Component {
     let ref = (baseRef && baseRef.refs) ? baseRef.refs.figure : (baseRef || false);
     let cwidth = this.domNode.clientWidth;
     let fwidth = !ref ? cwidth : ReactDOM.findDOMNode(ref).clientWidth;
-    let resizeCallback = this.props.onResize;
-
     this.setState({maxWidth: fwidth});
-
-    if (!resizeCallback) {
-      return;
-    }
-
-    resizeCallback(this.state.maxWidth);
   }
 
   componentWillUpdate(nextProps, nextState) {
     this.figures = [];
 
-    if (!this.state.loaded && nextProps.images.length !== this.props.images.length)  {
+    if (!this.state.loaded && nextProps.images.length !== this.props.images.length) {
       this.setState({loaded: true});
     }
   }
 
-  componentDidUpdate(nextProps) {
+  notifyIfnewSize(prevProps, prevState) {
+    let {onResize, visible} = this.props;
+
+    if ((visible && !prevProps.visible) || (visible && (prevState.maxWidth !== this.state.maxWidth))) {
+      callIfFunc(this.props.onResize, null, this.state.maxWidth);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+    this.notifyIfnewSize(prevProps, prevState);
+
     if (!this.state.loaded) {
       return;
     }
@@ -83,7 +88,8 @@ export default class Grid extends React.Component {
       this.masonry.layout();
     }
 
-    if (nextProps.images.length !== this.props.images.length) {
+
+    if (prevProps.images.length !== this.props.images.length) {
     // do specified stuff here
     }
   }

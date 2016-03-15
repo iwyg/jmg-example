@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
 import {isFunc, isObject} from 'lib/assert';
-import {IconSettings, IconCheck} from './Icons';
+import {IconSettings, IconCheck, IconAdd, Icon} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
@@ -14,27 +14,40 @@ import {
 } from 'playground/modules/actions';
 
 /**
- * class PanelHeader
+ * func PanelHeader
  */
-class PanelHeader extends React.Component {
-  render() {
-    return (
-      <header className={className('panel-header', this.props)}>
-        {this.props.children}
-      </header>
-    );
-  }
-}
+const PanelHeader = ({children, ...props}) => {
+  return (
+    <header className={className('panel-header', props)}>
+      {children}
+    </header>
+  );
+};
 
-class PanelFooter extends React.Component {
+/**
+ * func PanelFooter
+ */
+const PanelFooter = ({children, ...props}) => {
+  return (
+    <footer className={className('panel-footer', props)}>
+      {children}
+    </footer>
+  );
+};
+
+/**
+ * func PanelFooter
+ */
+class PanelContent extends React.Component {
   render() {
+    let {...props, children} = this.props;
     return (
-      <footer className={className('panel-footer', this.props)}>
-        {this.props.children}
-      </footer>
+      <div className={className('panel-content', props)} {...props}>
+        {children}
+      </div>
     );
   }
-}
+};
 
 /**
  * class Panel
@@ -55,6 +68,7 @@ export class Panel extends React.Component {
     this.onParamsUpdate     = this.onParamsUpdate.bind(this);
     this.settingChangedMode = this.settingChangedMode.bind(this);
     this.toggleSettings     = this.toggleSettings.bind(this);
+    this.onApply            = this.onApply.bind(this);
   }
 
   addSettings() {
@@ -109,17 +123,21 @@ export class Panel extends React.Component {
     }
   }
 
+  onApply() {
+    let {onApply, settings} = this.props;
+    onApply(settings);
+  }
+
   renderButtons() {
     let className = this.props.selecting ? 'select-image selecting' : 'select-image';
     let selectImage = (
       <ButtonAdd className={className} onClick={this.selectImage} />
     );
-    let addSettings = this.state.selected ?
-      (
-        <IconButton primary onClick={this.addSettings}>
-          <IconSettings/>
+    let addSettings = (
+        <IconButton primary onClick={this.addSettings} className='add-setting' disabled={!this.state.selected}>
+          <IconSettings/><IconAdd/>
         </IconButton>
-      ) : null;
+      );
     return (
       <div className='buttons'>
         {addSettings}
@@ -155,7 +173,7 @@ export class Panel extends React.Component {
       return null;
     }
     return (
-      <Button onClick={() => {alert('you clicked.')}}>
+      <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} accent={false}>
         <IconCheck></IconCheck>
         Apply
       </Button>
@@ -168,8 +186,10 @@ export class Panel extends React.Component {
         <PanelHeader>
           {this.renderButtons()}
         </PanelHeader>
-        {this.renderSettings()}
-        {this.props.children}
+        <PanelContent ref='content'>
+          {this.renderSettings()}
+          {this.props.children}
+        </PanelContent>
         <PanelFooter>
         {this.renderFooter()}
         </PanelFooter>
@@ -180,12 +200,15 @@ export class Panel extends React.Component {
 
 Panel.propTypes = {
   onSelectImage: PropTypes.func,
-  selecting: PropTypes.bool.isRequired
+  onApply: PropTypes.func.isRequired,
+  selecting: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool
 };
 
 Panel.defaultProps = {
   onSelectImage: null,
-  selecting: false
+  selecting: false,
+  disabled: false
 };
 
 

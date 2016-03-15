@@ -56,18 +56,29 @@ class App extends React.Component {
         type: 'accept',
         label: '',
         icon: null
-      }
+      },
     };
 
     this.toggleGrid = this.toggleGrid.bind(this);
     this.onGridResize = this.onGridResize.bind(this);
     this.initializeGrid = once(this.initializeGrid, this);
     this.onSelectImage = this.onSelectImage.bind(this);
+    this.requestImage = this.requestImage.bind(this);
   }
 
   toggleGrid() {
     let {dispatch, isSelectingImage} = this.props;
     dispatch(toggleGrid(isSelectingImage));
+  }
+
+  requestImage(settings, dispatch = null) {
+    dispatch = dispatch || this.props.dispatch;
+    dispatch(selectImage(this.props.image.name, settings));
+  }
+
+  requestImages(params, dispatch = null) {
+    dispatch = dispatch || this.props.dispatch;
+    dispatch(selectQuery(params));
   }
 
   initializeGrid(nextProps, nextState) {
@@ -77,14 +88,19 @@ class App extends React.Component {
   }
 
   getImagesQuery() {
-    let params = {
-      mode: MODES.IM_RESIZE,
+    let mode = MODES.IM_RESIZE;
+    let params = {};
+    params[mode] = {
       width: this.state.grid.size,
       height: 0,
     };
-    let filter = {};
+    let setting = {
+      mode: MODES.IM_RESIZE,
+      params,
+      filters: []
+    };
 
-    return [[params, filter]];
+    return [setting];
   }
 
   onGridResize(size) {
@@ -103,11 +119,6 @@ class App extends React.Component {
   }
 
   fetchImage(params) {
-  }
-
-  requestImages(params, dispatch = null) {
-    dispatch = dispatch || this.props.dispatch;
-    dispatch(selectQuery(params));
   }
 
   handleFetchImages(nextProps, nextState) {
@@ -134,9 +145,9 @@ class App extends React.Component {
     let {isSelectingImage, fetchImages, fetchImage} = nextProps;
 
     // initialize grid
-    if (isSelectingImage) {
-      this.initializeGrid(nextProps, nextState);
-    }
+    //if (isSelectingImage) {
+    //  this.initializeGrid(nextProps, nextState);
+    //}
 
     // fetch images
     if (fetchImages !== this.props.fetchImages) {
@@ -146,6 +157,16 @@ class App extends React.Component {
     // fetch new image
     if (fetchImage !== this.props.fetchImage) {
       this.handleFetchImage(nextProps, nextState);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState) {
+      return;
+    }
+
+    if (this.state.grid.size !== prevState.grid.size) {
+      this.requestImages(this.getImagesQuery(), this.props.dispatch);
     }
   }
 
@@ -164,9 +185,11 @@ class App extends React.Component {
         <Panel
           className='settings'
           onSelectImage={this.toggleGrid}
+          onApply={this.requestImage}
           selecting={this.props.isSelectingImage}
           image={this.props.image}
           constraints={this.props.defaults}
+          disabled={this.props.fetchingImage}
         />
         <div className='preview'>
           <Preview image={this.props.image}>

@@ -5,6 +5,10 @@ $gray_neutral: rgba(127, 127, 127, 1);
 
 $gray_darker: darken($gray_neutral, 10);
 $gray_dark: darken($gray_neutral, 20);
+$gray_xdark: darken($gray_neutral, 40);
+$gray_xxdark: darken($gray_neutral, 60);
 
 $gray_lighter: lighten($gray_neutral, 10);
 $gray_light: lighten($gray_neutral, 20);
+$gray_xlight: lighten($gray_neutral, 40);
+$gray_xxlight: lighten($gray_neutral, 60);

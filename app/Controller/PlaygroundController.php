@@ -25,8 +25,8 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class PlaygroundController extends PageController
 {
-    public function __invoke(ServerRequestInterface $request, $response = null)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response = null)
     {
-        return $this->renderTemplate('playground.php');
+        return $this->renderResponse('playground.php', ['title' => 'JMG | Playground'], 200, $response);
     }
 }

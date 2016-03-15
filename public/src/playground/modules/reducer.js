@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import {clonedeep} from 'lodash.clonedeep';
-import queryString from 'query-string';
 import {isObject, isArray} from 'lib/assert';
+import {createUrlFactory, defaultUrl} from './url';
 import {
   QUERY_ALL_RESULT_REQUEST,  QUERY_ALL_RESULT_SUCCESS,  QUERY_ALL_RESULT_ERROR,
   QUERY_IMAGE_RESULT_REQUEST, QUERY_IMAGE_RESULT_SUCCESS, QUERY_IMAGE_RESULT_ERROR,
@@ -9,45 +9,9 @@ import {
   SET_IMAGE_PARAMS,
   TOGGLE_GRID,
   SETTINGS_ADD, SETTINGS_UPDATE, SETTINGS_REMOVE, SETTINGS_CHANGE_MODE,
-  SETTINGS_UPDATE_PARAMS, SETTINGS_TOGGLE_VISIBLE
+  SETTINGS_UPDATE_PARAMS, SETTINGS_TOGGLE_VISIBLE,
+  SETTINGS_IMAGES_CHANGE
 } from './actions';
-
-const getUrl = (query = [], image = null, base = DEFAULT_URL) => {
-  let uri = image ? base + '/' + image : base;
-  if (query.length === 0) {
-    return uri;
-  }
-
-  let q = {jmg: query.map((p) => {
-    return getParamStrings(p).join('|');
-  })}
-
-  return uri + '?' + queryString.stringify(q);
-};
-
-const getParamStrings = (param) => {
-  let p = filterParam(param);
-  return [Object.values(param[0]).join(':')]
-}
-
-const filterParam = (param) => {
-  if (isObject(param)) {
-    return [param, null];
-  }
-
-  return param;
-};
-
-const createUrlFactory = (query, image = null) => {
-  return () => getUrl(query, image);
-};
-
-const defaultUrl = {
-  query: [],
-  uri() {
-    return DEFAULT_URL;
-  }
-};
 
 export const imageParams = (state = [], action) => {
   if (action.type === SET_IMAGE_PARAMS) {
@@ -60,9 +24,9 @@ export const imageParams = (state = [], action) => {
 export const fetchImages = (state = defaultUrl, action) => {
   switch (action.type) {
     case SELECT_QUERY_ALL:
-      const {query} = action.payload;
-      const uri = createUrlFactory(query);
-      return {query, uri};
+      const {settings} = action.payload;
+      const uri = createUrlFactory(settings);
+      return {settings, uri};
     default:
       return state;
   }
@@ -71,9 +35,9 @@ export const fetchImages = (state = defaultUrl, action) => {
 export const fetchImage = (state = {query: null, uri: null}, action) => {
   switch (action.type) {
     case SELECT_QUERY_IMAGE:
-      const {image, query} = action.payload;
-      const uri = createUrlFactory(query, image);
-      return {query, uri};
+      const {image, settings} = action.payload;
+      const uri = createUrlFactory(settings, image);
+      return {settings, uri};
     default:
       return state;
   }
@@ -212,6 +176,15 @@ export const settings = (state = [], action) => {
         return state;
   }
 }
+
+//export const settingsImages = (state = [], action) => {
+//  switch (action.type) {
+//    case SETTINGS_IMAGES_CHANGE:
+//      return [];
+//    default:
+//      return state;
+//  }
+//};
 
 const rootReducer = combineReducers({
   fetchImages,

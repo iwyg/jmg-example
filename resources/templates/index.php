@@ -4,10 +4,26 @@
 <?= $view->endsection() ?>
 
 <?= $view->section('content') ?>
-<section class="hero">
+<header id="site-header" class="site-header">
+    <h1>I stay on top</h1>
+    <div class="hero">hero image here</div>
+    <section class="main-nav">
+        <nav>
+            <ul>
+                <li>About</li>
+                <li>Playground</li>
+            </ul>
+        </nav>
+    </section>
+</header>
+<section class="container">
+    <div class="content">
+        <?= $func('markdown', 'test.md') ?>
+    </div>
 </section>
-<h1>this shouldn't be here</h1>
-<?= $func('markdown', 'test.md') ?>
+<footer>
+    <p>this is the footer</p>
+</footer>
 <?= $view->endsection() ?>
 
 <?= $view->section('body-scripts') ?>

@@ -21,6 +21,9 @@ export const IconModePx        = require('icons/ic_view_comfy_black_48px.svg');
 
 // misc icons
 export const IconAdd           = require('icons/ic_add_black_48px.svg');
+export const IconRemove        = require('icons/ic_remove_black_48px.svg');
+export const IconRemoveCirc    = require('icons/ic_remove_circle_outline_black_48px.svg');
+export const IconAddCirc       = require('icons/ic_add_circle_outline_black_48px.svg');
 export const IconClose         = require('icons/ic_close_black_48px.svg');
 export const IconCheck         = require('icons/ic_check_black_48px.svg');
 export const IconLink          = require('icons/ic_link_black_48px.svg');

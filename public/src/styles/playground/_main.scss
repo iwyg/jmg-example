@@ -60,43 +60,6 @@ $info_bar_position: bottom;
   position: relative;
 }
 
-.panel {
-  @include clearfix;
-  padding: 1rem;
-
-  button {
-    &.select-image {
-      position: relative;
-      right: calc(-100% + 9.8rem);
-      transform: rotate(0deg);
-      transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-    }
-    &.selecting {
-      transform: rotate(45deg);
-      background: $gray_dark !important;
-    }
-  }
-}
-
-.settings {
-  background-color: $base_flat;
-  width: 100%;
-
-  @include breakpoint((min-width: $q-small, orientation: landscape)) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    height: 100%;
-    width: $settings-width-small;
-    box-shadow: 1px 0px 6px 0 rgba(0, 0, 0, 0.5);
-  }
-
-  @include breakpoint((min-width: $q-medium, orientation: landscape)) {
-    width: $settings-width;
-  }
-}
-
 
 .grid-loading {
 
@@ -112,7 +75,8 @@ $info_bar_position: bottom;
 .preview {
   transform: translate3d(0, 0, 0) scaleZ(1);
   //background-color: darken($gray_darker, 20);
-  background-color: darken($color-primary-dark, 5);
+  /*background-color: darken($gray_dark, 1);*/
+  background-color: #3C4448;
   @include inbox;
   position: relative;
   overflow: hidden;
@@ -226,12 +190,10 @@ ul {
 
 .preview-image {
   img {
-    //display: none;
     transition: all .4s cubic-bezier(0.5, .12, .36, .9);
     transition-delay: .8s;
     opacity: 0;
     &.loaded {
-      //display: block;
       opacity: 1;
     }
   }

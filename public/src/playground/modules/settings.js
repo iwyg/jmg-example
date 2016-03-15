@@ -23,3 +23,15 @@ export const defaultSettings = (function () {
     filters: []
   };
 }());
+
+export const defaultSettingsImages = (function () {
+  let params = {};
+  params[MODES.IM_RESIZE] = initialModes[MODES.IM_RESIZE];
+  params[MODES.IM_SCALECROP] = initialModes[MODES.IM_SCALECROP];
+
+  return {
+    mode: MODES.IM_RESIZE,
+    params,
+    filters: []
+  };
+}());

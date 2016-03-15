@@ -38,10 +38,10 @@ trait ViewControllerTrait
      *
      * @return ResponseInterface
      */
-    private function renderResponse($template, array $args = [], $status = 200, ResponseInterface $response = null)
+    protected function renderResponse($template, array $vars = [], $status = 200, ResponseInterface $response = null)
     {
         $resource = fopen('php://temp', 'bw+');
-        fwrite($resource, $this->getView()->render($template, $args));
+        fwrite($resource, $this->getView()->render($template, $vars));
         $stream = new Stream($resource);
 
         if (null !== $response) {

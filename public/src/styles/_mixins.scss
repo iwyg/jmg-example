@@ -24,5 +24,5 @@
 @mixin flex($justify: center, $align: stretch) {
   display: flex;
   justify-content: $justify;
-  align-content: $align;
+  align-items: $align;
 }

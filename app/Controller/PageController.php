@@ -25,24 +25,14 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 abstract class PageController
 {
-    protected $view;
+    use ViewControllerTrait;
+
     public function __construct($view)
     {
         $this->view = $view;
     }
 
-    abstract public function __invoke(ServerRequestInterface $request, $response = null);
-
-    protected function renderTemplate($template)
-    {
-        try {
-            $rendered = $this->view->render($template);
-        } catch (\Exception $e) {
-            return $this->error($e);
-        }
-
-        return $this->getTemplateResponse($rendered);
-    }
+    abstract public function __invoke(ServerRequestInterface $request, ResponseInterface $response = null);
 
     protected function error(\Exception $e)
     {

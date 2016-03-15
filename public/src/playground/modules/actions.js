@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import MODES, {initial, parseValues} from './modes';
-import {defaultSettings} from './settings';
+import {defaultSettings, defaultSettingsImages} from './settings';
 
 export const QUERY_ALL_RESULT_REQUEST   = 'QUERY_ALL_RESULT_REQUEST';
 export const QUERY_ALL_RESULT_SUCCESS   = 'QUERY_ALL_RESULT_SUCCESS';
@@ -28,6 +28,7 @@ export const SETTINGS_CHANGE_MODE       = 'SETTINGS_CHANGE_MODE'
 export const SETTINGS_UPDATE_PARAMS     = 'SETTINGS_UPDATE_PARAMS';
 
 export const SETTINGS_TOGGLE_VISIBLE    = 'SETTINGS_TOGGLE_VISIBLE';
+export const SETTINGS_IMAGES_CHANGE     = 'SETTINGS_IMAGES_CHANGE';
 
 const isError = (response) =>  {
   return response.status >= 400 && response.status < 600;
@@ -38,20 +39,19 @@ const getQueryString = (query = {}) => {
 };
 
 /* Action creators */
-export const selectQuery = (query = []) => {
+export const selectQuery = (settings = []) => {
   return {
     type: SELECT_QUERY_ALL,
-    payload: {
-      query
-    }
+    payload: {settings}
   };
 };
 
-export const selectImage = (image = null, query = []) => {
+export const selectImage = (image = null, settings = []) => {
   return {
     type: SELECT_QUERY_IMAGE,
     payload: {
-      image : image, query
+      image : image,
+      settings
     }
   };
 };
@@ -161,53 +161,60 @@ export const setImageParams = (params = []) => {
     type: SET_IMAGE_PARAMS,
     payload: params
   };
-}
+};
 
 export const toggleGrid = (visible) => {
   return {
     type: TOGGLE_GRID,
     payload: visible
   };
-}
+};
 
 export const addSettings = (setting = defaultSettings) => {
   return {
     type: SETTINGS_ADD,
     payload: {setting}
   };
-}
+};
 
 export const removeSettings = (index) => {
   return {
     type: SETTINGS_REMOVE,
     payload: {index}
   };
-}
+};
 
 export const updateSettings = (setting, index) => {
   return {
     type: SETTINGS_UPDATE,
     payload: {index, setting}
   };
-}
+};
 
 export const changeSettingsMode = (index, mode) => {
   return {
     type: SETTINGS_CHANGE_MODE,
     payload: {index, mode}
   };
-}
+};
 
 export const toggleSettingVisible = (index) => {
   return {
     type: SETTINGS_TOGGLE_VISIBLE,
     payload: {index}
   };
-}
+};
 
 export const updateParams = (mode, params, index) => {
   return {
     type: SETTINGS_UPDATE_PARAMS,
     payload: {mode, params, index}
   };
-}
+};
+
+export const settingsImages = (index, width, settings = defaultSettingsImages) => {
+  return {
+    type: SETTINGS_IMAGES_CHANGE,
+    payload: {index, width, settings}
+  };
+};

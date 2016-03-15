@@ -41,11 +41,15 @@ export default class Collapsable extends React.Component {
     let Icn = this.props.visible ? this.props.iconOpen : this.props.iconCollapsed;
     let {label, hideLabel, headerContent} = this.props;
     let labelEl = hideLabel ? null : (<label>{label}</label>);
+    let toggle = (<IconButton><Icn></Icn></IconButton>);
+    let left = this.props.toggleLeft ? toggle : null;
+    let right = this.props.toggleLeft ? null : toggle;
     return (
       <header onClick={this.toggle}>
+        {left}
         {labelEl}
         {headerContent}
-        <IconButton><Icn></Icn></IconButton>
+        {right}
       </header>
     );
   }
@@ -75,12 +79,14 @@ Collapsable.propTypes = {
   visible: PropTypes.bool,
   iconOpen: PropTypes.func,
   iconCollapsed: PropTypes.func,
-  onToggle: PropTypes.func
+  onToggle: PropTypes.func,
+  toggleLeft: PropTypes.bool
 };
 
 Collapsable.defaultProps = {
   hideLabel: true,
   visible: true,
   iconOpen: IconExpandLess,
-  iconCollapsed: IconExpandMore
+  iconCollapsed: IconExpandMore,
+  toggleLeft: false
 };

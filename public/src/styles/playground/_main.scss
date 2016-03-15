@@ -66,8 +66,9 @@ $info_bar_position: bottom;
 
   button {
     &.select-image {
-      position: relative;
-      right: calc(-100% + 9.8rem);
+      top: 1rem;
+      position: absolute;
+      right: -12px;
       transform: rotate(0deg);
       transition: all .4s cubic-bezier(0.5, .12, .36, .9);
     }
@@ -112,7 +113,8 @@ $info_bar_position: bottom;
 .preview {
   transform: translate3d(0, 0, 0) scaleZ(1);
   //background-color: darken($gray_darker, 20);
-  background-color: darken($color-primary-dark, 5);
+  /*background-color: darken($gray_dark, 1);*/
+  background-color: #3C4448;
   @include inbox;
   position: relative;
   overflow: hidden;
@@ -226,12 +228,10 @@ ul {
 
 .preview-image {
   img {
-    //display: none;
     transition: all .4s cubic-bezier(0.5, .12, .36, .9);
     transition-delay: .8s;
     opacity: 0;
     &.loaded {
-      //display: block;
       opacity: 1;
     }
   }

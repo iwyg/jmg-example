@@ -1,6 +1,24 @@
+## Fenced code blocks
+
+write fenced code blocks
+
+```sh
+> composer require thapp/jmg
+```
+
+this is another code block.
+
+```php
+<?php
+
+class Foo extends Bar
+{
+}
+
+```
 # Header 1
 
-Her pussy tasts like cherry.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Nulla vitae elit libero, a pharetra augue. Nullam quis risus eget urna mollis ornare vel eu leo. Maecenas faucibus mollis interdum.
 
 ## Header 2
 
@@ -22,20 +40,3 @@ Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut ferm
 
 ###### Header 6
 
-## Fenced code blocks
-
-write fenced code blocks
-
-```sh
-> composer require thapp/jmg
-```
-
-this is another code block.
-
-```php
-<?php
-
-class Foo extends Bar
-{
-}
-```

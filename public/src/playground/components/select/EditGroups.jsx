@@ -168,7 +168,6 @@ export class EditResizeScale extends EditGroup {
 
   render() {
     let {maxW, minW, steps, label, unit, unitVal} = this.props;
-    console.log('STEPS', steps, this.state);
     return (
       <SelectGroup>
         <div className='slider'>

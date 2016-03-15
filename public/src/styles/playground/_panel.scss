@@ -1,8 +1,3 @@
-$panel_header_height: 7.6rem;
-$panel_footer_height: 7.6rem;
-$panel_top_padding: 1rem;
-$panel_bottom_padding: 1rem;
-
 .settings {
   background-color: $base_flat;
   width: 100%;
@@ -126,12 +121,13 @@ $panel_bottom_padding: 1rem;
 
 .panel-header, .panel-footer {
   background-color: $color-primary;
-  padding: 2rem;
+  padding: 2rem $panel_left_padding;
   width: 100%;
 }
 
 button{
   &.add-setting {
+    text-align: left;
     color: $base_flat !important;
     &[disabled] {
       opacity: 0.5;

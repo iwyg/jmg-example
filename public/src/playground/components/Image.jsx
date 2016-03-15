@@ -32,7 +32,7 @@ export default class Figure extends React.Component {
         {
           (function() {
             return isLoaded ? null : (
-              <ProgressBar className='loading' type='circular' mode='indeterminate' />
+              <ProgressBar className='spinner loading' type='circular' mode='indeterminate' />
             )
           }())
         }

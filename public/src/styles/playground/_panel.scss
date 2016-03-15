@@ -1,3 +1,8 @@
+$panel_header_height: 7.6rem;
+$panel_footer_height: 7.6rem;
+$panel_top_padding: 1rem;
+$panel_bottom_padding: 1rem;
+
 .settings {
   background-color: $base_flat;
   width: 100%;
@@ -21,6 +26,10 @@
   margin: .5rem 0;
   padding: 1rem 0;
   border-bottom: 1px solid $gray_xlight;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   & > label {
   }
@@ -49,15 +58,29 @@
 
 .panel {
   @include clearfix;
-  padding: 1rem 0;
+  padding: $panel_top_padding 0 $panel_bottom_padding 0;
+  position: relative;
+  height: auto;
+  max-height: 100%;
+  -webkit-touch-callout: default;
+
+  @include breakpoint($q-medium) {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
   button {
     &.select-image {
-      top: 1rem;
+      top: $panel_top_padding;
       position: absolute;
-      right: -12px;
       transform: rotate(0deg);
       transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+      right: 1rem;
+      @include breakpoint($q-medium) {
+        right: -12px;
+      }
     }
     &.selecting {
       transform: rotate(45deg);
@@ -69,29 +92,42 @@
 
 .panel-content {
   position: relative;
-  padding: 8rem 1rem 4rem 1rem;
+  padding: ($panel_header_height - $panel_top_padding) 1rem ($panel_footer_height - $panel_bottom_padding) 1rem;
   max-height: 100%;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
+
+  //&::-webkit-scrollbar {
+  //  width: 0;
+  //  height: 0;
+  //}
+  //&::scrollbar {
+  //  width: 0;
+  //  height: 0;
+  //}
 }
 
 .panel-header {
   position: absolute;
   top: 0;
   left: 0;
+  height: $panel_header_height;
+  z-index: 1010;
 }
 
 .panel-footer {
   position: absolute;
   bottom: 0;
   left: 0;
+  height: $panel_footer_height;
+  z-index: 1000;
 }
 
 .panel-header, .panel-footer {
   background-color: $color-primary;
   padding: 2rem;
   width: 100%;
-  z-index: 1000;
 }
 
 button{

@@ -9,6 +9,7 @@ import {isFunc, isObject} from 'lib/assert';
 import IconMasonry from 'ic_dashboard_black_24px.svg';
 import {CONTEXT} from 'runtime/constants';
 import {callIfFunc} from 'lib/react-helper';
+import ProgressBar from 'react-toolbox/lib/progress_bar';
 
 const RESIZE = 'resize';
 
@@ -176,10 +177,12 @@ export default class Grid extends React.Component {
     }
 
     let {layout, masonry, ...props} = this.props;
+    let progress = (<ProgressBar className='spinner loading' type='circular' mode='indeterminate' />);
     const items = this.renderItems(props);
 
     return (
       <div className={gridClass}>
+        {progress}
         {this.renderLayout(layout, items, masonry)}
       </div>
     );
@@ -228,6 +231,7 @@ class GridItem extends React.Component {
 
   render() {
     let {image, refPrefix, index, keys, ...rest} = this.props;
+
     return (
       <div className='grid-item'>
         <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>

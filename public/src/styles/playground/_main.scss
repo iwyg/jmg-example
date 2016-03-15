@@ -2,9 +2,23 @@
 @import "../colors";
 @import "grid";
 
-$settings-width: 36rem;
-$settings-width-small: 26rem;
+$settings-width: 42rem;
+$settings-width-small: 36rem;
 $settings-width-large: 48rem;
+
+figure {
+  img {
+    img {
+      transition: opacity .4s cubic-bezier(0.5, .12, .36, .9);
+    }
+    &.loaded {
+      opacity: 1;
+    }
+    &.loading {
+      opacity: 0;
+    }
+  }
+}
 
 $info_bar_position: bottom;
 
@@ -59,7 +73,6 @@ $info_bar_position: bottom;
   @include clearfix;
   position: relative;
 }
-
 
 .grid-loading {
 
@@ -140,6 +153,13 @@ $info_bar_position: bottom;
   //    transform: translate3d(0, 0, 0);
   //  }
   //}
+  .spinner {
+    position: absolute;
+    margin-top: -30px;
+    margin-left: -30px;
+    top: 50%;
+    left: 50%;
+  }
 }
 
 .mode-group-item {
@@ -190,12 +210,9 @@ ul {
 
 .preview-image {
   img {
-    transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-    transition-delay: .8s;
     opacity: 0;
-    &.loaded {
-      opacity: 1;
-    }
+    transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+    transition-delay: .2s;
   }
 }
 

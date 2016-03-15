@@ -1,17 +1,27 @@
 import React, {PropTypes} from 'react';
 import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
+import Tooltip from 'react-toolbox/lib/tooltip';
 import {isFunc, isObject} from 'lib/assert';
 import {IconSettings, IconCheck, IconAdd, Icon} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
+
 import {
   addSettings, updateSettings,
   updateParams,
   removeSettings, changeSettingsMode,
   toggleSettingVisible
 } from 'playground/modules/actions';
+
+const AbstractBtn = ({...props}) => {
+  return (
+    <Button {...props}></Button>
+  );
+};
+
+const ToolTipBtn = Tooltip(AbstractBtn);
 
 /**
  * func PanelHeader
@@ -133,11 +143,17 @@ export class Panel extends React.Component {
     let selectImage = (
       <ButtonAdd className={className} onClick={this.selectImage} />
     );
-    let addSettings = (
-        <IconButton primary onClick={this.addSettings} className='add-setting' disabled={!this.state.selected}>
-          <IconSettings/><IconAdd/>
-        </IconButton>
-      );
+
+    //<IconSettings/><IconAdd/>
+    //disabled={!this.state.selected}
+    let addSettings = (<ToolTipBtn
+        tooltip='Add Parameters'
+        onClick={this.addSettings}
+        className='add-setting'
+        disabled={!this.state.selected}
+      >
+       <IconSettings/><IconAdd/>
+      </ToolTipBtn>);
     return (
       <div className='buttons'>
         {addSettings}

@@ -25,9 +25,9 @@
     //@include breakpoint($q-big) {
     //  width: 25%;
     //}
+    @import "figure";
   }
 
-  @import "figure";
 }
 
 .grid-loading {

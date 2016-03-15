@@ -44,13 +44,13 @@ export default class Preview extends React.Component {
     let {uri, ...props} = image;
     let icl = image.width > image.height ? 'landscape' : 'portrait';
     let spinner = this.state.loading ?
-      (<ProgressBar className='loading' type='circular' mode='indeterminate' />) : null;
+      (<ProgressBar className='spinner' type='circular' mode='indeterminate' />) : null;
 
     return (
       <div className={className('preview-container', this.props)}>
         <InfoBar info={image} keys={['width', 'height', 'type', 'color', 'uri']}></InfoBar>
+        {spinner}
         <figure className={defaultClass}>
-          {spinner}
           <Image className={icl} src={uri} {...props} onLoad={this.imageWillLoad} onLoaded={this.imageDidLoad} >
           </Image>
         </figure>

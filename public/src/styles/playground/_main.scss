@@ -1,10 +1,17 @@
-@import "../mixins";
-@import "../colors";
-@import "grid";
-
 $settings-width: 42rem;
 $settings-width-small: 36rem;
 $settings-width-large: 48rem;
+
+$panel_header_height: 7.6rem;
+$panel_footer_height: 7.6rem;
+$panel_top_padding: 1rem;
+$panel_bottom_padding: 1rem;
+$panel_top_padding: 1rem;
+$panel_left_padding: 1rem;
+
+@import "../mixins";
+@import "../colors";
+@import "grid";
 
 figure {
   img {
@@ -46,17 +53,18 @@ $info_bar_position: bottom;
   position: absolute;
   left: 0;
   #{$info_bar_position}: 0;
-  max-height: 6rem;
+  height: $panel_footer_height;
+  //max-height: 6rem;
   @include clearfix;
   font-size: 1.2rem;
   line-height: .4rem;
-  color: $color-primary;
+  color: $gray_lighter;
 
   @include flex(space-between);
 
   .item {
     padding: 1rem;
-    border-left: 1px solid darken($color-primary-dark, 5);
+    //border-left: 1px solid darken($color-primary-dark, 5);
   }
 
   background-color: rgba(#000, 0.22);
@@ -66,6 +74,7 @@ $info_bar_position: bottom;
   @include inbox;
   padding-#{$info_bar_position}: 6rem;
   position: relative;
+  padding-bottom: $panel_footer_height;
 }
 
 .playground {
@@ -88,8 +97,9 @@ $info_bar_position: bottom;
 .preview {
   transform: translate3d(0, 0, 0) scaleZ(1);
   //background-color: darken($gray_darker, 20);
-  /*background-color: darken($gray_dark, 1);*/
-  background-color: #3C4448;
+  //background-color: darken($gray_dark, 1);
+  //background-color: #3C4448;
+  background-color: #4E4E4E;
   @include inbox;
   position: relative;
   overflow: hidden;

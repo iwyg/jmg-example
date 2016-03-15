@@ -60,44 +60,6 @@ $info_bar_position: bottom;
   position: relative;
 }
 
-.panel {
-  @include clearfix;
-  padding: 1rem;
-
-  button {
-    &.select-image {
-      top: 1rem;
-      position: absolute;
-      right: -12px;
-      transform: rotate(0deg);
-      transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-    }
-    &.selecting {
-      transform: rotate(45deg);
-      background: $gray_dark !important;
-    }
-  }
-}
-
-.settings {
-  background-color: $base_flat;
-  width: 100%;
-
-  @include breakpoint((min-width: $q-small, orientation: landscape)) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    height: 100%;
-    width: $settings-width-small;
-    box-shadow: 1px 0px 6px 0 rgba(0, 0, 0, 0.5);
-  }
-
-  @include breakpoint((min-width: $q-medium, orientation: landscape)) {
-    width: $settings-width;
-  }
-}
-
 
 .grid-loading {
 

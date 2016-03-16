@@ -9,9 +9,13 @@ $panel_bottom_padding: 1rem;
 $panel_top_padding: 1rem;
 $panel_left_padding: 1rem;
 
+$info_bar_position: bottom;
+
+
 @import "../mixins";
 @import "../colors";
 @import "grid";
+@import "preview";
 
 figure {
   img {
@@ -24,174 +28,6 @@ figure {
     &.loading {
       opacity: 0;
     }
-  }
-}
-
-$info_bar_position: bottom;
-
-.select-group {
-  padding: 2rem 0;
-
-  label {
-    @include label_small;
-    display: inline-block;
-    padding: 1rem 0;
-  }
-}
-
-.slider-name, .slider-value, .channel-name, .channel-value {
-  @include label_small;
-}
-
-.channel-name {
-  &.r {
-  }
-}
-
-.info-bar {
-  width: 100%;
-  position: absolute;
-  left: 0;
-  #{$info_bar_position}: 0;
-  height: $panel_footer_height;
-  //max-height: 6rem;
-  @include clearfix;
-  font-size: 1.2rem;
-  line-height: .4rem;
-  color: $gray_lighter;
-
-  @include flex(space-between);
-
-  .item {
-    padding: 1rem;
-    //border-left: 1px solid darken($color-primary-dark, 5);
-  }
-
-  background-color: rgba(#000, 0.22);
-}
-
-.preview-container {
-  @include inbox;
-  padding-#{$info_bar_position}: 6rem;
-  position: relative;
-  padding-bottom: $panel_footer_height;
-}
-
-.playground {
-  @include inbox;
-  @include clearfix;
-  position: relative;
-}
-
-.grid-loading {
-
-  @include breakpoint((min-width: $q-small, orientation: landscape)) {
-    left: calc(50% + #{$settings-width-small / 2});
-  }
-
-  @include breakpoint((min-width: $q-medium, orientation: landscape)) {
-    left: calc(50% + #{$settings-width / 2});
-  }
-}
-
-.preview {
-  transform: translate3d(0, 0, 0) scaleZ(1);
-  //background-color: darken($gray_darker, 20);
-  //background-color: darken($gray_dark, 1);
-  //background-color: #3C4448;
-  background-color: #4E4E4E;
-  @include inbox;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-
-  &, .grid-wrap {
-    @include breakpoint((min-width: $q-small, orientation: landscape)) {
-      padding-left: $settings-width-small;
-    }
-  }
-
-  &, .grid-wrap {
-    @include breakpoint((min-width: $q-medium, orientation: landscape)) {
-      padding-left: $settings-width;
-    }
-  }
-
-  .preview-image {
-    padding: 2rem;
-    @include inbox();
-    position: relative;
-
-    @include flex(center, center);
-
-    img {
-      margin: auto;
-      object-fit: contain;
-      max-width: 100%;
-      max-height: 100%;
-      //&.portrait {
-      //  height: 100%;
-      //  //width: auto;
-      //}
-
-      //&.landscape {
-      //  width: 100%;
-      //  height: auto;
-      //}
-
-    }
-  }
-
-  .grid-wrap {
-    @include inbox;
-    position: absolute;
-    overflow: scroll;
-    top: 0;
-    left: 0;
-    transform: translate3d(0, 100%, 0);
-    transition: transform .4s cubic-bezier(0.6, .12, .26, .96);
-    transition-delay: .1s;
-    &.visible {
-      transition-delay: 0s;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  //&.select {
-  //  .grid-wrap {
-  //    transition-delay: 0s;
-  //    transform: translate3d(0, 0, 0);
-  //  }
-  //}
-  .spinner {
-    position: absolute;
-    margin-top: -30px;
-    margin-left: -30px;
-    top: 50%;
-    left: 50%;
-  }
-}
-
-.mode-group-item {
-  @include clearfix;
-  .icon, .label {
-    height: 100%;
-    float: left;
-  }
-
-  .label {
-    padding: 0.4rem 2rem;
-  }
-
-  .icon {
-    svg {
-      height: 100%;
-      width: 24px;
-      fill: $gray_darker;
-    }
-  }
-
-  .label {
   }
 }
 
@@ -211,6 +47,7 @@ ul {
 .color-picker {
   @import "color-picker";
 }
+
 @import "slider";
 @import "gravity-select";
 
@@ -218,32 +55,6 @@ ul {
   z-index: 100000;
 }
 
-.preview-image {
-  img {
-    opacity: 0;
-    transition: all .4s cubic-bezier(0.5, .12, .36, .9);
-    transition-delay: .2s;
-  }
-}
-
-.modes-wrap {
-  @include flex();
-  .modes {
-    padding: .5rem 2rem;
-    width: 100%;
-  }
-}
-
-.collapsed {
-  .modes-wrap {
-    .modes {
-      justify-content: flex-start;
-      .tab {
-        width: #{(100 / 7)}%;
-      }
-    }
-  }
-}
 
 @import "icons";
 @import "buttons";

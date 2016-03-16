@@ -26,7 +26,6 @@ module.exports = {
     filename: '[name]/index.js',
     //chunkFilename: '[name]/[name]_[chunkhash].js',
     publicPath: '/',
-    sourceMapFilename: '[file].map'
   },
   resolve: {
     extensions: ['', '.jsx', '.js', '.scss', '.json'],
@@ -143,20 +142,15 @@ module.exports = {
 
   plugins: [
     new ExtractTextPlugin('css/[name].css', {allChunks: true}),
-    new webpack.DefinePlugin({
-			'process.env.NODE_ENV': '"'+env+'"'
-		})
+    new webpack.EnvironmentPlugin([
+      'NODE_ENV'
+    ])
+    //new webpack.DefinePlugin({
+		//	'process.env.NODE_ENV': '"'+env+'"'
+		//})
     //new webpack.DefinePlugin({
     //  'process.env.NODE_ENV': JSON.stringify('development')
     //})
   ],
-  devtool: [
-    'source-map'
-  ],
 
-  devServer: {
-  contentBase: 'dist/',
-    hot: true,
-    inline: true
-  }
 };

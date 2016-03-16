@@ -130,7 +130,6 @@ export class Settings extends React.Component {
 
   renderCrop(params, constr) {
     let key = 'crop-'+this.props.index;
-    console.log('CROP', params.background);
     return (
       <Crop key={key} {...constr} {...params} onChange={this.settingDidChange} />
     );

@@ -11,10 +11,6 @@ export class Tabs extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log('TABS', this);
-  }
-
   findTabs(children) {
     return React.Children.toArray(children).filter((c) => {
       return c.type === Tab || c.type.prototype.constructor === Tab;
@@ -23,7 +19,6 @@ export class Tabs extends React.Component {
 
   componentWillUpdate(nextProps)  {
     this.tabs = this.findTabs(nextProps.children);
-    console.log(this.tabs);
   }
 
   render() {

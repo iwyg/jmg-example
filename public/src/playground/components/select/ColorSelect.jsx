@@ -141,7 +141,6 @@ export default class ColorSelect extends React.Component {
         <div className='channels'>
           {channels.map((c, i) => {
             let updateFunc = ['set' + ucFirst(c)];
-            console.log(updateFunc);
             let value = this.mapChannel(c);
             return (
               <div className='channel' key={'channel-'+c}>

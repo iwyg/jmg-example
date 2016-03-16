@@ -183,8 +183,6 @@ export class EditResizeScale extends EditGroup {
   }
 }
 
-console.log(PropTypes);
-
 EditResizeScale.propTypes = Object.assign({}, EditGroup.propTypes, {
   width: PropTypes.number.isRequired,
   minW: PropTypes.number.isRequired,

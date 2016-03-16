@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux-cache.git",
-                "reference": "b289ff1cadf4bddc89a7f5736d8e4c8a7601d0fe"
+                "reference": "7f2489d6683b89c318ea50e5ed00834379529447"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/b289ff1cadf4bddc89a7f5736d8e4c8a7601d0fe",
-                "reference": "b289ff1cadf4bddc89a7f5736d8e4c8a7601d0fe",
+                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/7f2489d6683b89c318ea50e5ed00834379529447",
+                "reference": "7f2489d6683b89c318ea50e5ed00834379529447",
                 "shasum": ""
             },
             "require": {
@@ -231,7 +231,7 @@
                 }
             ],
             "description": "cache capability for lucid/mux",
-            "time": "2016-03-02 10:41:58"
+            "time": "2016-03-16 07:59:14"
         },
         {
             "name": "lucid/resource",
@@ -619,12 +619,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iwyg/jmg.git",
-                "reference": "f423bbb0922c5f472116ec73bbeef1c2b63db7bd"
+                "reference": "f57542b3ed1676c331c9eef1d7512fca569c41a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iwyg/jmg/zipball/f423bbb0922c5f472116ec73bbeef1c2b63db7bd",
-                "reference": "f423bbb0922c5f472116ec73bbeef1c2b63db7bd",
+                "url": "https://api.github.com/repos/iwyg/jmg/zipball/f57542b3ed1676c331c9eef1d7512fca569c41a9",
+                "reference": "f57542b3ed1676c331c9eef1d7512fca569c41a9",
                 "shasum": ""
             },
             "require": {
@@ -659,7 +659,7 @@
                 "imagine",
                 "jit"
             ],
-            "time": "2016-03-09 10:16:07"
+            "time": "2016-03-16 07:46:16"
         },
         {
             "name": "thapp/jmg-psr7",

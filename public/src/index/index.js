@@ -10,12 +10,13 @@ import ViewPort from './modules/ViewPort';
 import Q, {select, selectAll, addClass, removeClass} from './modules/Dom';
 
 let viewPort = new ViewPort;
-let el = selectAll('#test');
+let el = selectAll('section.container');
 
 viewPort.registerElements(el, (e) => {
   console.log('ENTER');
   console.log(e.target);
   addClass(e.target, 'in-viewport');
+  viewPort.removeElement(e.target);
 }, (e) => {
   console.log('LEAVE');
   console.log(e.target);

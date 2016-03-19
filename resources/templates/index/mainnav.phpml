@@ -1,0 +1,28 @@
+<div class="clm clm__2">
+  <nav>
+    <ul>
+      <li><a class="link int" href="#about">About</a></li>
+      <li><a class="link int" href="#features">Features</a></li>
+      <li><a class="link int" href="#contribute">Contribute</a></li>
+    </ul>
+  </nav>
+</div>
+
+<div class="clm clm__2">
+  <nav>
+    <ul class="right">
+      <li><a class="link ext" target="_blanc" href="https://github.com/iwyg/jmg">
+          <span class="icon"><?php $view->func('icon', 'link')?></span>
+          Github
+      </a></li>
+      <li><a class="link ext" target="_blanc" href="/playground">
+          <span class="icon install"><?php $view->func('icon', 'grid')?></span>
+          Playground
+      </a></li>
+      <li><a class="link ext" target="_blanc" href="https://packagist.org/packages/thapp/jmg">
+          <span class="icon install"><?php $view->func('icon', 'install')?></span>
+          Install
+      </a></li>
+    </ul>
+  </nav>
+</div>

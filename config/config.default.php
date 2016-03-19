@@ -6,6 +6,13 @@ return [
     'templates' => [
         realpath(__DIR__.'/../resources/templates')
     ],
+    'view' => [
+        'icons' => [
+            'link'    => '../../public/src/icons/ic_link_black_48px.svg',
+            'install' => '../../public/src/icons/ic_system_update_alt_black_48px.svg',
+            'grid'    => '../../public/src/icons/ic_dashboard_black_48px.svg'
+        ]
+    ],
 
     'markdown' => realpath(__DIR__.'/../resources/markdown'),
     'storage'  => realpath(__DIR__.'/../storage'),

@@ -16,7 +16,11 @@ return function (Interop\Container\ContainerInterface $container, Lucid\Signal\E
 
     $events->addHandler('view.register', function ($event) use ($container) {
         $view = $event->getView();
+        $config = $container->get('config');
         $event->getEngine()->registerExtension($container->get('view.markdown'));
-        $view->addListener('playground.php', new App\View\RenderAppSettingsListener($container->get('config')));
+        $event->getEngine()->registerExtension(
+            new App\Bridge\Template\UtilsExtension($config->get('view:icons', []))
+        );
+        $view->addListener('playground.php', new App\View\RenderAppSettingsListener($config));
     });
 };

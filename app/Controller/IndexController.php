@@ -30,7 +30,7 @@ class IndexController
 
     public function __invoke()
     {
-        return $this->renderTemplate('index.php');
+        return $this->renderTemplate('index.phpml');
     }
 
     protected function renderTemplate($template)

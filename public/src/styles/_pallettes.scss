@@ -1,0 +1,51 @@
+// Base16 Ocean Dark
+$bocd_black:   #2b303b;
+$bocd_red:     #bf616a;
+$bocd_green:   #a3be8c;
+$bocd_yellow:  #ebcb8b;
+$bocd_blue:    #8fa1b3;
+$bocd_magenta: #b48ead;
+$bocd_cyan:    #96b5b4;
+$bocd_white:   #c0c5ce;
+$bocd_gray:    #696D71;
+
+// Base16 Ocean Dark
+$bocl_black:   #65737e;
+$bocl_red:     #d08770;
+$bocl_green:   #343d46;
+$bocl_yellow:  #4f5b66;
+$bocl_blue:    #a7adba;
+$bocl_magenta: #dfe1e8;
+$bocl_cyan:    #ab7967;
+$bocl_white:   #eff1f5;
+$bocl_gray:    #a7adba;
+
+$base16_ocean_dark: (
+  'black':   $bocd_black,
+  'red':     $bocd_red,
+  'green':   $bocd_green,
+  'yellow':  $bocd_yellow,
+  'blue':    $bocd_blue,
+  'magenta': $bocd_magenta,
+  'cyan':    $bocd_cyan,
+  'white':   $bocd_white,
+  'gray':    $bocd_gray,
+);
+
+$base16_ocean_light: (
+  'black':   $bocl_black,
+  'red':     $bocl_red,
+  'green':   $bocl_green,
+  'yellow':  $bocl_yellow,
+  'blue':    $bocl_blue,
+  'magenta': $bocl_magenta,
+  'cyan':    $bocl_cyan,
+  'white':   $bocl_white,
+  'gray':    $bocl_gray,
+);
+
+$default_theme: $base16_ocean_dark;
+
+@function color($color, $theme: $default_theme) {
+  @return map-get($theme, $color);
+}

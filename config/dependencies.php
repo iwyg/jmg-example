@@ -49,6 +49,8 @@ $container['ctrl.error'] = $container->share(function () use ($container) {
 $container['view'] = $container->share(function () use ($container) {
     $paths = (array)$container['config']['templates'];
     $engine = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
+    $engine->addType('phpml');
+    $engine->addType('svg');
     $view = new Lucid\Template\View($engine);
 
     $container->get('events')->dispatch('view.register', new App\Events\RegisterView($view, $engine));

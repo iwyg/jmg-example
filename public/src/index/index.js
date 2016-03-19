@@ -16,7 +16,6 @@ viewPort.registerElements(el, (e) => {
   console.log('ENTER');
   console.log(e.target);
   addClass(e.target, 'in-viewport');
-  viewPort.removeElement(e.target);
 }, (e) => {
   console.log('LEAVE');
   console.log(e.target);

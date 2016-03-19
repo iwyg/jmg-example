@@ -27,6 +27,8 @@ const loop = () => {
 
   if (!loop.canceled) {
     requestAnimationFrame(loop);
+  } else {
+    document.addEventListener('scroll', startLoop);
   }
 };
 
@@ -35,6 +37,7 @@ loop.canceled = false;
 const startLoop = () => {
   loop.canceled = false;
   requestAnimationFrame(loop);
+  document.removeEventListener('scroll', startLoop);
 };
 
 const updateViewPort = (function (element = window) {
@@ -107,8 +110,8 @@ const leavesViewPort = (el, viewPort) => {
 
 const inViewport = (el, viewPort) => {
   return (el.props.offsetTop - el.props.offsetHeight < viewPort.offsetY &&
-    el.props.offsetTop > viewPort.offsetY - el.props.offsetHeight) || false;
-    (viewPort.offsetX >= 0 && (el.props.offsetLeft - el.props.offsetWidth < viewPort.offsetX) &&
+    el.props.offsetTop > viewPort.offsetY - el.props.offsetHeight) ||
+    ((viewPort.direction.left || viewPort.direction.right)  && (el.props.offsetLeft - el.props.offsetWidth < viewPort.offsetX) &&
     (el.props.offsetLeft > viewPort.offsetX - el.props.offsetWidth));
 }
 
@@ -160,8 +163,8 @@ export default class ViewPort {
   registerElement(element, onEnter, onLeave) {
     let index = this.elements.length;
 
-    this.elements.push(new ViewPortElement(element, () => {
-      this.elements.splice(index, 1);
+    this.elements.push(new ViewPortElement(element, function (n) {
+      this.elements.splice(n, 1);
 
       if (isFunc(onEnter)) {
         element.removeEventListener(EVENT_VIEWPORT_ENTER, onEnter);
@@ -170,8 +173,7 @@ export default class ViewPort {
       if (isFunc(onLeave)) {
         element.removeEventListener(EVENT_VIEWPORT_LEAVE, onLeave);
       }
-
-    }));
+    }.bind(this, index)));
 
     if (isFunc(onEnter)) {
       element.addEventListener(EVENT_VIEWPORT_ENTER, onEnter);
@@ -245,7 +247,5 @@ class ViewPortElement {
   }
 }
 
-
 window.addEventListener('resize', debounce(updateViewPort, 200));
-//window.addEventListener('scroll', updateViewPort);
-document.addEventListener('scroll', startLoop);
+startLoop();

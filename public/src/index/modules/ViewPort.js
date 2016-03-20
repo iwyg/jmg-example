@@ -1,5 +1,5 @@
 import {document, window} from 'global';
-import {isFunc, isObject} from 'lib/assert';
+import {isFunc, isObject, isDefined} from 'lib/assert';
 import debounce from 'lodash.debounce';
 
 export const EVENT_VIEWPORT = 'viewport';
@@ -7,6 +7,7 @@ export const EVENT_VIEWPORT_ENTER = 'viewportenter';
 export const EVENT_VIEWPORT_LEAVE = 'viewportleave';
 
 const {CustomEvent} = window;
+const offsetElement = isDefined(document.documentElement) ? document.documentElement : document.body;
 
 const getViewPort = (el = window) => {
   let {innerWidth, innerHeight, scrollX, scrollY} = el;
@@ -14,7 +15,9 @@ const getViewPort = (el = window) => {
     width: innerWidth,
     height: innerHeight,
     offsetX: scrollX,
-    offsetY: scrollY
+    offsetY: scrollY,
+    scrollsY: offsetElement.scrollHeight > innerHeight,
+    scrollsX: offsetElement.scrollWidth > innerWidth,
   };
 };
 
@@ -153,10 +156,10 @@ const leavesViewPort = (el, viewPort) => {
  * @returns {boolean}
  */
 const inViewport = (el, viewPort) => {
-  return (el.props.offsetTop - el.props.offsetHeight < viewPort.offsetY &&
-    el.props.offsetTop > viewPort.offsetY - el.props.offsetHeight) ||
-    ((viewPort.direction.left || viewPort.direction.right)  && (el.props.offsetLeft - el.props.offsetWidth < viewPort.offsetX) &&
-    (el.props.offsetLeft > viewPort.offsetX - el.props.offsetWidth));
+  return viewPort.scrollsY && (el.props.offsetTop < viewPort.offsetY + viewPort.height &&
+    el.props.offsetTop > viewPort.offsetY - viewPort.height) ||
+    viewPort.scrollsX && (el.props.offsetLeft < viewPort.offsetX + viewPort.width &&
+    (el.props.offsetLeft > viewPort.offsetX - viewPort.width));
 }
 
 const getSensitivity = (viewPort) => {
@@ -238,6 +241,8 @@ export default class ViewPort {
 
     window.addEventListener(EVENT_VIEWPORT, this._update);
     window.addEventListener('resize', this.updateElements)
+
+    updateViewPort(true);
   }
 
   updateElements(event) {
@@ -258,8 +263,7 @@ export default class ViewPort {
 
   registerElement(element, onEnter, onLeave) {
     let index = this.elements.length;
-
-    this.elements.push(new ViewPortElement(element, function (n) {
+    let el = new ViewPortElement(element, function (n) {
       this.elements.splice(n, 1);
 
       if (isFunc(onEnter)) {
@@ -269,7 +273,7 @@ export default class ViewPort {
       if (isFunc(onLeave)) {
         element.removeEventListener(EVENT_VIEWPORT_LEAVE, onLeave);
       }
-    }.bind(this, index)));
+    }.bind(this, index));
 
     if (isFunc(onEnter)) {
       element.addEventListener(EVENT_VIEWPORT_ENTER, onEnter);
@@ -279,9 +283,10 @@ export default class ViewPort {
       element.addEventListener(EVENT_VIEWPORT_LEAVE, onLeave);
     }
 
-    updateViewPort(true);
-    this.viewPort = syntesizeEvent().detail;
-    this.updateElements();
+    this.elements.push(el);
+
+    this.viewPort = this.viewPort || syntesizeEvent().detail;
+    el.update(this.viewPort);
   }
 
   removeElement(element) {
@@ -319,6 +324,8 @@ class ViewPortElement {
     updateViewPortElement.call(this, viewPort, event);
 
     let e = isObject(event) ? event : viewPort;
+
+    console.log(viewPort);
 
     if (!this.inViewport && inViewport(this, viewPort)) {
       this.enter(e);

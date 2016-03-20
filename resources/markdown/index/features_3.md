@@ -13,7 +13,7 @@ class AWSLoader extends AbstractLoader
      */
     public function load($file)
     {
-        //…
+        //...
     }
 
     /**
@@ -21,7 +21,7 @@ class AWSLoader extends AbstractLoader
      */
     public function supports($path)
     {
-        //…
+        //...
     }
 }
 ```

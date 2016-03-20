@@ -14,9 +14,22 @@ import {requestAnimationFrame} from 'polyfill/animation-frame';
 import scroll from 'scroll';
 import { createHistory } from 'history';
 
-let el = Q('section.container .animateable');
+let animateable = Q('section.container .animateable');
+let sections = Q('#fold, section.container');
+let fold  = Q('#fold').get(0);
+let feature  = Q('#features').get(0);
 let codeBlocks = document.querySelectorAll('code[class*="language-"]');
 let viewPort = new ViewPort;
+
+console.log(fold);
+
+feature.addEventListener(EVENT_VIEWPORT_ENTER, function (e) {
+  console.log('FEATURE ENTER');
+});
+
+feature.addEventListener(EVENT_VIEWPORT_LEAVE, function (e) {
+  console.log('FEATURE LEAVE');
+});
 
 const scrollTarget = (function () {
   return /Firefox/.test(navigator.userAgent) ?
@@ -33,18 +46,42 @@ const scrollHandler = (targetId) => {
   doScroll(target.offsetTop);
 };
 
-const doScroll = (top) => {
-  scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200});
+const history = {
+  locked: false,
+  history: createHistory(),
+  push() {
+    if (this.locked) {
+      return;
+    }
+    this.history.push.apply(this.history, arguments);
+  }
 };
 
-const history = createHistory();
-const historyStop = history.listen(location => {
+const doScroll = (function () {
+  let scrolling = false;
+
+  return (top) => {
+    if (scrolling) {
+      return;
+    }
+    scrolling = true;
+    history.locked = true;
+    scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200}, (error, scrollTop) => {
+      history.locked = false;
+      scrolling = false;
+    });
+  };
+}());
+
+
+history.stop = history.history.listen(location => {
   if (location.hash) {
     scrollHandler(location.hash.split('#')[1]);
   } else {
     doScroll(0);
   }
 });
+
 
 const handler = function (event) {
   let element = event.target;
@@ -54,12 +91,29 @@ const handler = function (event) {
   });
 };
 
-el.get().forEach((element) => {
+animateable.get().forEach((element) => {
   element.addEventListener(EVENT_VIEWPORT, handler);
 });
 
-viewPort.registerElements(el, null, (e) => {
+viewPort.registerElements(animateable, null, (e) => {
   removeClass(e.target, 'anim-in');
+});
+
+viewPort.registerElements(sections, (e) => {
+
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.target === fold) {
+    history.push({
+      pathname: '/',
+      hash: ''
+    });
+  } else if (!!e.target.id) {
+    history.push({
+      pathname: '/',
+      hash: '#' + e.target.id
+    });
+  }
 });
 
 

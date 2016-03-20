@@ -4,9 +4,7 @@ code, tt {
   margin: 0 2px;
   padding: 0 5px;
   white-space: nowrap;
-  //border: 1px solid #eaeaea;
   background-color: color('black');
-  //border-radius: 3px;
   font-weight: normal;
 }
 
@@ -19,28 +17,17 @@ pre code {
 }
 
 .highlight pre {
-  //background-color: #f8f8f8;
-  //border: 1px solid #cccccc;
-  font-size: 13px;
-  line-height: 19px;
   overflow: auto;
-  padding: 6px 10px;
-  //border-radius: 3px;
 }
 
 pre {
 	background: color('black');
-  //background-color: #f8f8f8;
-  //border: 1px solid #cccccc;
-  font-size: 13px;
-  line-height: 19px;
   overflow: auto;
-  padding: 6px 10px;
-  //border-radius: 3px;
+	padding: 2em 3.2rem;
 }
 pre code, pre tt {
   background-color: transparent;
-border: none;
+  border: none;
 }
 
 code[class*="language-"],
@@ -53,7 +40,6 @@ pre[class*="language-"] {
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
-	line-height: 1.5;
 
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
@@ -67,8 +53,6 @@ pre[class*="language-"] {
 
 /* Code blocks */
 pre[class*="language-"] {
-	padding: 1em;
-	margin: .5em 0;
 	overflow: auto;
 	//border-radius: 0.3em;
 }

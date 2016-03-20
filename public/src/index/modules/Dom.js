@@ -61,7 +61,7 @@ Q.prototype = {
   },
 
   get(index) {
-    return index ? (this[index] || null) : Array.prototype.slice.call(this, 0);
+    return index !== undefined ? (this[index] || null) : Array.prototype.slice.call(this, 0);
   },
 
 };

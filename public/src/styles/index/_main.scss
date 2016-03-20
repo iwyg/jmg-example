@@ -8,8 +8,26 @@ $site_footer_height: $site_header_height;
 $icon_width: 2.4rem;
 $icon_height: $icon_width;
 
+#fold {
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   line-height: 1.6;
+}
+
+p {
+  a {
+    color: color('blue');
+    font-weight: 400;
+  }
+}
+
+a {
+  &:visited {
+    color: color('blue');
+  }
 }
 
 section.container {
@@ -70,18 +88,35 @@ strong {
 
   .link {
     color: color('blue');
+
+    display: block;
     .icon {
       svg {
         fill: color('white');
+      }
+    }
+
+    .text {
+      display: none;
+      @include breakpoint($q-small) {
+        display: inline;
       }
     }
   }
 }
 
 p {
-  .link {
+  a.link.int {
     display: inline-block;
+    margin-left: 0;
+    vertical-align: bottom;
+    > * {
+      vertical-align: bottom;
+      float: none;
+      margin: 0 0;
+    }
     .icon {
+      padding: 0 .2rem;
       height: 2.4rem;
       svg {
         fill: color('white');
@@ -211,17 +246,10 @@ nav {
 }
 
 .link {
-  .text {
-    display: none;
-    @include breakpoint($q-small) {
-      display: inline;
-    }
-  }
 
-  @include clearfix();
-  display: block;
-  vertical-align: middle;
-  vertical-align: -webkit-baseline-middle;
+  //@include clearfix();
+  vertical-align: baseline;
+  //vertical-align: -webkit-baseline-middle;
   overflow: hidden;
   margin-left: -0.5rem;
   & > * {
@@ -312,7 +340,6 @@ nav {
 }
 
 #features {
-  background-color: color('blue');
 }
 
 #contribute {
@@ -335,7 +362,28 @@ nav {
 }
 
 #features {
+  background-color: color('blue');
   color: color('white');
+  p {
+    a {
+      color: color('black');
+      font-weight: 400;
+    }
+  }
+
+  .link {
+    .icon {
+      svg {
+        fill: lighten(color('white'), 20);
+      }
+    }
+  }
+
+  a {
+    &:visited {
+      color: color('yellow');
+    }
+  }
 }
 
 

@@ -44,7 +44,7 @@ class Processor implements ProcessorInterface
     public function load($parsed)
     {
         $this->dom = new DOMDocument;
-        $this->dom->loadHtml($parsed, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $this->dom->loadHtml($parsed, LIBXML_HTML_NODEFDTD);
     }
 
     /**

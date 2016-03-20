@@ -52,6 +52,7 @@ strong {
   }
 }
 
+
 .site-header {
   & > * {
     position: relative;
@@ -70,6 +71,18 @@ strong {
   .link {
     color: color('blue');
     .icon {
+      svg {
+        fill: color('white');
+      }
+    }
+  }
+}
+
+p {
+  .link {
+    display: inline-block;
+    .icon {
+      height: 2.4rem;
       svg {
         fill: color('white');
       }

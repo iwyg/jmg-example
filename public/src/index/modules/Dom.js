@@ -1,4 +1,5 @@
 import {document, window} from 'global';
+import {requestAnimationFrame} from 'polyfill/animation-frame';
 
 export const select = (selector) => {
   return document.querySelector(selector);

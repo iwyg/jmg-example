@@ -8,7 +8,7 @@ export const EVENT_VIEWPORT_LEAVE = 'viewportleave';
 
 const {CustomEvent} = window;
 
-const getViewPort = (el) => {
+const getViewPort = (el = window) => {
   let {innerWidth, innerHeight, scrollX, scrollY} = el;
   return {
     width: innerWidth,
@@ -88,10 +88,30 @@ const updateViewPort = (function (element = window) {
   };
 }());
 
+const syntesizeEvent = () => {
+  let vp = getViewPort();
+  return new CustomEvent(EVENT_VIEWPORT, {detail: vp});
+};
+
+/**
+ * Test if a number is within a given range.
+ *
+ * @param {number} a
+ * @param {number} b
+ * @param {number} range
+ * @returns {boolean}
+ */
 const inRange = (a, b, range = 20) => {
   return a === b || (a < b && (a + range) > b);
 };
 
+/**
+ * Test if a element enters viewport
+ *
+ * @param {ViewPortElement} el view port element
+ * @param {Object} viewPort viewport
+ * @returns {boolean}
+ */
 const entersViewPort = (el, viewPort) => {
   if (el.inViewport) {
     return false;
@@ -100,6 +120,13 @@ const entersViewPort = (el, viewPort) => {
   return inViewport(el, viewPort);
 };
 
+/**
+ * Test if a element leaves viewport
+ *
+ * @param {ViewPortElement} el view port element
+ * @param {Object} viewPort viewport
+ * @returns {boolean}
+ */
 const leavesViewPort = (el, viewPort) => {
   if (!el.inViewport) {
     return false;
@@ -108,6 +135,13 @@ const leavesViewPort = (el, viewPort) => {
   return !inViewport(el, viewPort);
 };
 
+/**
+ * Test if a element is inViewport
+ *
+ * @param {ViewPortElement} el view port element
+ * @param {Object} viewPort viewport
+ * @returns {boolean}
+ */
 const inViewport = (el, viewPort) => {
   return (el.props.offsetTop - el.props.offsetHeight < viewPort.offsetY &&
     el.props.offsetTop > viewPort.offsetY - el.props.offsetHeight) ||
@@ -115,6 +149,13 @@ const inViewport = (el, viewPort) => {
     (el.props.offsetLeft > viewPort.offsetX - el.props.offsetWidth));
 }
 
+/**
+ * Updates element satus `inViewport`
+ *
+ * @param {CustomEvent} event a viewport event.
+ * @param {ViewPortElement} el view port element
+ * @returns {void}
+ */
 const updateElement = (event, element) => {
   if (entersViewPort(element, event.detail)) {
     element.enter(event);
@@ -122,6 +163,10 @@ const updateElement = (event, element) => {
 
   if (leavesViewPort(element, event.detail)) {
     element.leave(event);
+  }
+
+  if (element.inViewport) {
+    !element.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, event || syntesizeEvent()));
   }
 };
 
@@ -139,8 +184,11 @@ export default class ViewPort {
   constructor() {
     this.elements = [];
     this.viewPort = {};
+
+    this._update = update.bind(this);
     this.updateElements = this.updateElements.bind(this);
-    window.addEventListener(EVENT_VIEWPORT, update.bind(this));
+
+    window.addEventListener(EVENT_VIEWPORT, this._update);
     window.addEventListener('resize', this.updateElements)
   }
 
@@ -244,6 +292,9 @@ class ViewPortElement {
     if (isFunc(this.remove)) {
       this.remove.call(null);
     }
+
+    window.removeEventListener(EVENT_VIEWPORT, this._update);
+    window.removeEventListener('resize', this.updateElements)
   }
 }
 

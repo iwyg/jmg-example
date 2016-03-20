@@ -8,18 +8,25 @@ import {php, bash, sh} from 'prism-languages';
 import 'babel-polyfill';
 import ViewPort from './modules/ViewPort';
 import Q, {select, selectAll, addClass, removeClass} from './modules/Dom';
+import {requestAnimationFrame} from 'polyfill/animation-frame';
 
 let viewPort = new ViewPort;
-let el = selectAll('section.container');
+let el = selectAll('#features');
+
+select('#features').addEventListener('viewport', function (e) {
+  console.log('Im in viewport');
+});
 
 viewPort.registerElements(el, (e) => {
-  console.log('ENTER');
-  console.log(e.target);
-  addClass(e.target, 'in-viewport');
+  //console.log('ENTER');
+  //console.log(e.target);
+  requestAnimationFrame(() => {
+    addClass(e.target, 'anim-in');
+  });
 }, (e) => {
-  console.log('LEAVE');
-  console.log(e.target);
-  removeClass(e.target, 'in-viewport');
+  //console.log('LEAVE');
+  //console.log(e.target);
+  removeClass(e.target, 'anim-in');
 });
 
 let codeBlocks = document.querySelectorAll('code[class*="language-"]');

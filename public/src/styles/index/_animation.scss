@@ -1,0 +1,75 @@
+
+#box {
+  width: 512px;
+  height: 512px;
+
+}
+
+#box svg {
+  height: 100%;
+  width: auto;
+
+}
+
+#jmg-chain {
+
+  > * {
+    fill: none;
+    stroke: color('white');
+    stroke-width: .2rem;
+  }
+  #c1, #c2, #c3 {
+    stroke-dasharray: 1000;
+    //stroke-dashoffset: 0;
+    stroke-dashoffset: 1000;
+    transition: all 1.4s cubic-bezier(.5,.01,.4,.9);
+  }
+
+  #c1 {
+    transition-delay: 0;
+  }
+  #c2 {
+    transition-delay: .3s;
+  }
+
+  #c3 {
+    transition-delay: .6s;
+    transition-duration: 1.2s;
+  }
+}
+
+.anim-in {
+  #jmg-chain {
+    #c1, #c2, #c3 {
+      stroke-dashoffset: 0;
+    }
+  }
+  #c1 {
+    transition-delay: .6s;
+  }
+  #c2 {
+    transition-delay: .3s;
+  }
+
+  #c3 {
+    transition-delay: 0;
+  }
+}
+
+//#box:hover #c1 {
+//  transition-delay: 0;
+//}
+//#box:hover #c2 {
+//  transition-delay: .3s;
+//}
+//
+//#box:hover #c3 {
+//  transition-delay: .6s;
+//  transition-duration: 1.4s;
+//}
+//
+//#box:hover #c1, #box:hover #c2, #box:hover #c3 {
+//  height: 100%;
+//  width: auto;
+//  stroke-dashoffset: 0;
+//}

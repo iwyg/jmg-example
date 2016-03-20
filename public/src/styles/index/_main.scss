@@ -14,6 +14,9 @@ body {
 
 section.container {
   min-height: 100%;
+  header {
+    height: 48rem;
+  }
 }
 
 .light {
@@ -32,6 +35,23 @@ strong {
   height: calc(100% - #{$bottom});
 }
 
+.content {
+  margin: 0 auto;
+  height: 100%;
+
+  @include breakpoint(1200px) {
+    width: 1000px;
+  }
+
+  @include breakpoint(1400px) {
+    width: 1200px;
+  }
+
+  @include breakpoint(1600px) {
+    width: 1400px;
+  }
+}
+
 .site-header {
   & > * {
     position: relative;
@@ -44,6 +64,7 @@ strong {
   position: relative;
   width: 100%;
   height: $site_header_height;
+  max-height: 100%;
   background-color: color('black');
 
   .link {
@@ -85,9 +106,17 @@ strong {
 
   @include breakpoint($q-medium) {
     display: block;
-    background: url('../images/index_hero.jpg') center center;
+    background: url('../images/index_hero_1200.jpg') center center;
     background-size: cover;
     opacity: 0.1;
+  }
+
+  @include breakpoint($q-big) {
+    background: url('../images/index_hero_1800.jpg') center center;
+  }
+
+  @include breakpoint($q-large) {
+    background: url('../images/index_hero_full.jpg') center center;
   }
 }
 
@@ -98,39 +127,61 @@ strong {
 }
 
 nav {
+  width: 100%;
+  @include clearfix();
   padding: 0 2rem;
   @include breakpoint($q-medium) {
     padding: 2rem;
   }
   ul {
-    margin-left: -1rem;
+    float: left;
     overflow: hidden;
     list-style: none;
     @include clearfix();
+
+    @include breakpoint($q-small) {
+      width: auto;
+      margin-left: -1rem;
+    }
     li {
-      float: left;
       padding: 1rem;
+      @include breakpoint($q-medium) {
+        float: left;
+      }
+    }
+
+    &.right {
+      li {
+        float: left;
+        @include breakpoint($q-small) {
+          float: none;
+        }
+
+        @include breakpoint($q-medium) {
+          float: left;
+        }
+      }
     }
   }
 }
 
-//.fold {
-//  @include fold_height();
-//}
+  //.fold {
+  //  @include fold_height();
+  //}
 
-.content {
-  margin: 0 auto;
-  height: 100%;
-
-  @include breakpoint(1200px) {
-    width: 1000px;
-  }
-
-  @include breakpoint(1400px) {
-    width: 1200px;
-  }
-
-}
+  //.content {
+  //  margin: 0 auto;
+  //  height: 100%;
+  //
+  //  @include breakpoint(1200px) {
+  //    width: 1000px;
+  //  }
+  //
+  //  @include breakpoint(1400px) {
+  //    width: 1200px;
+  //  }
+  //
+  //}
 
 @import "grid";
 @import "code";
@@ -147,6 +198,13 @@ nav {
 }
 
 .link {
+  .text {
+    display: none;
+    @include breakpoint($q-small) {
+      display: inline;
+    }
+  }
+
   @include clearfix();
   display: block;
   vertical-align: middle;
@@ -162,6 +220,7 @@ nav {
   .icon {
     margin-right: 0.5rem;
   }
+
 }
 
 .right {
@@ -209,6 +268,10 @@ nav {
   p {
     font-size: 1.8;
     text-align: center;
+    display: none;
+    @include breakpoint($q-small) {
+      display: block;
+    }
   }
 
   @include breakpoint($q-small) {
@@ -242,3 +305,6 @@ nav {
 #contribute {
   background-color: color('cyan');
 }
+
+
+@import "animation";

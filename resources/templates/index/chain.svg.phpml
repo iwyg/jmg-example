@@ -1,0 +1,3 @@
+<header class="svg">
+  <?=$view->func('svg', '../../public/assets/svg/jmg_chain.svg')?>
+</header>

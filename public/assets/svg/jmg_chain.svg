@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg id="jmg-chain" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512px" height="384px" viewBox="0 0 512 384" xml:space="preserve">
+  <polyline id="c1" points="210,324 184.5,366.5 143,366.5 39,192.5 143,18.5 184.5,18.5 210,60"/>
+  <polyline id="c2" points="302.5,324 277,366.5 235.5,366.5 131.5,192.5 235.5,18.5 277,18.5 302.5,60" />
+  <polygon id="c3"  points="394.5,324 369,366.5 327.5,366.5 223.5,192.5 327.5,18.5 369,18.5 473,192.5"/>
+</svg>

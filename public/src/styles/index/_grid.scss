@@ -1,0 +1,38 @@
+.row  {
+  @include clearfix();
+}
+.clm {
+  display: inline-block;
+  float: left;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+
+  @include breakpoint($q-small) {
+    &.clm__2.force {
+      width: 50%;
+    }
+
+    &.clm__3.force {
+      width: 33.33333%;
+    }
+
+    &.clm__4.force {
+      width: 25%;
+    }
+  }
+
+  @include breakpoint($q-medium) {
+    &.clm__2 {
+      width: 50%;
+    }
+
+    &.clm__3 {
+      width: 33.33333%;
+    }
+
+    &.clm__4 {
+      width: 25%;
+    }
+  }
+}

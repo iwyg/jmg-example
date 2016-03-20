@@ -1,0 +1,6 @@
+<div class="logo-main">
+  <?=$view->func('svg', '../../public/assets/svg/jmg_log_compact.svg')?>
+  <h1 class="jmg">jmg</h1>
+  <p class="thin">Http driven just in time <strong>image</strong> manipulation library for php projects.</p>
+
+</div>

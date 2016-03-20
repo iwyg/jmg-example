@@ -1,0 +1,77 @@
+<?= $view->extend('main.php') ?>
+<?= $view->section('head')?>
+<link href="/dist/css/index.css" rel="stylesheet"/>
+<?= $view->endsection() ?>
+
+<?= $view->section('content') ?>
+<section id="fold">
+  <header id="site-header" class="site-header">
+    <div class="row">
+      <?= $view->insert('index/logo.phpml') ?>
+    </div>
+    <section class="main-nav row clm__2">
+      <?= $view->insert('index/mainnav.phpml') ?>
+    </section>
+    <div class="hero"></div>
+  </header>
+  <section class="fold">
+    <div class="content row">
+      <div class="clm  clm__2">
+        <?= $view->func('markdown', 'fold_left.md') ?>
+      </div>
+
+      <div class="clm clm__2">
+        <?= $view->func('markdown', 'fold_right.md') ?>
+      </div>
+    </div>
+  </section>
+</section>
+<section id="about" class="container">
+  <div class="content row">
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'about_1.md') ?>
+    </div>
+    <div class="clm  clm__2">
+    </div>
+  </div>
+</section>
+<section id="features" class="container">
+  <div class="content row">
+    <div class="clm clm__2">
+      <?=$view->insert('index/chain.svg.phpml')?>
+    </div>
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_1.md') ?>
+    </div>
+  </div>
+
+  <div class="content row">
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_2.md') ?>
+    </div>
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_3.md') ?>
+    </div>
+  </div>
+</section>
+
+<section id="contribute" class="container">
+
+</section>
+
+<section id="test" class="container">
+
+</section>
+<footer class="site-footer">
+</footer>
+<?= $view->endsection() ?>
+
+<?= $view->section('body-scripts') ?>
+<script type="text/javascript">
+  (function (exports, undefined) {
+  //alert('fuck off.');
+  }(this));
+</script>
+<script src="dist/index/index.js" type="text/javascript">
+</script>
+<?= $view->endsection() ?>

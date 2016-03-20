@@ -1,16 +1,17 @@
 <?php $view->extend('main.php')?>
 <?php $view->section('head')?>
-    <link href="/dist/css/playground.css" rel="stylesheet"/>
+<link href="/dist/css/playground.css" rel="stylesheet"/>
 <?php $view->endsection() ?>
 <?php $view->section('content')?>
+<div id="main"></div>
 <?php $view->endsection() ?>
 
 <?php $view->section('body-scripts') ?>
-    <script type="text/javascript">
-        (function (exports, undefined) {
-            exports.DEFAULT_URL = '/api/v1/media/q/images';
-            exports.JMG_CONFIG = JSON.parse('<?=$jmg_config?>');
-        }(this));
-    </script>
-    <script src="dist/playground/index.js"></script>
+<script type="text/javascript">
+  (function (exports, undefined) {
+      exports.DEFAULT_URL = '/api/v1/media/q/images';
+      exports.JMG_CONFIG = JSON.parse('<?=$jmg_config?>');
+  }(this));
+</script>
+<script src="dist/playground/index.js"></script>
 <?php $view->endsection() ?>

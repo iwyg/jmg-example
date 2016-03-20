@@ -1,66 +1,56 @@
+$q-small: 420px;
 $fold_height: 100%;
 $fold_bottom: 48rem;
+
+$site_header_height: 62rem;
+$site_footer_height: $site_header_height;
+
+$icon_width: 2.4rem;
+$icon_height: $icon_width;
+
+#fold {
+  width: 100%;
+  min-height: 100%;
+}
 
 body {
   line-height: 1.6;
 }
 
-@mixin fold_height($bottom: $fold_bottom) {
-  height: calc(100% - #{$bottom});
-}
-
-.site-header {
-  overflow: hidden;
-  @include clearfix();
-  top: 0;
-  z-index: 1000;
-  position: relative;
-  width: 100%;
-  /*@include fold_height();*/
-  height: 62rem;
-}
-.site-wrapper {
-  height: 100%;
-}
-
-.container {
-  padding: 0 2.6rem;
-}
-
-.hero {
-  @include inbox();
-  background: url('../images/index.jpg') center center;
-  background-size: cover;
-  background-color: rgba(#444, 1);
-  /*background-blend-mode: multiply;*/
-
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.main-nav {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-
-nav {
-  padding: 2rem;
-  ul {
-    margin-left: -1rem;
-    overflow: hidden;
-    list-style: none;
-    @include clearfix();
-    li {
-      float: left;
-      padding: 1rem;
-    }
+p {
+  a {
+    color: color('blue');
+    font-weight: 400;
   }
 }
 
-.fold {
-  @include fold_height();
+a {
+  &:visited {
+    color: color('blue');
+  }
+}
+
+section.container {
+  min-height: 100%;
+  header {
+    height: 48rem;
+  }
+}
+
+.light {
+  @include fontLight();
+}
+
+.thin {
+  @include fontThin();
+}
+
+strong {
+  @include fontRegular();
+}
+
+@mixin fold_height($bottom: $fold_bottom) {
+  height: calc(100% - #{$bottom});
 }
 
 .content {
@@ -75,4 +65,329 @@ nav {
     width: 1200px;
   }
 
+  @include breakpoint(1600px) {
+    width: 1400px;
+  }
+}
+
+
+.site-header {
+  & > * {
+    position: relative;
+    z-index: 10;
+  }
+  overflow: hidden;
+  @include clearfix();
+  top: 0;
+  z-index: 1000;
+  position: relative;
+  width: 100%;
+  height: $site_header_height;
+  max-height: 100%;
+  background-color: color('black');
+
+  .link {
+    color: color('blue');
+
+    display: block;
+    .icon {
+      svg {
+        fill: color('white');
+      }
+    }
+
+    .text {
+      display: none;
+      @include breakpoint($q-small) {
+        display: inline;
+      }
+    }
+  }
+}
+
+p {
+  a.link.int {
+    display: inline-block;
+    margin-left: 0;
+    vertical-align: bottom;
+    > * {
+      vertical-align: bottom;
+      float: none;
+      margin: 0 0;
+    }
+    .icon {
+      padding: 0 .2rem;
+      height: 2.4rem;
+      svg {
+        fill: color('white');
+      }
+    }
+  }
+}
+.site-wrapper {
+  height: 100%;
+}
+
+.fold {
+  min-height: calc(100% - #{$site_header_height});
+}
+
+.site-footer {
+  min-height: $site_footer_height;
+  background-color: color('black');
+}
+
+.container {
+  padding: 0 2.6rem;
+}
+
+.hero {
+  @include inbox();
+  display: none;
+
+  //background-blend-mode: overlay;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  @include breakpoint($q-medium) {
+    display: block;
+    background: url('../images/index_hero_1200.jpg') center center;
+    background-size: cover;
+    opacity: 0.1;
+  }
+
+  @include breakpoint($q-big) {
+    background: url('../images/index_hero_1800.jpg') center center;
+  }
+
+  @include breakpoint($q-large) {
+    background: url('../images/index_hero_full.jpg') center center;
+  }
+}
+
+.main-nav {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+nav {
+  width: 100%;
+  @include clearfix();
+  padding: 0 2rem;
+  @include breakpoint($q-medium) {
+    padding: 2rem;
+  }
+  ul {
+    float: left;
+    overflow: hidden;
+    list-style: none;
+    @include clearfix();
+
+    @include breakpoint($q-small) {
+      width: auto;
+      margin-left: -1rem;
+    }
+    li {
+      padding: 1rem;
+      @include breakpoint($q-medium) {
+        float: left;
+      }
+    }
+
+    &.right {
+      li {
+        float: left;
+        @include breakpoint($q-small) {
+          float: none;
+        }
+
+        @include breakpoint($q-medium) {
+          float: left;
+        }
+      }
+    }
+  }
+}
+
+  //.fold {
+  //  @include fold_height();
+  //}
+
+  //.content {
+  //  margin: 0 auto;
+  //  height: 100%;
+  //
+  //  @include breakpoint(1200px) {
+  //    width: 1000px;
+  //  }
+  //
+  //  @include breakpoint(1400px) {
+  //    width: 1200px;
+  //  }
+  //
+  //}
+
+@import "grid";
+@import "code";
+
+
+.icon {
+  overflow: hidden;
+  width: $icon_width;
+  height: $icon_height;
+  svg {
+    height: 100%;
+    width: auto;
+  }
+}
+
+.link {
+
+  //@include clearfix();
+  vertical-align: baseline;
+  //vertical-align: -webkit-baseline-middle;
+  overflow: hidden;
+  margin-left: -0.5rem;
+  & > * {
+    float: left;
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+
+  .icon {
+    margin-right: 0.5rem;
+  }
+
+}
+
+.right {
+  float: left;
+  @include breakpoint($q-medium) {
+    float: right;
+  }
+}
+
+.force-right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+.logo-main {
+  color: color('white');
+  margin: 0 auto;
+  padding: 2.6rem;
+  width: 100%;
+  @include clearfix();
+
+  svg {
+    width: 100%;
+    height: auto;
+    polygon {
+      fill: color('white');
+    }
+  }
+  .jmg {
+    display: none;
+    font-weight: lighter;
+    font-size: 8rem;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 6.2rem;
+    line-height: 2.6;
+    @include breakpoint($q-medium) {
+      display: block;
+    }
+  }
+
+  p {
+    font-size: 1.8;
+    text-align: center;
+    display: none;
+    @include breakpoint($q-small) {
+      display: block;
+    }
+  }
+
+  @include breakpoint($q-small) {
+    width: 32rem;
+  }
+
+  @include breakpoint($q-medium) {
+    width: 48rem;
+    & > * {
+      display: inline-block;
+      float: left;
+    }
+
+    svg {
+      width: 24rem;
+    }
+
+    p {
+      font-size: 2.4rem;
+    }
+  }
+}
+#about {
+  background-color: color('red');
+}
+
+#features {
+}
+
+#contribute {
+  background-color: color('cyan');
+}
+
+
+@import "animation";
+
+.content {
+  //font-size: 2.6rem;
+  h1, h2, h3  {
+    @include fontLight();
+    text-transform: uppercase;
+  }
+}
+
+#about {
+  color: color('white');
+}
+
+#features {
+  background-color: color('blue');
+  color: color('white');
+  p {
+    a {
+      color: color('black');
+      font-weight: 400;
+    }
+  }
+
+  .link {
+    .icon {
+      svg {
+        fill: lighten(color('white'), 20);
+      }
+    }
+  }
+
+  a {
+    &:visited {
+      color: color('yellow');
+    }
+  }
+}
+
+
+.row {
+  padding-top: 2.6rem;
+  padding-bottom: 2.6rem;
 }

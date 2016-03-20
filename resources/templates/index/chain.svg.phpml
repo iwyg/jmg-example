@@ -1,0 +1,3 @@
+<div class="svg animateable">
+  <?=$view->func('svg', '../../public/assets/svg/jmg_chain.svg')?>
+</div>

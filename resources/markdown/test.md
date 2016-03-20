@@ -6,13 +6,26 @@ write fenced code blocks
 > composer require thapp/jmg
 ```
 
+```javascript
+var foo = 1;
+let FOO = 2;
+const BAR = 3;
+
+const MakeMeWet = (...args) => {
+};
+```
+
 this is another code block.
 
 ```php
 <?php
 
-class Foo extends Bar
+class ApiController
 {
+    public function __construct($repository)
+    {
+        $this->repository = $repository;
+    }
 }
 
 ```

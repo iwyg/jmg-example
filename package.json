@@ -54,6 +54,7 @@
     "breakpoint-sass": "^2.7.0",
     "color": "^0.11.1",
     "global": "^4.3.0",
+    "history": "^2.0.1",
     "image-loaded": "0.0.2",
     "isomorphic-fetch": "^2.2.1",
     "lazy-promise": "^3.0.1",
@@ -82,6 +83,7 @@
     "redux": "^3.3.1",
     "redux-logger": "^2.6.0",
     "redux-thunk": "^1.0.3",
+    "scroll": "^1.0.0",
     "susy": "^2.2.12"
   }
 }

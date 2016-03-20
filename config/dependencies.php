@@ -50,7 +50,7 @@ $container['view'] = $container->share(function () use ($container) {
     $paths = (array)$container['config']['templates'];
     $engine = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
     $engine->addType('phpml');
-    $engine->addType('svg');
+    $engine->addType('phpml');
     $view = new Lucid\Template\View($engine);
 
     $container->get('events')->dispatch('view.register', new App\Events\RegisterView($view, $engine));
@@ -71,7 +71,12 @@ $container['markdown.render'] = $container->share(function () use ($container) {
 });
 
 $container['markdown.adapter'] = $container->share(function () use ($container) {
-    return new App\Markdown\Adapter\Cebe(new cebe\markdown\GithubMarkdown);
+    return new App\Markdown\Adapter\Cebe(
+        new cebe\markdown\GithubMarkdown,
+        new App\Markdown\Post\Processor(
+            new App\Markdown\Post\ReplaceExternalLinks
+        )
+    );
 });
 
 $container['markdown.loader'] = $container->share(function () use ($container) {

@@ -12,6 +12,7 @@
 namespace App\Markdown\Adapter;
 
 use cebe\markdown\Parser;
+use App\Markdown\Post\ProcessorInterface;
 
 /**
  * @class Cebe
@@ -25,14 +26,18 @@ class Cebe implements AdapterInterface
     /** @var Parser */
     private $parser;
 
+    /** @var ProcessorInterface */
+    private $proc;
+
     /**
      * Constructor
      *
      * @param Parser $parser
      */
-    public function __construct(Parser $parser)
+    public function __construct(Parser $parser, ProcessorInterface $proc = null)
     {
         $this->parser = $parser;
+        $this->proc = $proc;
     }
 
     /**
@@ -40,6 +45,13 @@ class Cebe implements AdapterInterface
      */
     public function parse($markdown)
     {
-        return $this->parser->parse($markdown);
+        $parsed =  $this->parser->parse($markdown);
+
+        if (null !== $this->proc) {
+            $this->proc->load($parsed);
+            return $this->proc->process();
+        }
+
+        return $parsed;
     }
 }

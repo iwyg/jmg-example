@@ -13,7 +13,7 @@
   </section>
   <div class="hero"></div>
 </header>
-<section class="container fold">
+<section class="fold">
   <div class="content row">
     <div class="clm  clm__2">
       <?= $view->func('markdown', 'fold_left.md') ?>
@@ -25,9 +25,32 @@
   </div>
 </section>
 <section id="about" class="container">
+  <div class="content row">
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'about_1.md') ?>
+    </div>
+    <div class="clm  clm__2">
+    </div>
+  </div>
 </section>
 <section id="features" class="container">
-  <?=$view->insert('index/chain.svg.phpml')?>
+  <div class="content row">
+    <div class="clm clm__2">
+      <?=$view->insert('index/chain.svg.phpml')?>
+    </div>
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_1.md') ?>
+    </div>
+  </div>
+
+  <div class="content row">
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_2.md') ?>
+    </div>
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_3.md') ?>
+    </div>
+  </div>
 </section>
 
 <section id="contribute" class="container">

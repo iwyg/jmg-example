@@ -13,12 +13,12 @@
     <ul class="right">
       <li><a class="link ext" target="_blanc" href="https://github.com/iwyg/jmg"
             title="jmg on GitHub">
-          <span class="icon"><?php $view->func('icon', 'link')?></span>
+          <span class="icon github"><?php $view->func('icon', 'link')?></span>
           <span class="text">Github</span>
       </a></li>
       <li><a class="link ext" target="_blanc" href="/playground"
             title="jmg playground">
-          <span class="icon install"><?php $view->func('icon', 'grid')?></span>
+          <span class="icon playground"><?php $view->func('icon', 'grid')?></span>
           <span class="text">Playground</span>
       </a></li>
       <li><a class="link ext" target="_blanc" href="https://packagist.org/packages/thapp/jmg"

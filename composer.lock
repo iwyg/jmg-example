@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91173bf3589af54c5f918871822d5812",
-    "content-hash": "f20914b5fe479db34da2b7160854b99b",
+    "hash": "0376d0c85c86cbe9882a5a6ebfc1dad8",
+    "content-hash": "d15138141f1473aedff3c42a0f11b0c4",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -96,16 +96,16 @@
         },
         {
             "name": "lucid/common",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/common.git",
-                "reference": "c59943c5ba69e4224a2f06c077c0da240c64c1a4"
+                "reference": "65aad6f2939437af05d9fa306f0967c0f8c0f49f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/common/zipball/c59943c5ba69e4224a2f06c077c0da240c64c1a4",
-                "reference": "c59943c5ba69e4224a2f06c077c0da240c64c1a4",
+                "url": "https://api.github.com/repos/lucidphp/common/zipball/65aad6f2939437af05d9fa306f0967c0f8c0f49f",
+                "reference": "65aad6f2939437af05d9fa306f0967c0f8c0f49f",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "strings",
                 "structs"
             ],
-            "time": "2015-12-23 13:14:24"
+            "time": "2015-12-23 15:05:31"
         },
         {
             "name": "lucid/mux",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux-cache.git",
-                "reference": "7f2489d6683b89c318ea50e5ed00834379529447"
+                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/7f2489d6683b89c318ea50e5ed00834379529447",
-                "reference": "7f2489d6683b89c318ea50e5ed00834379529447",
+                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/ecac13f955eba1e5ca24584377cd4a33b9a61513",
+                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513",
                 "shasum": ""
             },
             "require": {
@@ -212,6 +212,7 @@
                 "php": "^5.6 || ^7.0"
             },
             "require-dev": {
+                "lucid/mux": "dev-develop",
                 "phpunit/phpunit": "5.2.*@dev"
             },
             "type": "library",
@@ -231,7 +232,7 @@
                 }
             ],
             "description": "cache capability for lucid/mux",
-            "time": "2016-03-16 07:59:14"
+            "time": "2016-03-17 08:43:20"
         },
         {
             "name": "lucid/resource",
@@ -239,12 +240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/resource.git",
-                "reference": "53576ea89c6e8be7a5e3abed2ae9d9d001ee3382"
+                "reference": "37fc771402231c2bd8d3381798b374305fb1a096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/resource/zipball/53576ea89c6e8be7a5e3abed2ae9d9d001ee3382",
-                "reference": "53576ea89c6e8be7a5e3abed2ae9d9d001ee3382",
+                "url": "https://api.github.com/repos/lucidphp/resource/zipball/37fc771402231c2bd8d3381798b374305fb1a096",
+                "reference": "37fc771402231c2bd8d3381798b374305fb1a096",
                 "shasum": ""
             },
             "require-dev": {
@@ -271,7 +272,7 @@
                 "loading",
                 "locator"
             ],
-            "time": "2016-03-01 21:02:34"
+            "time": "2016-03-17 08:07:05"
         },
         {
             "name": "lucid/signal",
@@ -359,6 +360,50 @@
                 "templating"
             ],
             "time": "2016-02-19 05:40:00"
+        },
+        {
+            "name": "lucid/xml",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lucidphp/xml.git",
+                "reference": "f61be2cfd988896c757dc5094bdcdfa16db83561"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lucidphp/xml/zipball/f61be2cfd988896c757dc5094bdcdfa16db83561",
+                "reference": "f61be2cfd988896c757dc5094bdcdfa16db83561",
+                "shasum": ""
+            },
+            "require": {
+                "lucid/common": "dev-master",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.2.*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lucid\\Xml\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "iwyg",
+                    "email": "mail@thomas-appel.com"
+                }
+            ],
+            "description": "Xml writing and parsing utilities",
+            "keywords": [
+                "parser",
+                "xml"
+            ],
+            "time": "2015-12-30 21:45:24"
         },
         {
             "name": "mouf/pimple-interop",
@@ -568,12 +613,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iwyg/image.git",
-                "reference": "f4aac5bc774c2c411882732389e83f989d2dd843"
+                "reference": "95ae488a71bad07399946dd32f9862d1d1ccbaab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iwyg/image/zipball/f4aac5bc774c2c411882732389e83f989d2dd843",
-                "reference": "f4aac5bc774c2c411882732389e83f989d2dd843",
+                "url": "https://api.github.com/repos/iwyg/image/zipball/95ae488a71bad07399946dd32f9862d1d1ccbaab",
+                "reference": "95ae488a71bad07399946dd32f9862d1d1ccbaab",
                 "shasum": ""
             },
             "require": {
@@ -611,7 +656,7 @@
                 "image",
                 "imagick"
             ],
-            "time": "2016-02-28 22:45:27"
+            "time": "2016-03-17 13:42:28"
         },
         {
             "name": "thapp/jmg",
@@ -619,12 +664,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iwyg/jmg.git",
-                "reference": "f57542b3ed1676c331c9eef1d7512fca569c41a9"
+                "reference": "40dbd91be801ab38e71e54edfd40c23934a54c40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iwyg/jmg/zipball/f57542b3ed1676c331c9eef1d7512fca569c41a9",
-                "reference": "f57542b3ed1676c331c9eef1d7512fca569c41a9",
+                "url": "https://api.github.com/repos/iwyg/jmg/zipball/40dbd91be801ab38e71e54edfd40c23934a54c40",
+                "reference": "40dbd91be801ab38e71e54edfd40c23934a54c40",
                 "shasum": ""
             },
             "require": {
@@ -659,7 +704,7 @@
                 "imagine",
                 "jit"
             ],
-            "time": "2016-03-16 07:46:16"
+            "time": "2016-03-16 14:47:01"
         },
         {
             "name": "thapp/jmg-psr7",
@@ -765,16 +810,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "cb3ae0ca07b31e1427680b00d07cd471a9aaf0aa"
+                "reference": "18182f681370cbd23fec64dbec8275a376bf4b66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/cb3ae0ca07b31e1427680b00d07cd471a9aaf0aa",
-                "reference": "cb3ae0ca07b31e1427680b00d07cd471a9aaf0aa",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/18182f681370cbd23fec64dbec8275a376bf4b66",
+                "reference": "18182f681370cbd23fec64dbec8275a376bf4b66",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4",
+                "php": "^5.4 || ^7.0",
                 "psr/http-message": "~1.0"
             },
             "provide": {
@@ -807,7 +852,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-03-07 15:48:32"
+            "time": "2016-03-17 18:05:07"
         }
     ],
     "packages-dev": [
@@ -1962,7 +2007,8 @@
         "lucid/resource": 20,
         "lucid/template": 20,
         "lucid/signal": 20,
-        "lucid/common": 20
+        "lucid/common": 20,
+        "lucid/xml": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

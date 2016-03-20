@@ -1,5 +1,5 @@
 import {document, window} from 'global';
-import {isFunc} from 'lib/assert';
+import {isFunc, isObject} from 'lib/assert';
 import debounce from 'lodash.debounce';
 
 export const EVENT_VIEWPORT = 'viewport';
@@ -34,6 +34,16 @@ const loop = () => {
 
 loop.canceled = false;
 
+const viewPortDirection = () => {
+    return {
+      down:  false,
+      up:    false,
+      left:  false,
+      right: false,
+      still: true
+    };
+};
+
 const startLoop = () => {
   loop.canceled = false;
   requestAnimationFrame(loop);
@@ -59,13 +69,7 @@ const updateViewPort = (function (element = window) {
       return;
     }
 
-    let d = n.direction = {
-      down:  false,
-      up:    false,
-      left:  false,
-      right: false,
-      still: true
-    };
+    let d = n.direction = viewPortDirection();
 
     if (n.offsetY > viewport.offsetY) {
       d.down  = true;
@@ -83,13 +87,19 @@ const updateViewPort = (function (element = window) {
       d.still = false;
     }
 
+
+    n.speed = {
+      y: 100 / (n.height / Math.max(1, Math.abs(viewport.offsetY - n.offsetY))),
+      x: 100 / (n.width / Math.max(1, Math.abs(viewport.offsetX - n.offsetX)))
+    }
+
     viewport = n;
     element.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, {detail: n}));
   };
 }());
 
 const syntesizeEvent = () => {
-  let vp = getViewPort();
+  let vp = Object.assign({}, getViewPort(), {direction: viewPortDirection(), speed: {y: 0, x: 0}});
   return new CustomEvent(EVENT_VIEWPORT, {detail: vp});
 };
 
@@ -149,6 +159,31 @@ const inViewport = (el, viewPort) => {
     (el.props.offsetLeft > viewPort.offsetX - el.props.offsetWidth));
 }
 
+const getSensitivity = (viewPort) => {
+  return {
+    sy: Math.max(1, viewPort.speed.y) * 20,
+    sx: Math.max(1, viewPort.speed.x) * 20
+  };
+}
+
+const inFullViewport = (el, viewPort) => {
+  let eH = Math.abs(viewPort.height - el.props.offsetHeight);
+  let eW = Math.abs(viewPort.width - el.props.offsetWidth);
+
+  if (isNaN(eH) || isNaN(eW)) {
+    return false;
+  }
+
+  let {sy, sx} = getSensitivity(viewPort);
+
+  let ny = viewPort.direction.down ? (el.props.offsetTop - eH) : (el.props.offsetTop + eH);
+  let nx = viewPort.direction.left ? (el.props.offsetLeft - eW) : (el.props.offsetLeft + eW);
+
+  return !el.inFullViewport && (inRange(viewPort.offsetY, ny, sy) ||
+    viewPort.offsetX > 0 && inRange(viewPort.offsetX, nx, sx)
+  );
+}
+
 /**
  * Updates element satus `inViewport`
  *
@@ -159,20 +194,33 @@ const inViewport = (el, viewPort) => {
 const updateElement = (event, element) => {
   if (entersViewPort(element, event.detail)) {
     element.enter(event);
+    return;
   }
 
   if (leavesViewPort(element, event.detail)) {
     element.leave(event);
+    return;
   }
 
-  if (element.inViewport) {
-    !element.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, event || syntesizeEvent()));
+  if (inFullViewport(element, event.detail)) {
+    element.inFullViewport = true;
+    element.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, event || syntesizeEvent()));
   }
 };
 
-function updateViewPortElement() {
-    let {offsetTop, offsetHeight, offsetLeft, offsetWidth} = this.el;
-    this.props = {offsetTop, offsetHeight, offsetLeft, offsetWidth};
+function updateViewPortElement(viewPort) {
+  let {offsetTop, offsetHeight, offsetLeft, offsetWidth} = this.el;
+  this.props = {offsetTop, offsetHeight, offsetLeft, offsetWidth};
+  //this.sensitivity = {
+  //  y: (100 / Math.max(100, viewPort.height - offsetHeight)) * 10,
+  //  x: (100 / Math.max(100, viewPort.width - offsetWidth)) * 10
+  //};
+
+  this.sensitivity = {
+    y: 10,
+    x: 10
+  };
+  console.log(this.sensitivity);
 }
 
 function update(event) {
@@ -232,7 +280,8 @@ export default class ViewPort {
     }
 
     updateViewPort(true);
-    this.updateElements(true);
+    this.viewPort = syntesizeEvent().detail;
+    this.updateElements();
   }
 
   removeElement(element) {
@@ -259,18 +308,23 @@ class ViewPortElement {
 
     this.el = element;
     this.inViewport = false;
+    this.inFullViewport = false;
     this.remove = remove;
     this.props = {};
+    this.sensitivity = {};
   }
 
   update(viewPort, event) {
 
-    updateViewPortElement.call(this);
+    updateViewPortElement.call(this, viewPort, event);
+
+    let e = isObject(event) ? event : viewPort;
 
     if (!this.inViewport && inViewport(this, viewPort)) {
-      this.enter(event);
+      this.enter(e);
+      this.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, {detail: e}));
     } else if (this.inViewport && !inViewport(this, viewPort)) {
-      this.leave(event);
+      this.leave(e);
     }
   }
 
@@ -283,6 +337,7 @@ class ViewPortElement {
 
   leave(event) {
     this.inViewport = false;
+    this.inFullViewport = false;
     requestAnimationFrame(() => {
       this.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT_LEAVE, {detail: {viewportEvent: event}}));
     });

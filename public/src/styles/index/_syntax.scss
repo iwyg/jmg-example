@@ -17,3 +17,8 @@ $syn_classname: color('magenta');
 $syn_delim:     $syn_comment;
 $syn_operator:  color('white');
 $syn_property:  color('white');
+
+$syn_var:       color('white');
+$syn_def:       color('white');
+$syn_symbol:    color('white');
+$syn_classname: color('blue');

@@ -43,8 +43,9 @@ class Processor implements ProcessorInterface
      */
     public function load($parsed)
     {
-        $this->dom = new DOMDocument;
-        $this->dom->loadHtml($parsed, LIBXML_HTML_NODEFDTD);
+        $parsed = sprintf('<div>%s</div>', $parsed);
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
+        $this->dom->loadHTML(utf8_decode($parsed), LIBXML_NOXMLDECL|LIBXML_HTML_NODEFDTD|LIBXML_HTML_NOIMPLIED);
     }
 
     /**
@@ -60,9 +61,8 @@ class Processor implements ProcessorInterface
             $parser->parse($this->dom);
         }
 
-        $parsed = $this->dom->saveHTML();
+        $parsed = $this->dom->saveHTML($this->dom->documentElement);
         $this->dom = null;
-
-        return $parsed;
+        return mb_substr(trim($parsed), 5, -6);
     }
 }

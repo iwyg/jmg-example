@@ -40,18 +40,17 @@ class ReplaceExternalLinks implements ParserInterface
     private function wrap(DOMDocument $dom, DOMElement $link)
     {
         $link->setAttribute('class', 'link int');
-        $text = $dom->createElement('span');
-        $text->setAttribute('class', 'text');
-        $text->textContent = $link->textContent;
 
         $icon = $dom->createElement('span');
         $icon->setAttribute('class', 'icon');
 
         $this->setIcon($icon);
 
+        $textContent = $link->textContent;
+
         $link->textContent = null;
         $link->appendDomElement($icon);
-        $link->appendDomElement($text);
+        $link->appendChild(new \DOMText($textContent));
     }
 
     private function setIcon(DOMElement $span)

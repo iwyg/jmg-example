@@ -57,17 +57,34 @@ strong {
   margin: 0 auto;
   height: 100%;
 
-  @include breakpoint(1200px) {
-    width: 1000px;
+  @include breakpoint($q-medium) {
+    max-width: 100rem;
   }
 
-  @include breakpoint(1400px) {
-    width: 1200px;
+  @include breakpoint(1440px) {
+    width: calc(100% - 24rem);
+    max-width: 100%;
   }
 
-  @include breakpoint(1600px) {
-    width: 1400px;
+  @include breakpoint(2500px) {
+    width: calc(100% - 32rem);
   }
+
+  //@include breakpoint(1200px) {
+  //  width: 100rem;
+  //}
+
+  //@include breakpoint(1400px) {
+  //  width: 120rem;
+  //}
+
+  //@include breakpoint(1600px) {
+  //  width: 140rem;
+  //}
+
+  //@include breakpoint(2000px) {
+  //  width: 160rem;
+  //}
 }
 
 
@@ -106,7 +123,7 @@ strong {
 }
 
 p {
-  a.link.int {
+  a.link.ext {
     display: inline-block;
     margin-left: 0;
     vertical-align: bottom;
@@ -128,17 +145,18 @@ p {
   height: 100%;
 }
 
+.container {
+  padding: 0 2.6rem;
+}
+
 .fold {
   min-height: calc(100% - #{$site_header_height});
+  @extend .container;
 }
 
 .site-footer {
   min-height: $site_footer_height;
   background-color: color('black');
-}
-
-.container {
-  padding: 0 2.6rem;
 }
 
 .hero {
@@ -152,20 +170,23 @@ p {
   left: 0;
   z-index: 1;
 
+
   @include breakpoint($q-medium) {
     display: block;
-    background: url('../images/index_hero_1200.jpg') center center;
-    background-size: cover;
-    opacity: 0.1;
-  }
-
-  @include breakpoint($q-big) {
-    background: url('../images/index_hero_1800.jpg') center center;
-  }
-
-  @include breakpoint($q-large) {
+    //background: url('../images/index_hero_1200.jpg') center center;
     background: url('../images/index_hero_full.jpg') center center;
+    opacity: 0.1;
+    background-size: cover;
   }
+
+  //@include breakpoint($q-big) {
+  //  background: url('../images/index_hero_1800.jpg') center center;
+  //}
+
+  //@include breakpoint($q-large) {
+  //  background: url('../images/index_hero_full.jpg') center center;
+  //  background-size: cover;
+  //}
 }
 
 .main-nav {
@@ -212,24 +233,6 @@ nav {
     }
   }
 }
-
-  //.fold {
-  //  @include fold_height();
-  //}
-
-  //.content {
-  //  margin: 0 auto;
-  //  height: 100%;
-  //
-  //  @include breakpoint(1200px) {
-  //    width: 1000px;
-  //  }
-  //
-  //  @include breakpoint(1400px) {
-  //    width: 1200px;
-  //  }
-  //
-  //}
 
 @import "grid";
 @import "code";
@@ -285,6 +288,10 @@ nav {
   padding: 2.6rem;
   width: 100%;
   @include clearfix();
+
+  @include breakpoint(1200px) {
+    padding-top: 12rem;
+  }
 
   svg {
     width: 100%;

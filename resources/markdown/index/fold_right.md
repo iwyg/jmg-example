@@ -1,3 +1,3 @@
 ```sh
-> composer install thapp/jmg
+> composer require thapp/jmg
 ```

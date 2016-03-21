@@ -23,6 +23,17 @@
   }
 
   @include breakpoint($q-medium) {
+
+    padding-left: 2.6rem;
+    padding-right: 2.6rem;
+    &:first-child {
+      padding-left: 1rem;
+    }
+
+    &:last-child {
+      padding-right: 1rem;
+    }
+
     &.clm__2 {
       width: 50%;
     }

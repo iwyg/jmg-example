@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This File is part of the App\Markdown\Post package
+ * This File is part of the App\Markdown package
  *
  * (c) iwyg <mail@thomas-appel.com>
  *
@@ -17,14 +17,41 @@ use Lucid\Xml\Dom\DOMDocument;
 /**
  * @class ReplaceExternalLinks
  *
- * @package App\Markdown\Post
+ * @package App\Markdown
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
 class ReplaceExternalLinks implements ParserInterface
 {
+    /** @var DOMElement */
     private $icon;
 
+    /** @var string */
+    private $svgPath;
+
+    /** @var string */
+    private $linkClass;
+
+    /** @var string */
+    private $iconClass;
+
+    /**
+     * Constructor.
+     *
+     * @param mixed $svgPath
+     * @param string $linkClass
+     * @param string $iconClass
+     */
+    public function __construct($svgPath, $linkClass = 'link ext', $iconClass = 'icon')
+    {
+        $this->svgPath = $svgPath;
+        $this->linkClass = $linkClass;
+        $this->iconClass = $iconClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function parse(DOMDocument $dom)
     {
         foreach ($dom->xpath('//a[starts-with(@href,\'http\')]') as $link) {
@@ -37,14 +64,22 @@ class ReplaceExternalLinks implements ParserInterface
         return $dom;
     }
 
+    /**
+     * wrap
+     *
+     * @param DOMDocument $dom
+     * @param DOMElement $link
+     *
+     * @return void
+     */
     private function wrap(DOMDocument $dom, DOMElement $link)
     {
-        $link->setAttribute('class', 'link int');
+        $link->setAttribute('class', $this->linkClass);
+        $link->setAttribute('target', '_blanc');
 
         $icon = $dom->createElement('span');
-        $icon->setAttribute('class', 'icon');
-
-        $this->setIcon($icon);
+        $icon->setAttribute('class', $this->iconClass);
+        $icon->appendDomElement($this->getIcon());
 
         $textContent = $link->textContent;
 
@@ -53,14 +88,19 @@ class ReplaceExternalLinks implements ParserInterface
         $link->appendChild(new \DOMText($textContent));
     }
 
-    private function setIcon(DOMElement $span)
+    /**
+     * getIcon
+     *
+     * @return DOMElement
+     */
+    private function getIcon()
     {
         if (null === $this->icon) {
-            $dom = new DOMDocument;
-            $dom->load(realpath(__DIR__.'/../resources/icon_link.svg'));
+            $dom = new DOMDocument('1.0', 'UTF-8');
+            $dom->load(realpath($this->svgPath));
             $this->icon = $dom->firstChild;
         }
 
-        $span->appendDomElement($this->icon);
+        return $this->icon;
     }
 }

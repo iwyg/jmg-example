@@ -32,6 +32,7 @@
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "image-webpack-loader": "^1.6.3",
     "jasmine": "^2.4.1",
     "jest": "^0.1.40",
     "modernizr-loader": "0.0.4",

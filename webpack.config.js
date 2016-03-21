@@ -57,8 +57,11 @@ module.exports = {
       },
 
       {
-        test   : /images?\/.*\.(jpe?g|png|gif)(\?[a-z0-9]+)?$/,
-        loader : 'file-loader?name=../dist/[path][name].[ext]'
+        test    : /images?\/.*\.(jpe?g|png|gif)(\?[a-z0-9]+)?$/,
+        loaders : [
+          'file?name=../dist/[path][name].[ext]',
+          'image-webpack?bypassOnDebug=false&optimizationLevel=7&interlaced=false&progressive=true&quality=30'
+        ]
       },
       //{
       //  test   : /fonts?\/.*\.(ttf|eot|svg|woff(2))(\?v=[0-9]\.[0-9]\.[0-9])?$/,

@@ -74,7 +74,9 @@ $container['markdown.adapter'] = $container->share(function () use ($container) 
     return new App\Markdown\Adapter\Cebe(
         new cebe\markdown\GithubMarkdown,
         new App\Markdown\Post\Processor(
-            new App\Markdown\Post\ReplaceExternalLinks
+            new App\Markdown\Post\ReplaceExternalLinks(
+                __DIR__.'/../app/Markdown/resources/icon_link.svg'
+            )
         )
     );
 });

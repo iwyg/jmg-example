@@ -4,6 +4,7 @@
 @import "font_roboto_light";
 @import "font_roboto_thin";
 @import "settings";
+@import "media";
 
 *, *:before, *:after {
   box-sizing: border-box;
@@ -12,6 +13,55 @@
 html {
   font-size: 62.5%;
   height: 100%;
+
+  //@include breakpoint($q-large) {
+  //  font-size: 70%;
+  //}
+  //
+
+  // mbp etc 1440
+  //@include breakpoint((min-width: 1440px, min-resolution: 192dpi)) {
+  //  font-size: 96%;
+  //}
+  //
+  // imac etc. 2560x2880
+  @include breakpoint(1900px) {
+    font-size: 72%;
+  }
+
+  // imac etc. 2560x2880
+  @include breakpoint(2500px) {
+    font-size: 76%;
+    @include breakpoint((min-resolution: 192dpi)) {
+      font-size: 108%;
+    }
+  }
+
+  @include breakpoint(5000px) {
+    font-size: 152%;
+  }
+
+
+  //@include breakpoint((min-width: $q-large, min-resolution: 96dpi)) {
+  //  font-size: 76%;
+  //}
+
+  //@include breakpoint((min-width: $q-large, min-resolution: 192dpi)) {
+  //  font-size: 152%;
+  //}
+
+  //@include breakpoint(4000px) {
+  //  font-size: 140%;
+  //}
+  //
+
+  //@include breakpoint((min-width: 4000px, min-resolution: 192dpi)) {
+  //  font-size: 160%;
+  //}
+
+  //@include breakpoint((min-width: 4000px, min-device-pixel-ratio: 2, min-resolution: 192)) {
+  //  font-size: 100%;
+  //}
 }
 
 body {
@@ -63,5 +113,5 @@ figure {
 
 .container {
   width: 100%;
-  max-width: 2400px;
+  //max-width: 24rem;
 }

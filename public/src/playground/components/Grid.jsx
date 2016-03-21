@@ -6,7 +6,7 @@ import Figure from './Image';
 import {ButtonAdd} from './Buttons';
 import {className} from 'lib/react-helper';
 import {isFunc, isObject} from 'lib/assert';
-import IconMasonry from 'ic_dashboard_black_24px.svg';
+import IconMasonry from 'ic_dashboard_black_48px.svg';
 import {CONTEXT} from 'runtime/constants';
 import {callIfFunc} from 'lib/react-helper';
 import ProgressBar from 'react-toolbox/lib/progress_bar';

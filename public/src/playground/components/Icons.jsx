@@ -3,12 +3,12 @@ import Tooltip from 'react-toolbox/lib/tooltip';
 import {className} from 'lib/react-helper';
 
 // icons for grid layouts
-export const IconLayoutMasonry = require('icons/ic_dashboard_black_24px.svg');
-export const IconLayoutGrid    = require('icons/ic_view_module_black_24px.svg');
+export const IconLayoutMasonry = require('icons/ic_dashboard_black_48px.svg');
+export const IconLayoutGrid    = require('icons/ic_view_module_black_48px.svg');
 
 // icons for settings panel
-export const IconSettings      = require('icons/ic_tune_black_24px.svg');
-export const IconFilter        = require('icons/ic_filter_black_24px.svg');
+export const IconSettings      = require('icons/ic_tune_black_48px.svg');
+export const IconFilter        = require('icons/ic_filter_black_48px.svg');
 
 // icons for edit modes
 export const IconModePass      = require('icons/ic_crop_3_2_black_48px.svg');

@@ -123,10 +123,10 @@
   //  }
   //}
   .spinner {
-    position: absolute;
-    margin-top: -30px;
-    margin-left: -30px;
-    top: 50%;
-    left: 50%;
+    @include abs_center($spinner_width, $spinner_height, 1000, 1);
+
+    @include breakpoint($q-medium) {
+      left: calc(50% + #{$settings-width / 2});
+    }
   }
 }

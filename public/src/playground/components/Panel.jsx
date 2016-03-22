@@ -7,6 +7,7 @@ import {IconSettings, IconCheck, IconAdd, IconJmg, Icon} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
+import ProgressBar from 'react-toolbox/lib/progress_bar';
 
 import {
   addSettings, updateSettings,
@@ -195,12 +196,12 @@ export class Panel extends React.Component {
     if (!this.props.settings.length) {
       return null;
     }
-    return (
-      <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} accent={false}>
+    return [this.props.showProgress ? (<ProgressBar className='progress-apply ' type='linear' mode='indeterminate'/>) : null, (
+      <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} className='apply-settings'>
         <IconCheck></IconCheck>
         Apply
       </Button>
-    );
+    )];
   }
 
   render() {
@@ -226,13 +227,15 @@ Panel.propTypes = {
   onSelectImage: PropTypes.func,
   onApply: PropTypes.func.isRequired,
   selecting: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  showProgress: PropTypes.bool
 };
 
 Panel.defaultProps = {
   onSelectImage: null,
   selecting: false,
-  disabled: false
+  disabled: false,
+  showProgress: false
 };
 
 

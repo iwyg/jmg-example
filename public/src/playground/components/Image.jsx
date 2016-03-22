@@ -12,15 +12,20 @@ export default class Figure extends React.Component {
     };
 
     this.onLoaded = this.onLoaded.bind(this);
+    this.onLoad = this.onLoad.bind(this);
   }
 
   onLoaded(loaded) {
-
-    if (loaded === this.state.loaded) {
-      return;
-    }
-
     this.setState({loaded: loaded});
+
+    if (isFunc(this.props.onLoaded)) {
+      this.props.onLoaded(loaded, this.refs.image);
+    }
+  }
+
+  onLoad(src, promise) {
+    promise.then(this.onLoaded);
+    this.setState({loaded: false});
   }
 
   render() {
@@ -28,10 +33,10 @@ export default class Figure extends React.Component {
     let isLoaded = this.state.loaded;
     return (
       <figure style={style} ref={ref}>
-        <Image ref='image' src={src} {...props} onLoaded={this.onLoaded}/>
+        <Image ref='image' src={src} {...props} onLoad={this.onLoad}/>
         {
           (function() {
-            return isLoaded ? null : (
+            return isLoaded || !props.progress ? null : (
               <ProgressBar className='spinner loading' type='circular' mode='indeterminate' />
             )
           }())
@@ -65,9 +70,10 @@ export class Image extends React.Component {
 
   load(src) {
     let {onLoad} = this.props;
-    isFunc(onLoad) && onLoad(src);
+    let promise = loadImage(src);
+    isFunc(onLoad) && onLoad(src, promise);
 
-    loadImage(src).then(() => {
+    promise.then(() => {
       this.setState({
         loaded: true,
         className: this.className + ' ' + this.props.loadedClass
@@ -119,11 +125,13 @@ Figure.propTypes = {
   style: PropTypes.object,
   width: PropTypes.number,
   height: PropTypes.number,
-  ref: PropTypes.string
+  ref: PropTypes.string,
+  progress: PropTypes.bool,
 };
 
 Figure.defaultProps = {
   style: {},
+  progress: false
 };
 
 Image.propTypes = {
@@ -136,5 +144,5 @@ Image.propTypes = {
 
 Image.defaultProps = {
   loadingClass: 'loading',
-  loadedClass: 'loaded'
+  loadedClass: 'loaded',
 };

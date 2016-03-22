@@ -16,10 +16,18 @@ $background_color_preivew: #353B44;
 $background_color_grid: $base_flat;
 $background_color_panel: $base_flat;
 
+$spinner_width: 6rem;
+$spinner_height: 6rem;
+
+
 @import "../mixins";
 @import "../colors";
 @import "grid";
 @import "preview";
+
+#main {
+  background-color: $background_color_preivew;
+}
 
 figure {
   img {
@@ -58,7 +66,6 @@ ul {
 .snackbar {
   z-index: 100000;
 }
-
 
 @import "icons";
 @import "buttons";

@@ -1,7 +1,4 @@
 @import "../media";
-$spinner_width: 6rem;
-$spinner_height: 6rem;
-
 .grid {
   position: relative;
   width: 100%;
@@ -30,7 +27,6 @@ $spinner_height: 6rem;
     //}
     @import "figure";
   }
-
 }
 
 .grid-loading {

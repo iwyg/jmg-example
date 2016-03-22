@@ -3,6 +3,7 @@ $mode_button_color: lighten($mode_button_color_active, 24);
 $mode_remove_color: $mode_button_color_active;
 $mode_toggle_color: $mode_button_color_active;
 $setting_border_bottom_color: $mode_button_color;
+$button_apply_color: $base_flat;
 
 .icon-logo {
   @include icon($base_flat, 3.6rem, 3.6rem);
@@ -157,6 +158,10 @@ button {
     }
   }
 
+  &.apply-settings {
+    color: $button_apply_color !important;
+  }
+
   &.close {
     svg {
       fill: $mode_remove_color !important;
@@ -233,4 +238,10 @@ button {
       }
     }
   }
+}
+
+.progress-apply {
+  position: absolute !important;
+  left: 0;
+  top: 0;
 }

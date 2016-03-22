@@ -223,7 +223,6 @@ function updateViewPortElement(viewPort) {
     y: 10,
     x: 10
   };
-  console.log(this.sensitivity);
 }
 
 function update(event) {
@@ -324,8 +323,6 @@ class ViewPortElement {
     updateViewPortElement.call(this, viewPort, event);
 
     let e = isObject(event) ? event : viewPort;
-
-    console.log(viewPort);
 
     if (!this.inViewport && inViewport(this, viewPort)) {
       this.enter(e);

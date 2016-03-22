@@ -196,8 +196,8 @@ export class Panel extends React.Component {
     if (!this.props.settings.length) {
       return null;
     }
-    return [this.props.showProgress ? (<ProgressBar className='progress-apply ' type='linear' mode='indeterminate'/>) : null, (
-      <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} className='apply-settings'>
+    return [this.props.showProgress ? (<ProgressBar key='progress' className='progress-apply ' type='linear' mode='indeterminate'/>) : null, (
+      <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} className='apply-settings' key='btn-apply'>
         <IconCheck></IconCheck>
         Apply
       </Button>

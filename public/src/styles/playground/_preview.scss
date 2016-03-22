@@ -101,6 +101,10 @@
     }
   }
 
+  .spinner {
+    @include abs_center($spinner_width, $spinner_height, 1000, 1);
+  }
+
   .grid-wrap {
     @include inbox;
     position: absolute;
@@ -114,6 +118,11 @@
       transition-delay: 0s;
       transform: translate3d(0, 0, 0);
     }
+    .spinner {
+      @include breakpoint($q-medium) {
+        left: calc(50% + #{$settings-width / 2});
+      }
+    }
   }
 
   //&.select {
@@ -122,11 +131,4 @@
   //    transform: translate3d(0, 0, 0);
   //  }
   //}
-  .spinner {
-    @include abs_center($spinner_width, $spinner_height, 1000, 1);
-
-    @include breakpoint($q-medium) {
-      left: calc(50% + #{$settings-width / 2});
-    }
-  }
 }

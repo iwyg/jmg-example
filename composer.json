@@ -38,9 +38,5 @@
     }
   },
 
-  "scripts": {
-    "serve": "./bin/serve.sh"
-  },
-
   "minimum-stability": "dev"
 }

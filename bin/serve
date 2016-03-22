@@ -1,9 +1,10 @@
 #!/bin/sh
 
 set -e
+
 usage() {
 cat <<EOF
-Usage: serve.sh [options...]
+Usage: ./serve [options...]
 Options:
   -h, --help, ?       Shows this dialog.
   -p, --port          Port on which the server will listen for requests. Default is 4040
@@ -55,4 +56,10 @@ if [[ ! -f $bin ]]; then
     BIN="php"
 fi
 
-$BIN -S $ADDR:$PORT -t public public/index.php
+PARENT=`ps $PPID | tail -n 1 | awk "{print \$5}"`
+echo "Running command $PARENT"
+
+#start npm start and php dev server as subshells
+if ( ( npm start ) & ( $BIN -S $ADDR:$PORT -t public public/index.php ) ); then wait; fi
+
+exit $?

@@ -51,7 +51,7 @@ $container['view'] = $container->share(function () use ($container) {
     $engine = new Lucid\Template\Engine(new Lucid\Template\Loader\FilesystemLoader($paths));
     $engine->addType('phpml');
     $engine->addType('phpml');
-    $view = new Lucid\Template\View($engine);
+    $view = new Lucid\Template\view($engine);
 
     $container->get('events')->dispatch('view.register', new App\Events\RegisterView($view, $engine));
 

@@ -11,8 +11,8 @@
 
 namespace App\Bridge\Mux;
 
-use Lucid\Mux\Handler\TypeMapperInterface;
-use Lucid\Template\EngineInterface;
+use Interop\Container\ContainerInterface;
+use Lucid\Template\ViewManagerInterface;
 
 /**
  * @class RequestTypeMap
@@ -21,21 +21,13 @@ use Lucid\Template\EngineInterface;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class ViewTypeMap implements TypeMapperInterface
+class ViewTypeMap extends TypeMap
 {
-    public function __construct($container, $key = 'view')
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(ContainerInterface $container, $key = 'view')
     {
-        $this->container = $container;
-        $this->key = $key;
-    }
-
-    public function getType()
-    {
-        return EngineInterface::class;
-    }
-
-    public function getObject()
-    {
-        return $this->container->get($this->key);
+        parent::__construct($container, $key, ViewManagerInterface::class);
     }
 }

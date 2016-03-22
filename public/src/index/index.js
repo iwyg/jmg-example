@@ -21,16 +21,6 @@ let feature  = Q('#features').get(0);
 let codeBlocks = document.querySelectorAll('code[class*="language-"]');
 let viewPort = new ViewPort;
 
-console.log(fold);
-
-feature.addEventListener(EVENT_VIEWPORT_ENTER, function (e) {
-  console.log('FEATURE ENTER');
-});
-
-feature.addEventListener(EVENT_VIEWPORT_LEAVE, function (e) {
-  console.log('FEATURE LEAVE');
-});
-
 const scrollTarget = (function () {
   return /Firefox/.test(navigator.userAgent) ?
   document.documentElement :
@@ -57,7 +47,7 @@ const history = {
   }
 };
 
-const doScroll = (function () {
+const doScroll = debounce(function () {
   let scrolling = false;
 
   return (top) => {
@@ -66,12 +56,14 @@ const doScroll = (function () {
     }
     scrolling = true;
     history.locked = true;
-    scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200}, (error, scrollTop) => {
-      history.locked = false;
-      scrolling = false;
+    requestAnimationFrame(() => {
+      scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200}, (error, scrollTop) => {
+        history.locked = false;
+        scrolling = false;
+      });
     });
   };
-}());
+}(), 300);
 
 
 history.stop = history.history.listen(location => {

@@ -11,7 +11,7 @@
 
 namespace App\Bridge\Mux;
 
-use Lucid\Mux\Handler\TypeMapperInterface;
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -21,21 +21,13 @@ use Psr\Http\Message\ServerRequestInterface;
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class RequestTypeMap implements TypeMapperInterface
+class RequestTypeMap extends TypeMap
 {
-    public function __construct($container, $key = 'request')
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(ContainerInterface $container, $key = 'request')
     {
-        $this->container = $container;
-        $this->key = $key;
-    }
-
-    public function getType()
-    {
-        return ServerRequestInterface::class;
-    }
-
-    public function getObject()
-    {
-        return $this->container->get($this->key);
+        parent::__construct($container, $key, ServerRequestInterface::class);
     }
 }

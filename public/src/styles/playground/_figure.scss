@@ -78,6 +78,14 @@ img {
   height: auto;
   transition: all .4s cubic-bezier(0.5, .12, .36, .9);
 
+  &.loading {
+    opacity: 0;
+  }
+
+  .loading & {
+    opacity: 0;
+  }
+
 }
 
 figure {
@@ -89,5 +97,3 @@ figure {
     margin-left: -30px;
   }
 }
-
-

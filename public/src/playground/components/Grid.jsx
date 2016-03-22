@@ -21,6 +21,8 @@ export default class Grid extends React.Component {
 
     this.state = {
       loaded: false,
+      loadingImages: false,
+      imagesLoaded: 0,
       maxWidth: null,
       layout: null,
     }
@@ -28,11 +30,39 @@ export default class Grid extends React.Component {
     this.domNode = null;
     this.masonry = null;
     this.figures = [];
+    this.loading = 0;
 
-    this.onResize = debounce(this.updateMaxWidth.bind(this), 300);
     this.bindMasonry = this.bindMasonry.bind(this);
     this.bindRefs = this.bindRefs.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.onResize = debounce(this.updateMaxWidth.bind(this), 300);
+    this.handleLayoutComplete = debounce(this.handleLayoutComplete.bind(this), 100);
+    this.onImageLoad = this.onImageLoad.bind(this);
+    this.onImageLoaded = this.onImageLoaded.bind(this);
+  }
+
+  onImageLoad(src, promise) {
+    promise.then(() => {
+      this.loading++;
+    }).catch(() => {
+      //this.loading++;
+      console.log('error loading image.');
+    });
+
+    if (!this.state.loadingImages) {
+      this.setState({loadingImages: true});
+    }
+  }
+
+  onImageLoaded(loaded, image) {
+    this.setState({imagesLoaded: this.loading});
+
+    if (this.loading !== this.props.images.length) {
+      return;
+    }
+
+    this.setState({loadingImages: false, imagesLoaded: 0});
+    this.loading = 0;
   }
 
   // handles click events grid items
@@ -42,11 +72,19 @@ export default class Grid extends React.Component {
   }
 
   bindMasonry(ref) {
-    if (isObject(ref)) {
+    if (isObject(ref) && isObject(ref.masonry)) {
+      if (ref.masonry === this.masonry) {
+        this.masonry.off('layoutComplete', this.handleLayoutComplete);
+        return;
+      }
       this.masonry = ref.masonry;
+      this.masonry.on('layoutComplete', this.handleLayoutComplete);
     } else {
       this.masonry = null;
     }
+  }
+
+  handleLayoutComplete(event) {
   }
 
   bindRefs(item) {
@@ -86,7 +124,7 @@ export default class Grid extends React.Component {
     }
 
     if (this.masonry) {
-      this.masonry.layout();
+      //this.masonry.layout();
     }
 
 
@@ -107,6 +145,10 @@ export default class Grid extends React.Component {
   componentWillUnmount() {
     CONTEXT.removeEventListener(RESIZE, this.onResize);
     this.setState({loaded: false, maxWidth: null});
+
+    if (this.masonry !== null) {
+      this.masonry.off('layoutComplete', this.handleLayoutComplete);
+    }
   }
 
   getClassName() {
@@ -114,9 +156,10 @@ export default class Grid extends React.Component {
   }
 
   // render empty ref for max width calculation
-  renderEmpty(gridClass) {
+  renderEmpty(gridClass, progress) {
     return (
       <div className={gridClass}>
+        {progress}
         <div className='grid'>
           <div className='grid-item' ref='figure0'></div>
         </div>
@@ -130,9 +173,8 @@ export default class Grid extends React.Component {
    * @return ReactElement
    */
   renderItem(image, key, keys, refStr, props) {
-    //let {...props} = props;
     return (
-      <GridItem ref={refStr + key} refPrefix={refStr} image={image}
+      <GridItem ref={refStr + key} refPrefix={refStr} image={image} onLoad={this.onImageLoad} onLoaded={this.onImageLoaded}
         onClick={this.props.onSelect} key={key} index={key} keys={keys} {...props} >
       </GridItem>
     );
@@ -164,6 +206,14 @@ export default class Grid extends React.Component {
     }
   }
 
+  getProgress() {
+    let props = this.state.loadingImages && this.loading > 0 ? {
+      mode: 'determinate', value: (100 / Math.max(1, this.props.images.length)) * this.loading
+    } : {mode: 'indeterminate'};
+
+    return (<ProgressBar id="gsp" className='spinner loading' type='circular' {...props}/>);
+  }
+
   /**
    * Render the grid.
    *
@@ -172,12 +222,17 @@ export default class Grid extends React.Component {
   render() {
     let gridClass = className('grid-wrap', {className: this.props.visible ? 'visible' : undefined});
 
+    let progress = null;
+    if (this.props.loading || this.state.loadingImages) {
+      gridClass += ' loading';
+      progress = this.getProgress();
+    }
+
     if (!this.state.loaded) {
-      return this.renderEmpty(gridClass);
+      return this.renderEmpty(gridClass, progress);
     }
 
     let {layout, masonry, ...props} = this.props;
-    let progress = (<ProgressBar className='spinner loading' type='circular' mode='indeterminate' />);
     const items = this.renderItems(props);
 
     return (
@@ -197,12 +252,14 @@ Grid.propTypes = {
   masonry: PropTypes.object,
   captionKeys: PropTypes.array,
   visible: PropTypes.bool,
+  loading: PropTypes.bool,
   layout: PropTypes.oneOf(['masonry', 'default'])
 };
 
 Grid.defaultProps = {
   images: [],
   visible: false,
+  loading: false,
   masonry: {
     gutter: 0,
     resize: false,
@@ -250,6 +307,7 @@ class GridItem extends React.Component {
 
 GridItem.propTypes = {
   image: PropTypes.object.isRequired,
+  loading: PropTypes.bool,
   index: PropTypes.number.isRequired,
   keys: PropTypes.array,
   refPrefix: PropTypes.string,
@@ -258,5 +316,6 @@ GridItem.propTypes = {
 };
 
 GridItem.defaultProps = {
-  onClick: null
+  onClick: null,
+  loading: false
 };

@@ -190,12 +190,15 @@ class App extends React.Component {
           image={this.props.image}
           constraints={this.props.defaults}
           disabled={this.props.fetchingImage}
+          showProgress={this.props.fetchingImage}
         />
         <div className='preview'>
           <Preview image={this.props.image}>
           </Preview>
           <Grid onSelect={this.onSelectImage} onResize={this.onGridResize}
             visible={this.props.isSelectingImage} images={this.props.images}
+            loading={this.props.fetchingImages}
+            layout='masonry'
           >
           </Grid>
         </div>

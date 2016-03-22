@@ -184,7 +184,7 @@ export class Settings extends React.Component {
   }
 
   render() {
-    let closeBtn = (<IconButton className='icon close' onClick={this.onRemove} accent={true}> <IconRemove/></IconButton>);
+    let closeBtn = (<IconButton className='icon close' onClick={this.onRemove} accent={false}> <IconRemove/></IconButton>);
     let header = this.props.visible ? (<Pane
         contentAfter={closeBtn}
         onTabChange={this.onModeChange}
@@ -213,6 +213,7 @@ export class Settings extends React.Component {
           toggleLeft={true}>
           <div className='setting-content'>{this.renderContent(this.props.mode)}</div>
         </Collapsable>
+        {this.props.children}
       </section>
     );
   }

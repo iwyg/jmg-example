@@ -18,12 +18,4 @@
     cursor: pointer;
     display: block;
   }
-
-  &.active {
-    .icon {
-      svg {
-        fill: $gray_darker;
-      }
-    }
-  }
 }

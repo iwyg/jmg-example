@@ -4,7 +4,7 @@
 $border-color: $base_flat;
 $fill-color: $color-primary;
 
-$border-size: 1px;
+$border-size: .1rem;
 
 .gravity {
   background: $border-color;
@@ -18,7 +18,7 @@ $border-size: 1px;
   background: #fff;
   @include clearfix();
   @include inbox(8*$base_font_size);
-  border: 1px solid $fill-color;
+  border: .1rem solid $fill-color;
 
   > * {
     cursor: pointer;

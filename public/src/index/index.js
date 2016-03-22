@@ -27,26 +27,7 @@ const scrollTarget = (function () {
   document.body
 }());
 
-const scrollHandler = (targetId) => {
-  let target = document.getElementById(targetId);
-  if (!target) {
-    return;
-  }
-
-  doScroll(target.offsetTop);
-};
-
-const history = {
-  locked: false,
-  history: createHistory(),
-  push() {
-    if (this.locked) {
-      return;
-    }
-    this.history.push.apply(this.history, arguments);
-  }
-};
-
+// debounced scroll animation.
 const doScroll = debounce(function () {
   let scrolling = false;
 
@@ -65,6 +46,26 @@ const doScroll = debounce(function () {
   };
 }(), 300);
 
+const scrollHandler = (targetId) => {
+  let target = document.getElementById(targetId);
+  if (!target) {
+    return;
+  }
+
+  doScroll(target.offsetTop);
+};
+
+// wrapper for history, can lock pushes.
+const history = {
+  locked: false,
+  history: createHistory(),
+  push() {
+    if (this.locked) {
+      return;
+    }
+    this.history.push.apply(this.history, arguments);
+  }
+};
 
 history.stop = history.history.listen(location => {
   if (location.hash) {
@@ -75,11 +76,11 @@ history.stop = history.history.listen(location => {
 });
 
 
+
 const handler = function (event) {
   let element = event.target;
   requestAnimationFrame(() => {
     addClass(element, 'anim-in');
-    //element.removeEventListener(EVENT_VIEWPORT, handler);
   });
 };
 
@@ -115,12 +116,9 @@ const handleClick = (e) => {
   history.push({
     hash: e.target.hash
   });
-  //let top = document.getElementById(targetId).offsetTop;
-  //scroll.top(scrollTarget, top, {duration: 2000});
 };
 
+// hadle internal reference links
 Q('.link.int').get().forEach((element) => {
   element.addEventListener('click', handleClick);
 });
-
-//document.addEventListener('DOMContentLoaded', Prism.fileHighlight);

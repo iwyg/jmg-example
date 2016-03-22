@@ -21,12 +21,9 @@ p {
   a {
     color: color('blue');
     font-weight: 400;
-  }
-}
-
-a {
-  &:visited {
-    color: color('blue');
+    &:visited {
+      color: color('blue');
+    }
   }
 }
 
@@ -120,6 +117,74 @@ strong {
       }
     }
   }
+
+  @include breakpoint(1200px) {
+    & > .row:first-child {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        justify-content: center;
+        flex-direction: column;
+    }
+  }
+}
+
+.logo-main {
+  color: color('white');
+  margin: 0 auto;
+  padding: 2.6rem;
+  width: 100%;
+  @include clearfix();
+
+  svg {
+    width: 100%;
+    height: auto;
+    polygon {
+      fill: color('white');
+    }
+  }
+  .jmg {
+    display: none;
+    font-weight: lighter;
+    font-size: 8rem;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 6.2rem;
+    line-height: 2.6;
+    @include breakpoint($q-medium) {
+      display: block;
+    }
+  }
+
+  p {
+    font-size: 1.8;
+    text-align: center;
+    display: none;
+    @include breakpoint($q-small) {
+      display: block;
+    }
+  }
+
+  @include breakpoint($q-small) {
+    width: 32rem;
+  }
+
+  @include breakpoint($q-medium) {
+    width: 48rem;
+    & > * {
+      display: inline-block;
+      float: left;
+    }
+
+    svg {
+      width: 24rem;
+    }
+
+    p {
+      font-size: 2.4rem;
+    }
+  }
 }
 
 p {
@@ -174,8 +239,9 @@ p {
   @include breakpoint($q-medium) {
     display: block;
     //background: url('../images/index_hero_1200.jpg') center center;
-    background: url('../images/index_hero_full.jpg') center center;
-    opacity: 0.1;
+    //background: url('../images/index_hero_full.jpg') center center;
+    background: url('../images/index_hero_overlay_opt.jpg') center center;
+    opacity: 0.2;
     background-size: cover;
   }
 
@@ -282,66 +348,6 @@ nav {
   float: left;
 }
 
-.logo-main {
-  color: color('white');
-  margin: 0 auto;
-  padding: 2.6rem;
-  width: 100%;
-  @include clearfix();
-
-  @include breakpoint(1200px) {
-    padding-top: 12rem;
-  }
-
-  svg {
-    width: 100%;
-    height: auto;
-    polygon {
-      fill: color('white');
-    }
-  }
-  .jmg {
-    display: none;
-    font-weight: lighter;
-    font-size: 8rem;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 6.2rem;
-    line-height: 2.6;
-    @include breakpoint($q-medium) {
-      display: block;
-    }
-  }
-
-  p {
-    font-size: 1.8;
-    text-align: center;
-    display: none;
-    @include breakpoint($q-small) {
-      display: block;
-    }
-  }
-
-  @include breakpoint($q-small) {
-    width: 32rem;
-  }
-
-  @include breakpoint($q-medium) {
-    width: 48rem;
-    & > * {
-      display: inline-block;
-      float: left;
-    }
-
-    svg {
-      width: 24rem;
-    }
-
-    p {
-      font-size: 2.4rem;
-    }
-  }
-}
 #about {
   background-color: color('red');
 }
@@ -373,7 +379,7 @@ nav {
   color: color('white');
   p {
     a {
-      color: color('black');
+      color: color('green');
       font-weight: 400;
     }
   }
@@ -388,7 +394,7 @@ nav {
 
   a {
     &:visited {
-      color: color('yellow');
+      color: color('green');
     }
   }
 }

@@ -1,5 +1,6 @@
 
 var base = require('./webpack.config');
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 var config = {
   output: base.output || {},
@@ -12,6 +13,12 @@ var config = {
     inline: true
   }
 };
+
+base.plugins.push(
+  new LiveReloadPlugin({
+    appendScriptTag: true
+  })
+);
 
 config.output.sourceMapFilename = '[file].map';
 

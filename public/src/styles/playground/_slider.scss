@@ -1,8 +1,10 @@
 .slider {
+
   @include flex(space-between, stretch);
   .slider-value {
     text-align: right;
   }
+
   .slider-name, .slider-value {
     white-space: nowrap;
     display: block;

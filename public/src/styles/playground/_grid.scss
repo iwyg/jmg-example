@@ -1,4 +1,7 @@
 @import "../media";
+$spinner_width: 6rem;
+$spinner_height: 6rem;
+
 .grid {
   position: relative;
   width: 100%;
@@ -31,12 +34,5 @@
 }
 
 .grid-loading {
-  position: absolute !important;
-
-  top: 50%;
-  left: 50%;
-
-  margin-top: -30px;
-  margin-left: -30px;
-  z-index: 10000;
+  @include abs_center($spinner_width, $spinner_height, 1000, 1);
 }

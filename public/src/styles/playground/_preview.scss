@@ -27,7 +27,7 @@
   @include clearfix;
   font-size: 1.2rem;
   line-height: .4rem;
-  color: $gray_lighter;
+  color: color('white');
 
   @include flex(space-between);
 
@@ -36,7 +36,7 @@
     //border-left: 1px solid darken($color-primary-dark, 5);
   }
 
-  background-color: rgba(#000, 0.22);
+  background-color: rgba(#fff, 0.08);
 }
 
 .preview-container {
@@ -56,10 +56,7 @@
 
 .preview {
   transform: translate3d(0, 0, 0) scaleZ(1);
-  //background-color: darken($gray_darker, 20);
-  //background-color: darken($gray_dark, 1);
-  //background-color: #3C4448;
-  background-color: #4E4E4E;
+  background-color: $background_color_preivew;
   @include inbox;
   position: relative;
   overflow: hidden;

@@ -3,7 +3,7 @@ import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
 import Tooltip from 'react-toolbox/lib/tooltip';
 import {isFunc, isObject} from 'lib/assert';
-import {IconSettings, IconCheck, IconAdd, Icon} from './Icons';
+import {IconSettings, IconCheck, IconAdd, IconJmg, Icon} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
@@ -127,9 +127,13 @@ export class Panel extends React.Component {
 
   componentDidUpdate(prevProps) {
     let {image} = prevProps;
+    let {settings} = this.props;
 
     if (image !== this.props.image) {
       this.setState({selected: this.hasImage()});
+      if (this.hasImage() && settings.length === 0) {
+        this.addSettings();
+      }
     }
   }
 
@@ -146,17 +150,11 @@ export class Panel extends React.Component {
 
     //<IconSettings/><IconAdd/>
     //disabled={!this.state.selected}
-    let addSettings = (<ToolTipBtn
-        tooltip='Add Parameters'
-        onClick={this.addSettings}
-        className='add-setting'
-        disabled={!this.state.selected}
-      >
-       <IconSettings/><IconAdd/>
-      </ToolTipBtn>);
     return (
       <div className='buttons'>
-        {addSettings}
+        <Icon className='icon-logo'>
+          <IconJmg/>
+        </Icon>
         {selectImage}
       </div>
     );
@@ -164,9 +162,18 @@ export class Panel extends React.Component {
 
   renderSettings() {
     let {settings, ...props} = this.props;
-    if (!settings.length || !this.state.selected) {
-      return null;
+    let addSettings = (<ToolTipBtn tooltip='Add Parameters' onClick={this.addSettings}
+        className='add-setting' key='addSetting'
+        disabled={!this.state.selected}
+      >
+       <IconAdd/><IconSettings/>
+      </ToolTipBtn>);
+    if (!settings.length) {
+      return this.state.selected ? addSettings : null;
     }
+
+
+
     return settings.map((setting, i) => {
         let {mode, params, filters, ...rest} = setting;
         return (<Settings onUpdate={this.onParamsUpdate} onModeChange={this.settingChangedMode}
@@ -181,7 +188,7 @@ export class Panel extends React.Component {
           className={null}
           {...rest}>
         </Settings>);
-      });
+      }).concat([addSettings]);
   }
 
   renderFooter() {
@@ -197,6 +204,7 @@ export class Panel extends React.Component {
   }
 
   render() {
+
     return (
       <div className={className('panel', this.props)}>
         <PanelHeader>

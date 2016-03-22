@@ -11,11 +11,19 @@ import createLogger from 'redux-logger';
 import {createStore, applyMiddleware} from 'redux';
 import App from 'playground/components/App';
 import rootReducer from 'playground/modules/reducer';
+import {ENV, PRODUCTION} from 'runtime/constants';
 
-const configureStore = (initialState) => {
-  const logger = createLogger();
-  return createStore(rootReducer, initialState, applyMiddleware(thunk, logger));
-};
+const configureStore = (function () {
+  if (ENV !== PRODUCTION) {
+    return (initialState) => {
+      const logger = createLogger();
+      return createStore(rootReducer, initialState, applyMiddleware(thunk, logger));
+    };
+  }
+  return (initialState) => {
+    return createStore(rootReducer, initialState, applyMiddleware(thunk));
+  };
+} ());
 
 const store = configureStore();
 

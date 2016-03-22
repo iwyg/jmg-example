@@ -11,6 +11,10 @@ $panel_left_padding: 1rem;
 
 $info_bar_position: bottom;
 
+//$background_color_preivew: #4E4E4E;
+$background_color_preivew: #353B44;
+$background_color_grid: $base_flat;
+$background_color_panel: $base_flat;
 
 @import "../mixins";
 @import "../colors";

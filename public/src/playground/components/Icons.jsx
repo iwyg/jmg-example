@@ -33,6 +33,8 @@ export const IconExpandLess    = require('icons/ic_expand_less_black_48px.svg');
 export const IconExpandMore    = require('icons/ic_expand_more_black_48px.svg');
 export const IconMoreHr        = require('icons/ic_more_horiz_black_48px.svg');
 
+export const IconJmg           = require('icons/jmg.svg');
+
 export const Icon = ({children, ...props}) => {
   let cName = className('icon', props);
   return (<span {...props} className={cName}>{children}</span>);

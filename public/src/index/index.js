@@ -21,21 +21,30 @@ let feature  = Q('#features').get(0);
 let codeBlocks = document.querySelectorAll('code[class*="language-"]');
 let viewPort = new ViewPort;
 
-console.log(fold);
-
-feature.addEventListener(EVENT_VIEWPORT_ENTER, function (e) {
-  console.log('FEATURE ENTER');
-});
-
-feature.addEventListener(EVENT_VIEWPORT_LEAVE, function (e) {
-  console.log('FEATURE LEAVE');
-});
-
 const scrollTarget = (function () {
   return /Firefox/.test(navigator.userAgent) ?
   document.documentElement :
   document.body
 }());
+
+// debounced scroll animation.
+const doScroll = debounce(function () {
+  let scrolling = false;
+
+  return (top) => {
+    if (scrolling) {
+      return;
+    }
+    scrolling = true;
+    history.locked = true;
+    requestAnimationFrame(() => {
+      scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200}, (error, scrollTop) => {
+        history.locked = false;
+        scrolling = false;
+      });
+    });
+  };
+}(), 300);
 
 const scrollHandler = (targetId) => {
   let target = document.getElementById(targetId);
@@ -46,6 +55,7 @@ const scrollHandler = (targetId) => {
   doScroll(target.offsetTop);
 };
 
+// wrapper for history, can lock pushes.
 const history = {
   locked: false,
   history: createHistory(),
@@ -57,23 +67,6 @@ const history = {
   }
 };
 
-const doScroll = (function () {
-  let scrolling = false;
-
-  return (top) => {
-    if (scrolling) {
-      return;
-    }
-    scrolling = true;
-    history.locked = true;
-    scroll.top(scrollTarget, top, {ease: 'inOutQuart', duration: 1200}, (error, scrollTop) => {
-      history.locked = false;
-      scrolling = false;
-    });
-  };
-}());
-
-
 history.stop = history.history.listen(location => {
   if (location.hash) {
     scrollHandler(location.hash.split('#')[1]);
@@ -83,11 +76,11 @@ history.stop = history.history.listen(location => {
 });
 
 
+
 const handler = function (event) {
   let element = event.target;
   requestAnimationFrame(() => {
     addClass(element, 'anim-in');
-    //element.removeEventListener(EVENT_VIEWPORT, handler);
   });
 };
 
@@ -123,12 +116,9 @@ const handleClick = (e) => {
   history.push({
     hash: e.target.hash
   });
-  //let top = document.getElementById(targetId).offsetTop;
-  //scroll.top(scrollTarget, top, {duration: 2000});
 };
 
+// hadle internal reference links
 Q('.link.int').get().forEach((element) => {
   element.addEventListener('click', handleClick);
 });
-
-//document.addEventListener('DOMContentLoaded', Prism.fileHighlight);

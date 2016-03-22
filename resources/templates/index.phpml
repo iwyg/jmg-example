@@ -9,7 +9,7 @@
     <div class="row">
       <?= $view->insert('index/logo.phpml') ?>
     </div>
-    <section class="main-nav row clm__2">
+    <section class="main-nav row">
       <?= $view->insert('index/mainnav.phpml') ?>
     </section>
     <div class="hero"></div>

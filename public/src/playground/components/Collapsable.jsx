@@ -41,7 +41,7 @@ export default class Collapsable extends React.Component {
     let Icn = this.props.visible ? this.props.iconOpen : this.props.iconCollapsed;
     let {label, hideLabel, headerContent} = this.props;
     let labelEl = hideLabel ? null : (<label>{label}</label>);
-    let toggle = (<IconButton><Icn></Icn></IconButton>);
+    let toggle = (<IconButton className='toggle'><Icn></Icn></IconButton>);
     let left = this.props.toggleLeft ? toggle : null;
     let right = this.props.toggleLeft ? null : toggle;
     return (

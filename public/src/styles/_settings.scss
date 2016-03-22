@@ -3,32 +3,7 @@
 $base_font_size: 1.6rem;
 $base_line_height: 1;
 
-$icon_width: 24px;
-$icon_height: 24px;
+$icon_width: 2.4rem;
+$icon_height: 2.4rem;
 
-@mixin icon($fill: $gray_neutral) {
-  display: block;
-  width: $icon_width;
-  height: $icon_height;
-
-  svg {
-    fill: $fill;
-    height: 100%;
-    width: auto;
-  }
-}
-
-@mixin fontRegular() {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-}
-
-@mixin fontLight() {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-}
-
-@mixin fontThin() {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
-}
+$link_color: black;

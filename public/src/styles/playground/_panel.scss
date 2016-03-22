@@ -1,20 +1,28 @@
+$mode_button_color_active: $color-primary;
+$mode_button_color: lighten($mode_button_color_active, 24);
+$mode_remove_color: $mode_button_color_active;
+$mode_toggle_color: $mode_button_color_active;
+$setting_border_bottom_color: $mode_button_color;
+
+.icon-logo {
+  @include icon($base_flat, 3.6rem, 3.6rem);
+}
+
 .settings {
-  background-color: $base_flat;
+  background-color: $background_color_panel;
   width: 100%;
 
-  //@include breakpoint((min-width: $q-small, orientation: landscape)) {
-  @include breakpoint((min-width: $q-small)) {
+  @include breakpoint($q-small) {
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1000;
     height: 100%;
     //width: $settings-width-small;
-    box-shadow: 1px 0px 6px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: .1rem 0 .6rem 0 rgba(0, 0, 0, 0.5);
   }
 
-  //@include breakpoint((min-width: $q-medium, orientation: landscape)) {
-  @include breakpoint((min-width: $q-medium)) {
+  @include breakpoint($q-medium) {
     width: $settings-width;
   }
 }
@@ -22,7 +30,7 @@
   @include clearfix;
   margin: .5rem 0;
   padding: 1rem 0;
-  border-bottom: 1px solid $gray_xlight;
+  border-bottom: .1rem solid $setting_border_bottom_color;
 
   &:last-child {
     border-bottom: none;
@@ -80,7 +88,7 @@
       transition: all .4s cubic-bezier(0.5, .12, .36, .9);
       right: 1rem;
       @include breakpoint($q-medium) {
-        right: -12px;
+        right: -1.2rem;
       }
     }
     &.selecting {
@@ -100,6 +108,7 @@
   overflow-scrolling: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 100;
+
 
   //&::-webkit-scrollbar {
   //  width: 0;
@@ -129,16 +138,34 @@
 
 .panel-header, .panel-footer {
   background-color: $color-primary;
+  //background-color: color('blue');
   padding: 2rem $panel_left_padding;
   width: 100%;
 }
 
-button{
+button {
   &.add-setting {
+    /*color: $mode_button_color_active !important;*/
+
+    svg {
+      fill: $mode_button_color_active !important;
+    }
     text-align: left;
-    color: $base_flat !important;
+    //color: $base_flat !important;
     &[disabled] {
       opacity: 0.5;
+    }
+  }
+
+  &.close {
+    svg {
+      fill: $mode_remove_color !important;
+    }
+  }
+
+  &.toggle {
+    svg {
+      fill: $mode_toggle_color !important;
     }
   }
 }
@@ -163,6 +190,22 @@ button{
     padding: .5rem 2rem;
     width: 100%;
   }
+
+  .icon {
+    svg {
+      height: 100%;
+      width: 2.4rem;
+      fill: $mode_button_color;
+    }
+  }
+
+  .active {
+    .icon {
+      svg {
+        fill: $mode_button_color_active;
+      }
+    }
+  }
 }
 
 .mode-group-item {
@@ -176,13 +219,6 @@ button{
     padding: 0.4rem 2rem;
   }
 
-  .icon {
-    svg {
-      height: 100%;
-      width: 24px;
-      fill: $gray_darker;
-    }
-  }
 
   .label {
   }

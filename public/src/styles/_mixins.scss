@@ -6,6 +6,18 @@
   }
 }
 
+@mixin icon($fill: $gray_neutral, $width: $icon_width, $height: $icon_height) {
+  display: block;
+  width: $width;
+  height: $height;
+
+  svg {
+    fill: $fill;
+    height: 100%;
+    width: auto;
+  }
+}
+
 @mixin inbox($value: 100%) {
   height: $value;
   width: $value;
@@ -25,4 +37,43 @@
   display: flex;
   justify-content: $justify;
   align-items: $align;
+}
+
+
+@mixin abs_z($z: 10, $force: 0) {
+  @if ($force == 1)  {
+    position: absolute !important;
+  } @else {
+    position: absolute;
+  }
+
+  z-index: $z;
+}
+
+@mixin abs_center($width, $height, $z: 10, $f: 0) {
+  @include abs_z($z, 1);
+
+  width: $width;
+  height: $height;
+
+  top: 50%;
+  left: 50%;
+
+  margin-top:  -#{$height / 2};
+  margin-left: -#{$width / 2};
+}
+
+@mixin fontRegular() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+@mixin fontLight() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+@mixin fontThin() {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
 }

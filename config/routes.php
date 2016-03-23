@@ -19,7 +19,7 @@ return [
             'mediaq' => [
                 'methods' => ['GET'],
                 'pattern' => '/media/q/{alias}/{src?}',
-                'handler' => 'ctrl.api@actionIndex',
+                'handler' => 'ctrl.api',
                 'requirements' => [
                     'alias' => '(images|thumbs)',
                     //'alias' => '(media)(/{1}[qp]?)/(images|thumbs)',
@@ -30,7 +30,7 @@ return [
             'error' => [
                 'methods' => ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD'],
                 'pattern' => '/error',
-                'handler' => 'ctrl.api@triggerError',
+                'handler' => 'ctrl.api@handleErr',
             ]
         ]
 

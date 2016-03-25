@@ -22,7 +22,7 @@ const ScrollTimer = (function (element) {
 }(window));
 
 // exposes an object capable of starting and stopping
-// sroll stard and end events.
+// sroll `EVENT_VIEWPORT_SCROLL_START` and `EVENT_VIEWPORT_SCROLL_STOP` events.
 export default (function (window, undefined) {
   let started = false;
 

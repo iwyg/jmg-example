@@ -1,12 +1,14 @@
 import {document, window} from 'global';
 import {isFunc, isObject, isDefined} from 'lib/assert';
 import debounce from 'lodash.debounce';
-
-export const EVENT_VIEWPORT = 'viewport';
-export const EVENT_VIEWPORT_ENTER = 'viewportenter';
-export const EVENT_VIEWPORT_LEAVE = 'viewportleave';
+import {requestAnimationFrame, cancelAnimationFrame} from '../../polyfill/animation-frame';
+import scroll from './Scroll';
+import {EVENT_VIEWPORT, EVENT_VIEWPORT_ENTER, EVENT_VIEWPORT_LEAVE,
+  EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP
+} from './Events';
 
 const {CustomEvent} = window;
+
 const offsetElement = isDefined(document.documentElement) ? document.documentElement : document.body;
 
 const getViewPort = (el = window) => {
@@ -18,24 +20,28 @@ const getViewPort = (el = window) => {
     offsetY: scrollY,
     scrollsY: offsetElement.scrollHeight > innerHeight,
     scrollsX: offsetElement.scrollWidth > innerWidth,
+    scrolling: false
   };
 };
 
-let top = window.scrollY;
+const loop = (function () {
+  let currentFrame;
+  const _loop = () => {
+    currentFrame = requestAnimationFrame(() => {
+      updateViewPort();
+      _loop()
+    });
+  };
 
-const loop = () => {
-  loop.canceled = window.scrollY === top;
-  top = window.scrollY
-  updateViewPort();
-
-  if (!loop.canceled) {
-    requestAnimationFrame(loop);
-  } else {
-    document.addEventListener('scroll', startLoop);
-  }
-};
-
-loop.canceled = false;
+  return {
+    start() {
+      _loop();
+    },
+    stop() {
+      cancelAnimationFrame(currentFrame);
+    }
+  };
+}());
 
 const viewPortDirection = () => {
     return {
@@ -47,14 +53,9 @@ const viewPortDirection = () => {
     };
 };
 
-const startLoop = () => {
-  loop.canceled = false;
-  requestAnimationFrame(loop);
-  document.removeEventListener('scroll', startLoop);
-};
-
 const updateViewPort = (function (element = window) {
   let viewport = getViewPort(element);
+  let scrolls = false;
 
   const isdiff = (function () {
     let keys = Object.keys(viewport);
@@ -74,6 +75,13 @@ const updateViewPort = (function (element = window) {
 
     let d = n.direction = viewPortDirection();
 
+    n.speed = {
+      y: 100 * Math.max(0, Math.abs(viewport.offsetY - n.offsetY)) / 100,
+      x: 100 * Math.max(0, Math.abs(viewport.offsetX - n.offsetX)) / 100
+    }
+
+    n.scrolling = n.speed.y > 0 || n.speed.x > 0;
+
     if (n.offsetY > viewport.offsetY) {
       d.down  = true;
       d.still = false;
@@ -90,12 +98,6 @@ const updateViewPort = (function (element = window) {
       d.still = false;
     }
 
-
-    n.speed = {
-      y: 100 / (n.height / Math.max(1, Math.abs(viewport.offsetY - n.offsetY))),
-      x: 100 / (n.width / Math.max(1, Math.abs(viewport.offsetX - n.offsetX)))
-    }
-
     viewport = n;
     element.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, {detail: n}));
   };
@@ -105,6 +107,8 @@ const syntesizeEvent = () => {
   let vp = Object.assign({}, getViewPort(), {direction: viewPortDirection(), speed: {y: 0, x: 0}});
   return new CustomEvent(EVENT_VIEWPORT, {detail: vp});
 };
+
+const _updateViewPort = debounce(updateViewPort, 250);
 
 /**
  * Test if a number is within a given range.
@@ -357,5 +361,22 @@ class ViewPortElement {
   }
 }
 
-window.addEventListener('resize', debounce(updateViewPort, 200));
-startLoop();
+export const tick = {
+  start() {
+    if (scroll.start()) {
+      window.addEventListener('resize', _updateViewPort);
+      window.addEventListener('scroll', scroll);
+      window.addEventListener(EVENT_VIEWPORT_SCROLL_START, loop.start);
+      window.addEventListener(EVENT_VIEWPORT_SCROLL_STOP, loop.stop);
+    }
+  },
+
+  stop() {
+    if (scroll.stop()) {
+      window.removeEventListener('resize', _updateViewPort);
+      window.removeEventListener('scroll', scroll);
+      window.removeEventListener(EVENT_VIEWPORT_SCROLL_START, loop.start);
+      window.removeEventListener(EVENT_VIEWPORT_SCROLL_STOP, loop.stop);
+    }
+  }
+};

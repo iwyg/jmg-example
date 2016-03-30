@@ -118,6 +118,11 @@ class App extends React.Component {
     dispatch(selectImage(image.name, imageParams));
   }
 
+  removeImage = () => {
+    let {dispatch} = this.props;
+    dispatch(selectImage(null));
+  }
+
   fetchImage(params) {
   }
 
@@ -138,10 +143,16 @@ class App extends React.Component {
       return;
     }
 
-    dispatch(getImage(fetchImage.uri()));
+    if (fetchImage.uri === null) {
+      dispatch(getImage(null));
+    } else {
+      dispatch(getImage(fetchImage.uri()));
+    }
+
   }
 
   componentWillReceiveProps(nextProps, nextState) {
+
     let {isSelectingImage, fetchImages, fetchImage} = nextProps;
 
     // initialize grid
@@ -185,6 +196,7 @@ class App extends React.Component {
         <Panel
           className='settings'
           onSelectImage={this.toggleGrid}
+          onDeselectImage={this.removeImage}
           onApply={this.requestImage}
           selecting={this.props.isSelectingImage}
           image={this.props.image}

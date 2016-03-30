@@ -29,3 +29,13 @@ export const stringable = (thing) => {
 export const isDefined = (thing) => {
   return !typeOf(thing, 'undefined');
 }
+
+export default {
+  typeOf,
+  isFunc,
+  isArray,
+  isObject,
+  isNumber,
+  stringable,
+  isDefined
+};

@@ -12,12 +12,12 @@ const {CustomEvent} = window;
 const offsetElement = isDefined(document.documentElement) ? document.documentElement : document.body;
 
 const getViewPort = (el = window) => {
-  let {innerWidth, innerHeight, scrollX, scrollY} = el;
+  let {innerWidth, innerHeight, pageXOffset, pageYOffset} = el;
   return {
     width: innerWidth,
     height: innerHeight,
-    offsetX: scrollX,
-    offsetY: scrollY,
+    offsetX: pageXOffset,
+    offsetY: pageYOffset,
     scrollsY: offsetElement.scrollHeight > innerHeight,
     scrollsX: offsetElement.scrollWidth > innerWidth,
     scrolling: false
@@ -160,35 +160,40 @@ const leavesViewPort = (el, viewPort) => {
  * @returns {boolean}
  */
 const inViewport = (el, viewPort) => {
-  return viewPort.scrollsY && (el.props.offsetTop < viewPort.offsetY + viewPort.height &&
-    el.props.offsetTop > viewPort.offsetY - viewPort.height) ||
-    viewPort.scrollsX && (el.props.offsetLeft < viewPort.offsetX + viewPort.width &&
-    (el.props.offsetLeft > viewPort.offsetX - viewPort.width));
+  return viewPort.scrollsY && (el.props.top < viewPort.offsetY + viewPort.height &&
+    el.props.top > viewPort.offsetY - viewPort.height) ||
+    viewPort.scrollsX && (el.props.left < viewPort.offsetX + viewPort.width &&
+    (el.props.left > viewPort.offsetX - viewPort.width));
 }
 
 const getSensitivity = (viewPort) => {
   return {
-    sy: Math.max(1, viewPort.speed.y) * 20,
-    sx: Math.max(1, viewPort.speed.x) * 20
+    sy: Math.max(1, viewPort.speed.y / 10) * 20,
+    sx: Math.max(1, viewPort.speed.x / 10) * 20
   };
 }
 
 const inFullViewport = (el, viewPort) => {
-  let eH = Math.abs(viewPort.height - el.props.offsetHeight);
-  let eW = Math.abs(viewPort.width - el.props.offsetWidth);
+  //let eH = Math.abs(viewPort.height - el.props.top);
+  //let eW = Math.abs(viewPort.width - el.props.left);
 
-  if (isNaN(eH) || isNaN(eW)) {
-    return false;
-  }
+  //if (isNaN(eH) || isNaN(eW)) {
+    //return false;
+  //}
 
   let {sy, sx} = getSensitivity(viewPort);
 
-  let ny = viewPort.direction.down ? (el.props.offsetTop - eH) : (el.props.offsetTop + eH);
-  let nx = viewPort.direction.left ? (el.props.offsetLeft - eW) : (el.props.offsetLeft + eW);
+  console.log(sy);
 
-  return !el.inFullViewport && (inRange(viewPort.offsetY, ny, sy) ||
-    viewPort.offsetX > 0 && inRange(viewPort.offsetX, nx, sx)
-  );
+  return !el.inFullViewport && (inRange(el.props.top + (el.props.height / 2), viewPort.offsetY + (viewPort.height / 2), sy))
+    || viewPort.offsetX > 0 && (inRange(el.props.left + (el.props.width / 2), viewPort.offsetX + (viewPort.width / 2), sx))
+
+  //let ny = viewPort.direction.down ? (el.props.top - eH) : (el.props.top + eH);
+  //let nx = viewPort.direction.left ? (el.props.left - eW) : (el.props.top + eW);
+
+  //return !el.inFullViewport && (inRange(viewPort.offsetY, ny, sy) ||
+  //  viewPort.offsetX > 0 && inRange(viewPort.offsetX, nx, sx)
+  //);
 }
 
 /**
@@ -211,13 +216,15 @@ const updateElement = (event, element) => {
 
   if (inFullViewport(element, event.detail)) {
     element.inFullViewport = true;
+
+    console.log('INSIDE');
     element.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, event || syntesizeEvent()));
   }
 };
 
 function updateViewPortElement(viewPort) {
-  let {offsetTop, offsetHeight, offsetLeft, offsetWidth} = this.el;
-  this.props = {offsetTop, offsetHeight, offsetLeft, offsetWidth};
+  let {top, left, height, width} = this.el.getBoundingClientRect();
+  this.props = {top: viewPort.offsetY + top, left: viewPort.offsetX + left, height, width};
   //this.sensitivity = {
   //  y: (100 / Math.max(100, viewPort.height - offsetHeight)) * 10,
   //  x: (100 / Math.max(100, viewPort.width - offsetWidth)) * 10

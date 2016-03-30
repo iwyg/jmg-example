@@ -87,14 +87,14 @@ export const fetchRequestedImage = (url) => {
 };
 
 /* success */
-export const fetchImagesSucceeded = (payload = {}) => {
+export const fetchImagesSucceeded = (payload = {images: []}) => {
   return {
     type: QUERY_ALL_RESULT_SUCCESS,
     payload: Object.assign({}, payload, {fetching: false})
   };
 };
 
-export const fetchImageSucceeded = (payload = {}) => {
+export const fetchImageSucceeded = (payload = {image: null}) => {
   return {
     type: QUERY_IMAGE_RESULT_SUCCESS,
     payload: Object.assign({}, payload, {fetching: false})
@@ -122,6 +122,9 @@ export const fetchImageFailed = (msg = 'fetching result failed.') => {
 const doFetchAssets = (parse, actionFetch, actionSuccess, actionError) => {
   return (url) => {
     return (dispatch) => {
+      if (url === null)  {
+        return dispatch(actionSuccess());
+      }
       dispatch(actionFetch(url));
       return fetch(url).then((response) => {
         if (isError(response)) {

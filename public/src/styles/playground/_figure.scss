@@ -11,7 +11,7 @@ figure {
   text-align: center;
 
   button {
-    transform: translate(0, 20%);
+    transform: translate3d(0, 1.2rem, 0);
     transition: transform 0.4s cubic-bezier(0.5, .12, .36, .9);
     display: inline-block;
   }
@@ -41,7 +41,7 @@ figcaption {
   &:hover {
     .buttons {
       button {
-        transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
         display: inline-block;
       }
     }

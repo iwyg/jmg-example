@@ -9,7 +9,7 @@ export const ButtonAdd = ({...props}) => {
   let buttonClass = cn('icon-button', props);
 
   return (
-    <Button accent={true} floating={true} className={buttonClass} {...rest}>
+    <Button accent={false} floating={true} className={buttonClass} {...rest}>
       <IconAdd></IconAdd>
     </Button>
   )

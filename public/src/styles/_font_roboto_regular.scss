@@ -1,14 +1,16 @@
 @font-face {
   font-family: 'Roboto';
   src:
-  local('Roboto'), local('Roboto-Regular'),
-  url('../fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot');
+    //local('Roboto'),
+    //local('Roboto-Regular'),
+    url('../fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot');
 }
 
 @font-face {
   font-family: 'Roboto';
   src:
-    local('Roboto'), local('Roboto-Regular'),
+    //local('Roboto'),
+    //local('Roboto-Regular'),
     url('../fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
     url('../fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.woff') format('woff'),
     url('../fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.ttf') format('truetype'),

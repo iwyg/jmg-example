@@ -27,7 +27,31 @@
     //}
     @import "figure";
   }
+
+  .row {
+    .grid-item {
+      width: 100%;
+    }
+  }
+
+  &.default {
+    column-count: 1;
+    @include breakpoint($q-small) {
+      column-count: 2;
+    }
+    @include breakpoint($q-medium) {
+      column-count: 3;
+    }
+    column-gap: 0;
+
+    .grid-item {
+      float: none;
+      break-inside: avoid;
+      width: 100%;
+    }
+  }
 }
+
 
 .grid-loading {
   @include abs_center($spinner_width, $spinner_height, 1000, 1);

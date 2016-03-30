@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {clonedeep} from 'lodash.clonedeep';
-import {isObject, isArray} from 'lib/assert';
+import {isObject, isArray, isNumber} from 'lib/assert';
 import {createUrlFactory, defaultUrl} from './url';
 import {
   QUERY_ALL_RESULT_REQUEST,  QUERY_ALL_RESULT_SUCCESS,  QUERY_ALL_RESULT_ERROR,
@@ -36,7 +36,13 @@ export const fetchImage = (state = {query: null, uri: null}, action) => {
   switch (action.type) {
     case SELECT_QUERY_IMAGE:
       const {image, settings} = action.payload;
+
+      if (image === null) {
+        return {query: null, uri: null};
+      }
+
       const uri = createUrlFactory(settings, image);
+
       return {settings, uri};
     default:
       return state;
@@ -62,6 +68,8 @@ export const fetchingImage  = (state = false, action) => {
       return fetching;
     case QUERY_IMAGE_RESULT_SUCCESS:
       return false;
+    default:
+      return state;
   }
 
   return state;
@@ -147,7 +155,10 @@ export const settings = (state = [], action) => {
         return state.concat([action.payload.setting]);
       case SETTINGS_REMOVE:
         let {index} = action.payload;
-        return [
+        if (!isNumber(index)) {
+          throw new Error('Index must be either positive integer or -1.');
+        }
+        return index === -1 ? [] : [
           ...state.slice(0, action.payload.index),
           ...state.slice(action.payload.index + 1),
         ];

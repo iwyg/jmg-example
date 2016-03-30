@@ -18,9 +18,9 @@ $button_apply_color: $base_flat;
     top: 0;
     left: 0;
     z-index: 1000;
-    height: 100%;
+    //height: 100%;
     //width: $settings-width-small;
-    box-shadow: .1rem 0 .6rem 0 rgba(0, 0, 0, 0.5);
+    //box-shadow: .1rem 0 .6rem 0 rgba(0, 0, 0, 0.5);
   }
 
   @include breakpoint($q-medium) {
@@ -63,12 +63,20 @@ $button_apply_color: $base_flat;
 
 .panel {
   @include clearfix;
-  padding: $panel_top_padding 0 $panel_bottom_padding 0;
+  //padding: $panel_top_padding 0 $panel_bottom_padding 0;
+
+  padding: (1rem + $panel_header_height - $panel_top_padding) 0 ($panel_footer_height - $panel_bottom_padding) 0;
   position: relative;
-  height: auto;
-  max-height: 100%;
-  -webkit-touch-callout: default;
-  overflow-y: hidden;
+  //min-height: 1px;
+  //-webkit-touch-callout: default;
+  //overflow-y: hidden;
+  overflow: hidden;
+
+  &.loaded {
+    //height: 100%;
+  }
+
+  max-height: 100% !important;
 
   @include breakpoint((orientation: landscape)) {
     overflow-y: visible;
@@ -76,6 +84,7 @@ $button_apply_color: $base_flat;
 
   @include breakpoint($q-medium) {
     height: 100%;
+    max-height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -85,16 +94,22 @@ $button_apply_color: $base_flat;
     &.select-image {
       top: $panel_top_padding;
       position: absolute;
-      transform: rotate(0deg);
-      transition: all .4s cubic-bezier(0.5, .12, .36, .9);
       right: 1rem;
       @include breakpoint($q-medium) {
-        right: -1.2rem;
+        //right: -1.2rem;
+      }
+
+      svg {
+        transition: all .4s cubic-bezier(0.5, .12, .36, .9);
+        transform: rotate(0deg);
       }
     }
     &.selecting {
-      transform: rotate(45deg);
       background: $gray_dark !important;
+      svg {
+        transform: rotate(45deg);
+        color: $base_flat;
+      }
     }
   }
 }
@@ -102,23 +117,17 @@ $button_apply_color: $base_flat;
 
 .panel-content {
   position: relative;
-  padding: ($panel_header_height - $panel_top_padding) 1rem ($panel_footer_height - $panel_bottom_padding) 1rem;
-  max-height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  overflow-scrolling: auto;
-  -webkit-overflow-scrolling: touch;
+  //padding: ($panel_header_height - $panel_top_padding) 1rem ($panel_footer_height - $panel_bottom_padding) 1rem;
+  padding: 0 1rem 0 1rem;
+  height: 100%;
+  max-height: 97%;
   z-index: 100;
+  overflow: hidden;
 
-
-  //&::-webkit-scrollbar {
-  //  width: 0;
-  //  height: 0;
-  //}
-  //&::scrollbar {
-  //  width: 0;
-  //  height: 0;
-  //}
+  .scroll {
+    height: 98% !important;
+    //padding-bottom: $panel_bottom_padding;
+  }
 }
 
 .panel-header {

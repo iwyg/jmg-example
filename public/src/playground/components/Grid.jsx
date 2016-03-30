@@ -190,6 +190,9 @@ export default class Grid extends React.Component {
   };
 
   renderLayout(layout, items, masonry = {}) {
+    if (this.state.loadingImages) {
+      return null;
+    }
     switch (layout) {
       case 'masonry':
         return (
@@ -199,9 +202,7 @@ export default class Grid extends React.Component {
         );
       default:
         return (
-          <div className='grid'>
-            {items}
-          </div>
+          <Layout className='grid default'>{items}</Layout>
         );
     }
   }
@@ -213,6 +214,13 @@ export default class Grid extends React.Component {
 
     return (<ProgressBar id="gsp" className='spinner loading' type='circular' {...props}/>);
   }
+
+  //shouldComponentUpdate(state, props) {
+    //if (props.visible) {
+      //return false;
+    //}
+    //return true;
+  //}
 
   /**
    * Render the grid.
@@ -319,3 +327,29 @@ GridItem.defaultProps = {
   onClick: null,
   loading: false
 };
+
+class Layout extends React.Component {
+  static propTypes = {
+    children: PropTypes.any.isRequired
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.children.length !== this.props.children.length;
+  }
+
+  //getSorted(rows, children) {
+  //  let sorted =  [];
+  //  for (var i = 0; i < rows; i++) {
+  //    sorted.push(children.filter((n, j) => {
+  //        return (j + 1) % rows - i === 0;
+  //      })
+  //    );
+  //  }
+
+  //  return sorted;
+  //}
+
+  render() {
+    return <div className={this.props.className}>{this.props.children}</div>;
+  }
+}

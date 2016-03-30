@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import React, {PropTypes} from 'react';
 import {className} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
@@ -8,6 +9,8 @@ import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
 import {connect} from 'react-redux';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
+import ReactIScroll from 'react-iscroll';
+import iScroll from 'iscroll/build/iscroll-probe';
 
 import {
   addSettings, updateSettings,
@@ -50,12 +53,61 @@ const PanelFooter = ({children, ...props}) => {
  * func PanelFooter
  */
 class PanelContent extends React.Component {
+
+  static propTypes = {
+    options: PropTypes.object,
+    style: PropTypes.object,
+    onChange: PropTypes.func
+  }
+
+  static defaultProps = {
+    style: {},
+    options: {
+      preventDefault: true,
+      bounce: true,
+      scrollbars: true,
+      fadeScrollbars: false,
+      mouseWheel: true,
+      freeScroll: false,
+      invertWheelDirection: false,
+      momentum: false
+    }
+  }
+
+  state = {
+    height: 'auto'
+  }
+
+  onChange() {
+    let {onChange} = this.props;
+    isFunc(onChange) && onChange(
+      ReactDOM.findDOMNode(this.refs.content),
+      this.refs.container.getIScroll()
+    );
+  }
+
+  onScrollRefresh = (scroller) => {
+    this.onChange();
+  }
+
+  onScroll = (scroller) => {
+    console.log(scroller);
+  }
+
+  componentDidUpdate(prevProps) {
+    this.onChange();
+  }
+
   render() {
-    let {...props, children} = this.props;
+    let {children, options, ...props} = this.props;
     return (
-      <div className={className('panel-content', props)} {...props}>
-        {children}
-      </div>
+      <ReactIScroll className={className('panel-content', props)} ref='container' iScroll={iScroll}
+        onScroll={this.onScroll}
+        onRefresh={this.onScrollRefresh} options={options}
+        {...props}
+      >
+        <div ref='content'>{children}</div>
+      </ReactIScroll>
     );
   }
 };
@@ -64,66 +116,96 @@ class PanelContent extends React.Component {
  * class Panel
  */
 export class Panel extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      selecting: false,
-      selected: false
-    };
-
-    this.selectImage        = this.selectImage.bind(this);
-    this.addSettings        = this.addSettings.bind(this);
-    this.removeSettings     = this.removeSettings.bind(this);
-    this.onSettingSupdate   = this.onSettingSupdate.bind(this);
-    this.onParamsUpdate     = this.onParamsUpdate.bind(this);
-    this.settingChangedMode = this.settingChangedMode.bind(this);
-    this.toggleSettings     = this.toggleSettings.bind(this);
-    this.onApply            = this.onApply.bind(this);
+  static propTypes = {
+    onSelectImage: PropTypes.func,
+    onDeselectImage: PropTypes.func,
+    onApply: PropTypes.func.isRequired,
+    selecting: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+    showProgress: PropTypes.bool
   }
 
-  addSettings() {
-    let {dispatch} = this.props;
-    dispatch(addSettings());
+  static defaultProps = {
+    onSelectImage: null,
+    selecting: false,
+    disabled: false,
+    showProgress: false
   }
 
-  removeSettings(index) {
-    let {dispatch} = this.props;
-    dispatch(removeSettings(index));
-  }
-
-  updateSettings() {
-    alert('add settings you shmock');
-  }
-
-  toggleSettings(index, visible) {
-    let {dispatch} = this.props;
-    dispatch(toggleSettingVisible(index, visible));
-  }
-
-  onParamsUpdate(index, mode, params) {
-    let {dispatch} = this.props;
-
-    dispatch(updateParams(mode, params, index));
-  }
-
-  selectImage() {
-    let {onSelectImage} = this.props;
-    isFunc(onSelectImage) && onSelectImage();
+  state = {
+    selecting: false,
+    selected: false,
+    height: null
   }
 
   hasImage() {
     return isObject(this.props.image) && 0 < Object.keys(this.props.image).length;
   }
 
-  onSettingSupdate(i, index, params, filters = []) {
+  handleContentChange = (content, scroller) => {
+    let {height} = this.refs.container.getBoundingClientRect();
+    let styleHeight = content.getBoundingClientRect().height > height ? '100%' : null;
+
+    if (styleHeight === this.state.height) {
+      return;
+    }
+
+    this.setState({height: styleHeight});
+
+    setTimeout(() => {
+      console.log('update', scroller);
+      scroller.refresh();
+    }, 250);
+  }
+
+  addSettings = () => {
+    let {dispatch} = this.props;
+    dispatch(addSettings());
+  }
+
+  removeSettings = (index) => {
+    let {dispatch} = this.props;
+    dispatch(removeSettings(index));
+  }
+
+  toggleSettings = (index, visible) => {
+    let {dispatch} = this.props;
+    dispatch(toggleSettingVisible(index, visible));
+  }
+
+  onParamsUpdate = (index, mode, params) => {
+    let {dispatch} = this.props;
+
+    dispatch(updateParams(mode, params, index));
+  }
+
+  selectImage = () => {
+    let {onSelectImage} = this.props;
+    isFunc(onSelectImage) && onSelectImage();
+  }
+
+  deselectImage = () => {
+    if (this.props.image === null) {
+      return;
+    }
+    let {onDeselectImage} = this.props;
+    isFunc(onDeselectImage) && onDeselectImage();
+  }
+
+  onSettingSupdate = (i, index, params, filters = []) => {
     let {dispatch} = this.props;
     dispatch(updateSettings({index, params, filters}, i));
   }
 
-  settingChangedMode(index, mode) {
+  settingChangedMode = (index, mode) => {
     let {dispatch} = this.props;
     dispatch(changeSettingsMode(index, mode));
+  }
+
+  onApply = () => {
+    let {onApply, settings} = this.props;
+    onApply(settings);
   }
 
   componentDidUpdate(prevProps) {
@@ -134,13 +216,15 @@ export class Panel extends React.Component {
       this.setState({selected: this.hasImage()});
       if (this.hasImage() && settings.length === 0) {
         this.addSettings();
+      } else if (this.props.image === null) {
+        this.removeSettings(-1);
       }
     }
+
   }
 
-  onApply() {
-    let {onApply, settings} = this.props;
-    onApply(settings);
+  trashAll = () => {
+    this.deselectImage();
   }
 
   renderButtons() {
@@ -149,6 +233,10 @@ export class Panel extends React.Component {
       <ButtonAdd className={className} onClick={this.selectImage} />
     );
 
+    let trash = this.state.selected ? (
+      <Button onClick={this.trashAll}>na</Button>
+    ) : null;
+
     //<IconSettings/><IconAdd/>
     //disabled={!this.state.selected}
     return (
@@ -156,6 +244,7 @@ export class Panel extends React.Component {
         <Icon className='icon-logo'>
           <IconJmg/>
         </Icon>
+        {trash}
         {selectImage}
       </div>
     );
@@ -167,7 +256,8 @@ export class Panel extends React.Component {
         className='add-setting' key='addSetting'
         disabled={!this.state.selected}
       >
-       <IconAdd/><IconSettings/>
+       <IconSettings/>
+       <IconAdd/>
       </ToolTipBtn>);
     if (!settings.length) {
       return this.state.selected ? addSettings : null;
@@ -196,6 +286,7 @@ export class Panel extends React.Component {
     if (!this.props.settings.length) {
       return null;
     }
+
     return [this.props.showProgress ? (<ProgressBar key='progress' className='progress-apply ' type='linear' mode='indeterminate'/>) : null, (
       <Button onClick={this.onApply} disabled={this.props.disabled} flat={true} className='apply-settings' key='btn-apply'>
         <IconCheck></IconCheck>
@@ -206,12 +297,15 @@ export class Panel extends React.Component {
 
   render() {
 
+    let postfix = this.props.settings.length ? ' loaded' : '';
+    let style = {height: this.state.height};
+
     return (
-      <div className={className('panel', this.props)}>
+      <div style={style} className={className('panel', this.props) + postfix} ref='container'>
         <PanelHeader>
           {this.renderButtons()}
         </PanelHeader>
-        <PanelContent ref='content'>
+        <PanelContent ref='content' onChange={this.handleContentChange}>
           {this.renderSettings()}
           {this.props.children}
         </PanelContent>
@@ -222,22 +316,6 @@ export class Panel extends React.Component {
     );
   }
 }
-
-Panel.propTypes = {
-  onSelectImage: PropTypes.func,
-  onApply: PropTypes.func.isRequired,
-  selecting: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool,
-  showProgress: PropTypes.bool
-};
-
-Panel.defaultProps = {
-  onSelectImage: null,
-  selecting: false,
-  disabled: false,
-  showProgress: false
-};
-
 
 const mapStateToProps = (state) => {
   return {settings: state.settings};

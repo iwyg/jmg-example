@@ -3,6 +3,9 @@ import ProgressBar from 'react-toolbox/lib/progress_bar';
 import {isFunc} from 'lib/assert';
 import loadImage from 'lib/loadImage';
 
+/**
+ * class Figure
+ */
 export default class Figure extends React.Component {
   constructor(props) {
     super(props);
@@ -31,22 +34,37 @@ export default class Figure extends React.Component {
   render() {
     let {src, style, ref, ...props} = this.props;
     let isLoaded = this.state.loaded;
+    let progress = isLoaded || !props.progress ? null :
+      (<ProgressBar className='spinner loading' type='circular' mode='indeterminate'/>
+    );
+
     return (
       <figure style={style} ref={ref}>
         <Image ref='image' src={src} {...props} onLoad={this.onLoad}/>
-        {
-          (function() {
-            return isLoaded || !props.progress ? null : (
-              <ProgressBar className='spinner loading' type='circular' mode='indeterminate' />
-            )
-          }())
-        }
+        {progress}
         <figcaption>{this.props.children}</figcaption>
       </figure>
     );
   }
 }
 
+Figure.propTypes = {
+  src: PropTypes.string.isRequired,
+  style: PropTypes.object,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  ref: PropTypes.string,
+  progress: PropTypes.bool,
+};
+
+Figure.defaultProps = {
+  style: {},
+  progress: false
+};
+
+/**
+ * class Image
+ */
 export class Image extends React.Component {
   constructor(props) {
     super(props);
@@ -56,16 +74,11 @@ export class Image extends React.Component {
       src: null,
       className: null
     };
-    this.image = null;
   }
 
   imageDidLoad(loaded) {
     let {onLoaded} = this.props;
     isFunc(onLoaded) && onLoaded(loaded);
-  }
-
-  getImage() {
-    return this.image;
   }
 
   load(src) {
@@ -81,7 +94,7 @@ export class Image extends React.Component {
 
       this.imageDidLoad(this.state.loaded);
 
-    }).catch((err) => {
+    }).catch(err => {
         throw new Error(err);
         this.imageDidLoad(false);
       }
@@ -103,36 +116,19 @@ export class Image extends React.Component {
 
   componentWillMount() {
     this.className = this.props.className;
-    this.image = document.createElement('img');
-    //this.setState({src: this.props.src});
   }
 
   componentDidMount() {
     this.load(this.props.src);
-
   }
 
   render() {
     let {src, height, width} = this.props;
     return (
-      <img src={src} height={height} width={width} className={this.state.className}></img>
+      <img src={src} height={height} width={width} className={this.state.className}/>
     );
   }
 }
-
-Figure.propTypes = {
-  src: PropTypes.string.isRequired,
-  style: PropTypes.object,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  ref: PropTypes.string,
-  progress: PropTypes.bool,
-};
-
-Figure.defaultProps = {
-  style: {},
-  progress: false
-};
 
 Image.propTypes = {
   src: PropTypes.string.isRequired,

@@ -1,3 +1,4 @@
+import {isObject, isString} from 'lib/assert';
 
 // cast first char to uppercase
 export const ucFirst = (str) => {

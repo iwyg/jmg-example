@@ -7,6 +7,30 @@ $button_apply_color: $base_flat;
 
 .icon-logo {
   @include icon($base_flat, 3.6rem, 3.6rem);
+  float: left;
+}
+
+.buttons {
+  .ctrls {
+    @include clearfix();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    height: 3.6rem;
+
+    button {
+      float: left;
+      border-radius: $icon_width / 2;
+      margin-left: 1rem;
+    }
+
+    .icon {
+      svg {
+        fill: $base_flat;
+      }
+    }
+  }
 }
 
 .settings {
@@ -65,7 +89,7 @@ $button_apply_color: $base_flat;
   @include clearfix;
   //padding: $panel_top_padding 0 $panel_bottom_padding 0;
 
-  padding: (1rem + $panel_header_height - $panel_top_padding) 0 ($panel_footer_height - $panel_bottom_padding) 0;
+  padding: (1rem + $panel_header_height - $panel_top_padding) 0 (1rem + $panel_footer_height - $panel_bottom_padding) 0;
   position: relative;
   //min-height: 1px;
   //-webkit-touch-callout: default;
@@ -92,9 +116,9 @@ $button_apply_color: $base_flat;
 
   button {
     &.select-image {
-      top: $panel_top_padding;
-      position: absolute;
-      right: 1rem;
+      //top: $panel_top_padding;
+      //position: absolute;
+      //right: 1rem;
       @include breakpoint($q-medium) {
         //right: -1.2rem;
       }
@@ -105,10 +129,10 @@ $button_apply_color: $base_flat;
       }
     }
     &.selecting {
-      background: $gray_dark !important;
+      //background: $gray_dark !important;
       svg {
         transform: rotate(45deg);
-        color: $base_flat;
+        color: $gray_dark;
       }
     }
   }

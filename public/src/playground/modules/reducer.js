@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 import {clonedeep} from 'lodash.clonedeep';
+import {insertAt, removeAt} from 'lib/array';
 import {isObject, isArray, isNumber} from 'lib/assert';
 import {createUrlFactory, defaultUrl} from './url';
 import {
@@ -143,48 +144,48 @@ const settingUpdate = (state, action) => {
 };
 
 export const settings = (state = [], action) => {
-  switch (action.type) {
-      case SETTINGS_CHANGE_MODE:
-        let setting = Object.assign({}, state[action.payload.index], {mode: action.payload.mode});
-        return [
-          ...state.slice(0, action.payload.index),
-          setting,
-          ...state.slice(action.payload.index + 1),
-        ];
-      case SETTINGS_ADD:
-        return state.concat([action.payload.setting]);
-      case SETTINGS_REMOVE:
-        let {index} = action.payload;
-        if (!isNumber(index)) {
-          throw new Error('Index must be either positive integer or -1.');
-        }
-        return index === -1 ? [] : [
-          ...state.slice(0, action.payload.index),
-          ...state.slice(action.payload.index + 1),
-        ];
-      case SETTINGS_UPDATE:
-        return [
-          ...state.slice(0, action.payload.index),
-          settingUpdate(state[action.payload.index], action),
-          ...state.slice(action.payload.index + 1),
-        ];
 
-      case SETTINGS_UPDATE_PARAMS:
-        let params = Object.assign({}, state[action.payload.index].params);
-        params[action.payload.mode] = action.payload.params;
-        return [
-          ...state.slice(0, action.payload.index),
-          Object.assign({}, state[action.payload.index], {params: params}),
-          ...state.slice(action.payload.index + 1),
-        ];
-      case SETTINGS_TOGGLE_VISIBLE:
-        return [
-          ...state.slice(0, action.payload.index),
-          settingVisibility(state[action.payload.index], action),
-          ...state.slice(action.payload.index + 1),
-        ];
-      default:
-        return state;
+  switch (action.type) {
+    case SETTINGS_CHANGE_MODE:
+      let setting = Object.assign({}, state[action.payload.index], {mode: action.payload.mode});
+      return insertAt(state, action.payload.index, setting);
+      //let setting = Object.assign({}, state[action.payload.index], {mode: action.payload.mode});
+      //return [
+      //  ...state.slice(0, action.payload.index),
+      //  setting,
+      //  ...state.slice(action.payload.index + 1)
+      //  ];
+    case SETTINGS_ADD:
+      return state.concat([action.payload.setting]);
+    case SETTINGS_REMOVE:
+      if (!isNumber(action.payload.index)) {
+        throw new Error('Index must be either positive integer or -1.');
+      }
+
+      return action.payload.index === -1 ? [] : removeAt(state, action.payload.index);
+    case SETTINGS_UPDATE:
+      return insertAt(
+        state,
+        action.payload.index,
+        settingUpdate(state[action.payload.index], action)
+      );
+    case SETTINGS_UPDATE_PARAMS:
+      let params = Object.assign({}, state[action.payload.index].params);
+      params[action.payload.mode] = action.payload.params;
+
+      return insertAt(
+        state,
+        action.payload.index,
+        Object.assign({}, state[action.payload.index], {params: params})
+      );
+    case SETTINGS_TOGGLE_VISIBLE:
+      return insertAt(
+        state,
+        action.payload.index,
+        settingVisibility(state[action.payload.index], action)
+      );
+    default:
+      return state;
   }
 }
 

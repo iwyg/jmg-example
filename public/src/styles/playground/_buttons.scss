@@ -1,8 +1,29 @@
 button {
-  &.icon-button {
+  &.icon-button, &.icon {
     svg {
       height: $icon_height;
       width: auto;
     }
+  }
+
+  &.icon {
+    padding: 0;
+    outline: none;
+    border: 0;
+    height: $icon_height;
+    min-width: $icon_width;
+    background-color: transparent;
+    display: inline-block;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    //.icon {
+    //  height: 100%;
+    //  width: 100%;
+    //  svg {
+    //    height: 100%;
+    //    width: 100%;
+    //  }
+    //}
   }
 }

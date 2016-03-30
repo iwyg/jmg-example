@@ -1,12 +1,17 @@
 import ReactDOM from 'react-dom';
 import React, {PropTypes} from 'react';
-import {className} from 'lib/react-helper';
+import {className, callIfFunc} from 'lib/react-helper';
 import {Button, IconButton} from 'react-toolbox';
 import Tooltip from 'react-toolbox/lib/tooltip';
 import {isFunc, isObject} from 'lib/assert';
-import {IconSettings, IconCheck, IconAdd, IconJmg, Icon} from './Icons';
+import {
+  IconSettings, IconCheck, IconAdd, IconJmg, Icon,
+  IconAddCirc, IconRemoveCirc,
+  TooltipIcon
+} from './Icons';
 import {Settings} from './Settings';
 import {ButtonAdd} from './Buttons';
+import Overflow from './Overflow';
 import {connect} from 'react-redux';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 import ReactIScroll from 'react-iscroll';
@@ -63,7 +68,7 @@ class PanelContent extends React.Component {
   static defaultProps = {
     style: {},
     options: {
-      preventDefault: true,
+      preventDefault: false,
       bounce: true,
       scrollbars: true,
       fadeScrollbars: false,
@@ -74,24 +79,23 @@ class PanelContent extends React.Component {
     }
   }
 
-  state = {
-    height: 'auto'
-  }
-
   onChange() {
-    let {onChange} = this.props;
-    isFunc(onChange) && onChange(
-      ReactDOM.findDOMNode(this.refs.content),
-      this.refs.container.getIScroll()
-    );
+		if (!isFunc(this.props.onChange)) {
+      return;
+    }
+
+    let promise = new Promise((resolve, reject) => {
+      this.props.onChange(ReactDOM.findDOMNode(this.refs.content), resolve, reject);
+    });
+
+    promise.then(() => {
+      this.refs.container.getIScroll().refresh();
+    }).catch((err) => {
+    });
   }
 
   onScrollRefresh = (scroller) => {
     this.onChange();
-  }
-
-  onScroll = (scroller) => {
-    console.log(scroller);
   }
 
   componentDidUpdate(prevProps) {
@@ -100,6 +104,7 @@ class PanelContent extends React.Component {
 
   render() {
     let {children, options, ...props} = this.props;
+
     return (
       <ReactIScroll className={className('panel-content', props)} ref='container' iScroll={iScroll}
         onScroll={this.onScroll}
@@ -143,20 +148,20 @@ export class Panel extends React.Component {
     return isObject(this.props.image) && 0 < Object.keys(this.props.image).length;
   }
 
-  handleContentChange = (content, scroller) => {
+  handleContentChange = (content, resolve, reject) => {
     let {height} = this.refs.container.getBoundingClientRect();
     let styleHeight = content.getBoundingClientRect().height > height ? '100%' : null;
 
     if (styleHeight === this.state.height) {
+      reject();
       return;
     }
 
     this.setState({height: styleHeight});
 
     setTimeout(() => {
-      console.log('update', scroller);
-      scroller.refresh();
-    }, 250);
+      resolve();
+    }, 100);
   }
 
   addSettings = () => {
@@ -230,11 +235,15 @@ export class Panel extends React.Component {
   renderButtons() {
     let className = this.props.selecting ? 'select-image selecting' : 'select-image';
     let selectImage = (
-      <ButtonAdd className={className} onClick={this.selectImage} />
+      <TooltipIcon className={className} tooltip='Select image' button={true} onClick={this.selectImage}>
+        <Icon><IconAddCirc></IconAddCirc></Icon>
+      </TooltipIcon>
     );
 
     let trash = this.state.selected ? (
-      <Button onClick={this.trashAll}>na</Button>
+      <TooltipIcon className='cancel-all' tooltip='Cancel all' button={true} onClick={this.trashAll}>
+        <Icon><IconRemoveCirc></IconRemoveCirc></Icon>
+      </TooltipIcon>
     ) : null;
 
     //<IconSettings/><IconAdd/>
@@ -242,10 +251,12 @@ export class Panel extends React.Component {
     return (
       <div className='buttons'>
         <Icon className='icon-logo'>
-          <IconJmg/>
+          <IconJmg></IconJmg>
         </Icon>
-        {trash}
-        {selectImage}
+        <div className='ctrls'>
+          {trash}
+          {selectImage}
+        </div>
       </div>
     );
   }

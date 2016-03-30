@@ -1,6 +1,6 @@
 import React from 'react';
 import Tooltip from 'react-toolbox/lib/tooltip';
-import {className} from 'lib/react-helper';
+import {className, classNames} from 'lib/react-helper';
 
 // icons for grid layouts
 export const IconLayoutMasonry = require('icons/ic_dashboard_black_48px.svg');
@@ -35,9 +35,10 @@ export const IconMoreHr        = require('icons/ic_more_horiz_black_48px.svg');
 
 export const IconJmg           = require('icons/jmg.svg');
 
-export const Icon = ({children, ...props}) => {
+export const Icon = ({children, button, ...props}) => {
   let cName = className('icon', props);
-  return (<span {...props} className={cName}>{children}</span>);
+  let El = button === true ? 'button' : 'span';
+  return (<El {...props} className={classNames(cName, {button: button})}>{children}</El>);
 };
 
 export const TooltipIcon = Tooltip(Icon);

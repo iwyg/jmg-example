@@ -104,17 +104,19 @@ export const fetchImageSucceeded = (payload = {image: null}) => {
 /* errors */
 
 export const fetchImagesFailed = (msg = 'fetching result failed.') => {
+  msg = msg instanceof Error ? msg : new Error(msg);
   return {
     type: QUERY_ALL_RESULT_ERROR,
-    payload: msg instanceof Error ? msg : new Error(msg),
+    payload: {msg},
     error: true
   };
 };
 
 export const fetchImageFailed = (msg = 'fetching result failed.') => {
+  msg = msg instanceof Error ? msg : new Error(msg);
   return {
     type: QUERY_IMAGE_RESULT_ERROR,
-    payload: msg instanceof Error ? msg : new Error(msg),
+    payload: {msg},
     error: true
   };
 };
@@ -134,7 +136,10 @@ const doFetchAssets = (parse, actionFetch, actionSuccess, actionError) => {
       }).then((json) => {
         let res = parse(json);
         return dispatch(actionSuccess(res));
-      }).catch(err => dispatch(actionError));
+      }).catch((err) => {
+        dispatch(actionError(err))
+        return err;
+      });
     };
   }
 };

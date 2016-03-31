@@ -75,9 +75,13 @@ class ImageRepository
             throw new NoResultException(sprintf('Path %s not found.', $path));
         }
 
-        $result = array_map(function ($file) use ($params, $prefix, $q) {
-            return $this->generator->fromParams($file, $params, $prefix, $q);
-        }, $this->glob($path, $limit));
+        try {
+            $result = array_map(function ($file) use ($params, $prefix, $q) {
+                return $this->generator->fromParams($file, $params, $prefix, $q);
+            }, $this->glob($path, $limit));
+        } catch (\UnexpectedValueException $e) {
+            throw new NoResultException('Error retreiving images.', $e->getCode(), $e);
+        }
 
         if (empty($result)) {
             throw new NoResultException('No result found.');

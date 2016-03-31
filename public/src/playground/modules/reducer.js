@@ -55,6 +55,7 @@ export const fetchingImages  = (state = false, action) => {
     case QUERY_ALL_RESULT_REQUEST:
       let {fetching} = action.payload;
       return fetching;
+    case QUERY_ALL_RESULT_ERROR:
     case QUERY_ALL_RESULT_SUCCESS:
       return false;
   }
@@ -67,6 +68,7 @@ export const fetchingImage  = (state = false, action) => {
     case QUERY_IMAGE_RESULT_REQUEST:
       let {fetching} = action.payload;
       return fetching;
+    case QUERY_IMAGE_RESULT_ERROR:
     case QUERY_IMAGE_RESULT_SUCCESS:
       return false;
     default:
@@ -82,6 +84,7 @@ export const images  = (state = [], action) => {
       let {images} = action.payload;
       return images;
   }
+
   return state;
 };
 
@@ -94,16 +97,22 @@ export const image  = (state = null, action) => {
   return state;
 };
 
-export const fetchError = (state = {error: false, msg: null}, action) => {
+const defaultErr = {error: false, msg: null};
+
+export const fetchError = (state = defaultErr , action) => {
   switch (action.type) {
+    case QUERY_ALL_RESULT_SUCCESS:
+    case QUERY_IMAGE_RESULT_SUCCESS:
+        return defaultErr;
     case QUERY_ALL_RESULT_ERROR:
     case QUERY_IMAGE_RESULT_ERROR:
       let {error} = action;
       let {msg} = action.payload;
       return {error, msg};
+    default:
+      return state;
   }
 
-  return state;
 };
 
 export const gridVisible = (state = false, action) => {

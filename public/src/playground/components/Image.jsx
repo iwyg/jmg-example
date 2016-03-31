@@ -28,6 +28,11 @@ export default class Figure extends React.Component {
 
   onLoad(src, promise) {
     promise.then(this.onLoaded);
+
+    if (isFunc(this.props.onLoad)) {
+      this.props.onLoad(src, promise);
+    }
+
     this.setState({loaded: false});
   }
 
@@ -66,6 +71,20 @@ Figure.defaultProps = {
  * class Image
  */
 export class Image extends React.Component {
+
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    loadingClass: PropTypes.string,
+    loadedClass: PropTypes.string,
+    onLoad: PropTypes.func,
+    onLoaded: PropTypes.func
+  }
+
+  static defaultProps = {
+    loadingClass: 'loading',
+    loadedClass: 'loaded',
+  }
+
   constructor(props) {
     super(props);
     this.className = null;
@@ -83,6 +102,7 @@ export class Image extends React.Component {
 
   load(src) {
     let {onLoad} = this.props;
+
     let promise = loadImage(src);
     isFunc(onLoad) && onLoad(src, promise);
 
@@ -129,16 +149,3 @@ export class Image extends React.Component {
     );
   }
 }
-
-Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  loadingClass: PropTypes.string,
-  loadedClass: PropTypes.string,
-  onLoad: PropTypes.func,
-  onLoaded: PropTypes.func
-};
-
-Image.defaultProps = {
-  loadingClass: 'loading',
-  loadedClass: 'loaded',
-};

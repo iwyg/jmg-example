@@ -22,7 +22,17 @@ use DOMDocument;
  */
 interface ProcessorInterface
 {
+    /**
+     * Takes a parsed html string.
+     *
+     * @param string $parsed
+     *
+     * @return void
+     */
     public function load($parsed);
 
+    /**
+     * @return string
+     */
     public function process();
 }

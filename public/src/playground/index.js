@@ -39,3 +39,9 @@ ObjectFit.polyfill({
   fittype: 'contain',
   disableCrossdomain: true
 });
+
+console.log('%c' + document.title, 'background:#90a4ae;color:white;font-weight: bold;padding:2px 4px');
+
+if (ENV !== PRODUCTION) {
+  console.log('%crunning in ', 'color:lime', ENV);
+}

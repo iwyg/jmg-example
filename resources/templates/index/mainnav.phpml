@@ -1,6 +1,6 @@
 <div class="clm clm__2 force">
   <nav>
-    <ul>
+    <ul role="navigation">
       <li><a class="link int" href="#about">About</a></li>
       <li><a class="link int" href="#features">Features</a></li>
       <li><a class="link int" href="#contribute">Contribute</a></li>
@@ -10,7 +10,7 @@
 
 <div class="clm clm__2 force">
   <nav>
-    <ul class="right">
+    <ul role="navigation" class="right">
       <li><a class="link ext" target="_blanc" href="https://github.com/iwyg/jmg"
             title="jmg on GitHub">
           <span class="icon github"><?php $view->func('icon', 'link')?></span>

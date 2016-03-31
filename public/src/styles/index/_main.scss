@@ -367,6 +367,7 @@ nav {
   h1, h2, h3  {
     @include fontLight();
     text-transform: uppercase;
+    color: color('black');
   }
 }
 
@@ -374,30 +375,30 @@ nav {
   color: color('white');
 }
 
-#features {
-  background-color: color('blue');
-  color: color('white');
-  p {
-    a {
-      color: color('green');
-      font-weight: 400;
-    }
-  }
-
-  .link {
-    .icon {
-      svg {
-        fill: lighten(color('white'), 20);
-      }
-    }
-  }
-
-  a {
-    &:visited {
-      color: color('green');
-    }
-  }
-}
+//#features {
+//  background-color: color('blue');
+//  color: color('white');
+//  p {
+//    a {
+//      color: color('green');
+//      font-weight: 400;
+//    }
+//  }
+//
+//  .link {
+//    .icon {
+//      svg {
+//        fill: lighten(color('white'), 20);
+//      }
+//    }
+//  }
+//
+//  a {
+//    &:visited {
+//      color: color('green');
+//    }
+//  }
+//}
 
 
 .row {

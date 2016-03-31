@@ -20,5 +20,12 @@ namespace App\Markdown\Adapter;
  */
 interface AdapterInterface
 {
+    /**
+     * Parses a markdown string.
+     *
+     * @param string $markdown
+     *
+     * @return string
+     */
     public function parse($markdown);
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0376d0c85c86cbe9882a5a6ebfc1dad8",
+    "hash": "83c8752b8a13006482db1165f35205b0",
     "content-hash": "d15138141f1473aedff3c42a0f11b0c4",
     "packages": [
         {
@@ -240,12 +240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/resource.git",
-                "reference": "37fc771402231c2bd8d3381798b374305fb1a096"
+                "reference": "9f5c617b46f15db88ce5249f911fd282bd75bfd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/resource/zipball/37fc771402231c2bd8d3381798b374305fb1a096",
-                "reference": "37fc771402231c2bd8d3381798b374305fb1a096",
+                "url": "https://api.github.com/repos/lucidphp/resource/zipball/9f5c617b46f15db88ce5249f911fd282bd75bfd1",
+                "reference": "9f5c617b46f15db88ce5249f911fd282bd75bfd1",
                 "shasum": ""
             },
             "require-dev": {
@@ -272,7 +272,7 @@
                 "loading",
                 "locator"
             ],
-            "time": "2016-03-17 08:07:05"
+            "time": "2016-03-30 15:23:36"
         },
         {
             "name": "lucid/signal",
@@ -1310,12 +1310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6572c14ed74aa0eb2879fea073b62dd17a7b62d0"
+                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6572c14ed74aa0eb2879fea073b62dd17a7b62d0",
-                "reference": "6572c14ed74aa0eb2879fea073b62dd17a7b62d0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
+                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
                 "shasum": ""
             },
             "require": {
@@ -1377,7 +1377,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-03-15 06:01:32"
+            "time": "2016-03-23 10:10:18"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1385,12 +1385,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da"
+                "reference": "7b18bbdad9880e09740959e90eec4b91c35a4aa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
-                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/7b18bbdad9880e09740959e90eec4b91c35a4aa9",
+                "reference": "7b18bbdad9880e09740959e90eec4b91c35a4aa9",
                 "shasum": ""
             },
             "require": {
@@ -1433,7 +1433,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-03-09 13:33:49"
+            "time": "2016-03-24 06:24:17"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1954,12 +1954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "38aebd1045f91caaf25db0164e2703b21fb5359d"
+                "reference": "407e31ad9742ace5c3d01642f02a3b2e6062bae5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/38aebd1045f91caaf25db0164e2703b21fb5359d",
-                "reference": "38aebd1045f91caaf25db0164e2703b21fb5359d",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/407e31ad9742ace5c3d01642f02a3b2e6062bae5",
+                "reference": "407e31ad9742ace5c3d01642f02a3b2e6062bae5",
                 "shasum": ""
             },
             "require": {
@@ -1995,7 +1995,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-10 14:06:18"
+            "time": "2016-03-30 14:44:34"
         }
     ],
     "aliases": [],

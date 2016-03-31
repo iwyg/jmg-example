@@ -37,7 +37,7 @@ class Cebe implements AdapterInterface
     public function __construct(Parser $parser, ProcessorInterface $proc = null)
     {
         $this->parser = $parser;
-        $this->proc = $proc;
+        $this->proc   = $proc;
     }
 
     /**
@@ -47,11 +47,12 @@ class Cebe implements AdapterInterface
     {
         $parsed =  $this->parser->parse($markdown);
 
-        if (null !== $this->proc) {
-            $this->proc->load($parsed);
-            return $this->proc->process();
+        if (null === $this->proc) {
+            return $parsed;
         }
 
-        return $parsed;
+        $this->proc->load($parsed);
+
+        return $this->proc->process();
     }
 }

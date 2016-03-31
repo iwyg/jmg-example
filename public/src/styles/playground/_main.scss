@@ -64,11 +64,13 @@ ul {
 @import "slider";
 @import "gravity-select";
 
-.snackbar {
-  z-index: 100000;
-}
-
 @import "icons";
 @import "buttons";
 @import "panel";
 @import "tabs";
+
+div[data-react-toolbox] {
+  & > * {
+    z-index: 10000;
+  }
+}

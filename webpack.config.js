@@ -2,8 +2,6 @@ var path              = require('path');
 var webpack           = require('webpack');
 
 var process           = require('process');
-var env               = process.env.NODE_ENV || 'development';
-
 var autoprefixer      = require('autoprefixer');
 var precss            = require('precss');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -147,10 +145,10 @@ module.exports = {
     new ExtractTextPlugin('css/[name].css', {allChunks: true}),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
-    ])
-    //new webpack.DefinePlugin({
-		//	'process.env.NODE_ENV': '"'+env+'"'
-		//})
+    ]),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"'+process.env.NODE_ENV || 'development'+'"'
+    })
     //new webpack.DefinePlugin({
     //  'process.env.NODE_ENV': JSON.stringify('development')
     //})

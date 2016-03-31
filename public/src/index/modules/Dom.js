@@ -10,7 +10,8 @@ export const selectAll = (selector) => {
 };
 
 export const addClass = (el, className) => {
-  el.className = el.className.split(' ').concat(className.split(' ')).join(' ').trim();
+  let classNames = el.className.split(' ');
+  el.className = classNames.concat(className.split(' ').filter(n => classNames.indexOf(n) < 0)).join(' ').trim();
 };
 
 export const removeClass = (el, className) => {

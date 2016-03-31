@@ -25,8 +25,14 @@ use Lucid\Template\Extension\AbstractExtension;
  */
 class UtilsExtension extends AbstractExtension
 {
+    /** @var arry */
     private $icons;
 
+    /**
+     * Constructor.
+     *
+     * @param array $icons
+     */
     public function __construct(array $icons = [])
     {
         $this->icons = $icons;

@@ -1,13 +1,15 @@
 import debounce from 'lodash.debounce';
 import React, {PropTypes} from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 import ReactDOM from 'react-dom';
 import Masonry from 'react-masonry-component';
 import Figure from './Image';
 import {ButtonAdd} from './Buttons';
 import {className} from 'lib/react-helper';
+import isEqual from 'lodash.isEqual';
 import {isFunc, isObject} from 'lib/assert';
 import {CONTEXT} from 'runtime/constants';
-import {callIfFunc} from 'lib/react-helper';
+import {callIfFunc, classNames} from 'lib/react-helper';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 
 const RESIZE = 'resize';
@@ -37,6 +39,7 @@ export default class Grid extends React.Component {
 	state = {
 		loaded: false,
 		loadingImages: false,
+		layoutComplete: false,
 		imagesLoaded: 0,
 		maxWidth: null,
 		layout: null,
@@ -62,11 +65,12 @@ export default class Grid extends React.Component {
     });
 
     if (!this.state.loadingImages) {
-      this.setState({loadingImages: true});
+      //this.setState({loadingImages: true});
     }
   }
 
   onImageLoaded = (loaded, image) => {
+
     this.setState({imagesLoaded: this.loading});
 
     if (this.loading !== this.props.images.length) {
@@ -124,6 +128,20 @@ export default class Grid extends React.Component {
     }
   }
 
+  onSelect = (...args) => {
+    callIfFunc(this.props.onSelect, null, ...args);
+  }
+
+  onLayoutRequested = (nodes) => {
+    this.setState({layoutComplete: false});
+  }
+
+  onLayoutRendered = (nodes) => {
+    if (!this.state.layoutComplete) {
+      this.setState({layoutComplete: true});
+    }
+  }
+
   componentDidMount() {
     this.domNode = ReactDOM.findDOMNode(this);
     setTimeout(() => {
@@ -143,11 +161,19 @@ export default class Grid extends React.Component {
     let baseClass = 'grid';
   }
 
+  isLoading() {
+    return this.props.loading || this.state.loadingImages || !this.state.layoutComplete;
+  }
+
+  getClassName() {
+    return classNames('grid-wrap', {visible: this.props.visible, loading: this.isLoading()});
+  }
+
   // render empty ref for max width calculation
-  renderEmpty(gridClass, progress) {
+  renderEmpty() {
     return (
-      <div className={gridClass}>
-        {progress}
+      <div className={this.getClassName()}>
+        {this.renderProgress()}
         <div className='grid'>
           <div className='grid-item' ref='figure0'></div>
         </div>
@@ -163,14 +189,14 @@ export default class Grid extends React.Component {
   renderItem(image, key, keys, refStr, props) {
     return (
       <GridItem ref={refStr + key} refPrefix={refStr} image={image} onLoad={this.onImageLoad} onLoaded={this.onImageLoaded}
-        onClick={this.props.onSelect} key={key} index={key} keys={keys} {...props} >
+        onClick={this.onSelect} key={key} index={key} keys={keys} {...props} >
       </GridItem>
     );
   }
 
   renderItems(props) {
-    let {captionKeys, images, ...rest} = props;
-    let refStr = 'figure'
+    const {captionKeys, images, ...rest} = props;
+    const refStr = 'figure'
 
     return images.map((image, key) => {
       return this.renderItem(image, key, captionKeys, refStr, rest);
@@ -183,17 +209,25 @@ export default class Grid extends React.Component {
     }
 
 		return (
-			<GridLayout className='grid' layout={layout} {...props}>{items}</GridLayout>
+      <GridLayout
+        onLayoutStart={this.onLayoutRequested}
+        onLayoutComplete={this.onLayoutRendered}
+        className='grid' layout={layout} {...props}>{items}</GridLayout>
 		);
   }
 
-  getProgress() {
-    let props = this.state.loadingImages && this.loading > 0 ? {
+  renderProgress() {
+    if (!this.isLoading()) {
+      return null;
+    }
+
+    const props = this.loading > 0 ? {
       mode: 'determinate', value: (100 / Math.max(1, this.props.images.length)) * this.loading
     } : {mode: 'indeterminate'};
 
     return (<ProgressBar id="gsp" className='spinner loading' type='circular' {...props}/>);
   }
+
 
   /**
    * Render the grid.
@@ -201,23 +235,16 @@ export default class Grid extends React.Component {
    * @return ReactElement
    */
   render() {
-    let gridClass = className('grid-wrap', {className: this.props.visible ? 'visible' : undefined});
-    let progress = null;
-
-    if (this.props.loading || this.state.loadingImages) {
-      gridClass += ' loading';
-      progress = this.getProgress();
-    }
 
     if (!this.state.loaded) {
-      return this.renderEmpty(gridClass, progress);
+      return this.renderEmpty();
     }
 
-    let {layout, ...props} = this.props;
+    const {layout, ...props} = this.props;
 
     return (
-      <div className={gridClass}>
-        {progress}
+      <div className={this.getClassName()}>
+        {this.renderProgress()}
         {this.renderLayout(layout, this.renderItems(props), props)}
       </div>
     );
@@ -245,24 +272,28 @@ class GridItem extends React.Component {
 		loading: false
 	}
 
-  handleClick = () => {
+  onClick = () => {
     let {onClick, image} = this.props;
     callIfFunc(onClick, null, image, this.refs.figure);
   }
 
+  getChildren() {
+    return this.props.children;
+  }
+
   render() {
-    let {image, refPrefix, index, keys, ...rest} = this.props;
+    const {image, refPrefix, index, keys, ...rest} = this.props;
 
     return (
       <div className='grid-item'>
         <Figure src={image.uri} ref='figure' width={image.width} height={image.height} {...rest}>
           <div className='buttons'>
-            <ButtonAdd onClick={this.handleClick}></ButtonAdd>
+            <ButtonAdd onClick={this.onClick}></ButtonAdd>
           </div>
           <div className='info'>
             {keys.map((key, i) => (<p className={key} key={i}><label>{key + ':'}</label>{image[key]}</p>))}
           </div>
-          {this.props.children}
+          {this.getChildren()}
         </Figure>
       </div>
     );
@@ -277,7 +308,9 @@ class GridLayout extends React.Component {
   static propTypes = {
 		masonry: PropTypes.object,
     layout: PropTypes.oneOf(['default', 'masonry']).isRequired,
-    children: PropTypes.any.isRequired
+    children: PropTypes.any.isRequired,
+    onLayoutComplete: PropTypes.func,
+    onLayoutStart: PropTypes.func
   }
 
   static defaultProps = {
@@ -295,33 +328,45 @@ class GridLayout extends React.Component {
 	bindMasonry = (ref) => {
     if (isObject(ref) && isObject(ref.masonry)) {
       if (ref.masonry === this.masonry) {
-        this.masonry.off('layoutComplete', this.handleLayoutComplete);
+        this.masonry.off('layoutComplete', this.layoutComplete);
         return;
       }
       this.masonry = ref.masonry;
-      this.masonry.on('layoutComplete', this.handleLayoutComplete);
+      this.masonry.on('layoutComplete', this.onLayoutComplete);
     } else {
       this.masonry = null;
     }
 	}
 
-  handleLayoutComplete(event) {
+  onLayoutComplete = () => {
+    callIfFunc(this.props.onLayoutComplete, null, this.props.children);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.children.length !== this.props.children.length;
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.children.length === nextProps.children.length || !shallowCompare(this, nextProps, nextState)) {
+      return !isEqual(this.props.children, nextProps.children);
+    }
+
+    return true;
   }
 
 	componentWillUnmount() {
     if (this.masonry !== null) {
-      this.masonry.off('layoutComplete', this.handleLayoutComplete);
+      this.masonry.off('layoutComplete', this.onLayoutComplete);
     }
 	}
 
+	componentWillUpdate() {
+    callIfFunc(this.props.onLayoutStart, null, this.props.children);
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.masonry) {
-    	this.masonry.layout();
+    if (!this.masonry) {
+      this.onLayoutComplete();
+      return;
     }
+
+    this.masonry.layout();
 	}
 
 	renderMasonry() {

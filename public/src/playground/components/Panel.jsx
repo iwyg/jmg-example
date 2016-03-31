@@ -68,7 +68,8 @@ class PanelContent extends React.Component {
   static defaultProps = {
     style: {},
     options: {
-      preventDefault: false,
+      eventPassthrough: 'horizontal',
+      preventDefault: true,
       bounce: true,
       scrollbars: true,
       fadeScrollbars: false,
@@ -157,7 +158,9 @@ export class Panel extends React.Component {
       return;
     }
 
-    this.setState({height: styleHeight});
+    console.log('set state', this.setState({height: styleHeight}, (...args) => {
+      console.log(args);
+    }));
 
     setTimeout(() => {
       resolve();

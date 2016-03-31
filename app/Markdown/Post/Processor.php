@@ -11,6 +11,7 @@
 
 namespace App\Markdown\Post;
 
+use RuntimeException;
 use Lucid\Xml\Dom\DOMDocument;
 
 /**
@@ -54,7 +55,7 @@ class Processor implements ProcessorInterface
     public function process()
     {
         if (null === $this->dom) {
-            throw new \RuntimeException('No document loaded.');
+            throw new RuntimeException('No document loaded.');
         }
 
         foreach ($this->parser as $parser) {
@@ -63,6 +64,7 @@ class Processor implements ProcessorInterface
 
         $parsed = $this->dom->saveHTML($this->dom->documentElement);
         $this->dom = null;
+
         return mb_substr(trim($parsed), 5, -6);
     }
 }

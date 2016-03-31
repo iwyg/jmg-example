@@ -183,8 +183,6 @@ const inFullViewport = (el, viewPort) => {
 
   let {sy, sx} = getSensitivity(viewPort);
 
-  console.log(sy);
-
   return !el.inFullViewport && (inRange(el.props.top + (el.props.height / 2), viewPort.offsetY + (viewPort.height / 2), sy))
     || viewPort.offsetX > 0 && (inRange(el.props.left + (el.props.width / 2), viewPort.offsetX + (viewPort.width / 2), sx))
 
@@ -216,8 +214,6 @@ const updateElement = (event, element) => {
 
   if (inFullViewport(element, event.detail)) {
     element.inFullViewport = true;
-
-    console.log('INSIDE');
     element.el.dispatchEvent(new CustomEvent(EVENT_VIEWPORT, event || syntesizeEvent()));
   }
 };

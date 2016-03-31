@@ -109,6 +109,7 @@ class App extends React.Component {
   }
 
   onSelectImage(image) {
+
     let {dispatch, imageParams} = this.props;
 
     if (this.props.isSelectingImage) {

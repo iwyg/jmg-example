@@ -712,12 +712,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iwyg/jmg-psr7.git",
-                "reference": "dfeb6f4dc4ece2eee8268df1a31700aaaf19208f"
+                "reference": "09f74e3130367f50a72b6998e38b4b5749cd3e15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iwyg/jmg-psr7/zipball/dfeb6f4dc4ece2eee8268df1a31700aaaf19208f",
-                "reference": "dfeb6f4dc4ece2eee8268df1a31700aaaf19208f",
+                "url": "https://api.github.com/repos/iwyg/jmg-psr7/zipball/09f74e3130367f50a72b6998e38b4b5749cd3e15",
+                "reference": "09f74e3130367f50a72b6998e38b4b5749cd3e15",
                 "shasum": ""
             },
             "require": {
@@ -750,7 +750,7 @@
                 "image",
                 "psr7"
             ],
-            "time": "2016-02-29 17:11:27"
+            "time": "2016-04-01 06:56:38"
         },
         {
             "name": "willdurand/negotiation",
@@ -862,12 +862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
+                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/416fb8ad1d095a87f1d21bc40711843cd122fd4a",
+                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +908,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14 21:17:01"
+            "time": "2016-03-31 10:24:22"
         },
         {
             "name": "myclabs/deep-copy",

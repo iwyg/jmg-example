@@ -1,11 +1,50 @@
-## Features
+## And there's more <sup>*</sup>
 
-Jmg comes with a bunch of features including parameter chaining.
 
 ### Dynamic, per request, image processing
 
+At its core, Jmg will manipulate images by a given set of parameters. Parameters
+are defined by their mode where each mode represents a different basic task
+(mainly resizing and cropping). Parametes can also be joind by filters.
+
+Parameters may be passed as query or you may define them as placeholder
+parameter in the routing framework of your choice.
+
+### Parameter chaining
+
+In some cases you want to resize an image before cropping (or the other way around). That's where parameter chaining comes in handy as you can join multiple parameters.
+
 ### Define recipes
 
-### Use dynamic processing or recipes in your views
+Recipes are conceptual predefined parameters that will be applied to your
+images.
+
+### Filters
+
+Filters can be used to further manipulate images. They're a good place for
+performing more complex operations than resizing and cropping.
+
+Jmg ships with a few basic filters, like autorotate, grayscale, colorize, and a circle shape.
+
+### Processing constraints.
+
+It's possible to restrict the usage of dynamic processing by signing the
+generated image URL. This way processing is restricted to the
+request defined in you application.
+
+Furthermore, image dimension can be
+restricted to not exceed predefined boundaries.
+
+### Ready for your favourite templating engine
+
+Thanks to the view helper class it's easy to integrate jmg image requests in
+your templating layer of your choice.
 
 ### Caching
+
+Jmg also comes with a poweful caching layer.
+
+<div>
+<sup>* jmg is still in a pre releas state. listed features are considered stable
+and unlikley to change.</sup>
+</div>

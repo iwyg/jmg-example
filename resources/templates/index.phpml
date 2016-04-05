@@ -4,17 +4,22 @@
 <?= $view->endsection() ?>
 
 <?= $view->section('content') ?>
-<section id="fold">
-  <header id="site-header" class="site-header">
-    <div class="row">
-      <?= $view->insert('index/logo.phpml') ?>
+<header id="site-header" class="site-header">
+  <div class="main-nav row">
+    <?= $view->insert('index/mainnav.phpml') ?>
+  </div>
+</header>
+<section id="fold" class="fold">
+  <div class="hero"></div>
+  <div class="container">
+    <div class="content row">
+      <div class="clm  clm__2 center">
+        <?= $view->insert('index/logo.phpml') ?>
+        <p>Http driven just in time image manipulation library for php projects.
+        <br/>Open Source. MIT licensed.</p>
+      </div>
     </div>
-    <section class="main-nav row">
-      <?= $view->insert('index/mainnav.phpml') ?>
-    </section>
-    <div class="hero"></div>
-  </header>
-  <section class="fold">
+
     <div class="content row">
       <div class="clm  clm__2">
         <?= $view->func('markdown', 'fold_left.md') ?>
@@ -24,44 +29,59 @@
         <?= $view->func('markdown', 'fold_right.md') ?>
       </div>
     </div>
-  </section>
+  </div>
 </section>
+<div class="spacer"></div>
 <section id="about" class="container">
   <div class="content row">
-    <div class="clm  clm__2">
+    <div class="clm  clm__2 center">
       <?= $view->func('markdown', 'about_1.md') ?>
-    </div>
-    <div class="clm  clm__2">
     </div>
   </div>
 </section>
+
 <section id="features" class="container">
   <div class="content row">
+    <div class="clm  clm__2 right">
+      <?= $view->func('markdown', 'features.md') ?>
+    </div>
     <div class="clm clm__2">
       <?=$view->insert('index/chain.svg.phpml')?>
     </div>
+  </div>
+</section>
+<section id="features-example" class="container">
+  <div class="content row">
     <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_loaders.md') ?>
+    </div>
+    <div class="clm  clm__2">
+      <?= $view->func('markdown', 'features_loaders_example.md') ?>
+    </div>
+  </div>
+</section>
+<section id="features-more" class="container">
+  <div class="content row">
+    <div class="clm  clm__2 center">
       <?= $view->func('markdown', 'features_1.md') ?>
     </div>
   </div>
 
+</section>
+
+<section id="contribute" class="container">
   <div class="content row">
-    <div class="clm  clm__2">
-      <?= $view->func('markdown', 'features_2.md') ?>
+    <div class="clm  clm__2 center centered">
+      <div class="icon github-contrib">
+        <?= $view->func('icon', 'github') ?>
+      </div>
     </div>
-    <div class="clm  clm__2">
-      <?= $view->func('markdown', 'features_3.md') ?>
+    <div class="clm  clm__2 center">
+      <?= $view->func('markdown', 'contrib.md') ?>
     </div>
   </div>
 </section>
 
-<section id="contribute" class="container">
-
-</section>
-
-<section id="test" class="container">
-
-</section>
 <footer class="site-footer">
 </footer>
 <?= $view->endsection() ?>

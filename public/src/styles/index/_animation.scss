@@ -1,8 +1,13 @@
 
 #box {
-  width: 512px;
-  height: 512px;
 
+  width: 100%;
+  height: auto;
+
+  @include breakpoint($q-small) {
+    width: 512px;
+    height: 512px;
+  }
 }
 
 #box svg {
@@ -16,8 +21,9 @@
   > * {
     fill: none;
     stroke: color('white');
-    stroke-width: .2rem;
+    stroke-width: .15rem;
   }
+
   #c1, #c2, #c3 {
     stroke-dasharray: 1000;
     //stroke-dashoffset: 0;

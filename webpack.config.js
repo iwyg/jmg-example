@@ -37,6 +37,8 @@ module.exports = {
       'web_modules',
       'node_modules',
       path.resolve(__dirname, './node_modules'),
+      path.resolve(__dirname, './node_modules/prismjs'),
+      path.resolve(__dirname, './node_modules/prismjs/components'),
       path.resolve(__dirname, './public/src'),
       path.resolve(__dirname, './public/src/scss'),
       path.resolve(__dirname, './public/src/icons'),

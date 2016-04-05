@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux.git",
-                "reference": "b20b69a6227fcc4e28dea88a29e4f8a038bdd967"
+                "reference": "cc01859bb8239bcdbf1427e1174a5a5b15b9abfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux/zipball/b20b69a6227fcc4e28dea88a29e4f8a038bdd967",
-                "reference": "b20b69a6227fcc4e28dea88a29e4f8a038bdd967",
+                "url": "https://api.github.com/repos/lucidphp/mux/zipball/cc01859bb8239bcdbf1427e1174a5a5b15b9abfd",
+                "reference": "cc01859bb8239bcdbf1427e1174a5a5b15b9abfd",
                 "shasum": ""
             },
             "require": {
@@ -190,7 +190,7 @@
                 "prs7",
                 "routing"
             ],
-            "time": "2016-03-01 21:12:23"
+            "time": "2016-04-05 16:15:10"
         },
         {
             "name": "lucid/mux-cache",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux-cache.git",
-                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513"
+                "reference": "ab04bdfddc21f8696c0d5beccc246495aadde864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/ecac13f955eba1e5ca24584377cd4a33b9a61513",
-                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513",
+                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/ab04bdfddc21f8696c0d5beccc246495aadde864",
+                "reference": "ab04bdfddc21f8696c0d5beccc246495aadde864",
                 "shasum": ""
             },
             "require": {
@@ -232,7 +232,7 @@
                 }
             ],
             "description": "cache capability for lucid/mux",
-            "time": "2016-03-17 08:43:20"
+            "time": "2016-04-05 15:57:33"
         },
         {
             "name": "lucid/resource",
@@ -712,12 +712,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iwyg/jmg-psr7.git",
-                "reference": "dfeb6f4dc4ece2eee8268df1a31700aaaf19208f"
+                "reference": "486e5210e637a443206ffb55d15c9594e1d76556"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iwyg/jmg-psr7/zipball/dfeb6f4dc4ece2eee8268df1a31700aaaf19208f",
-                "reference": "dfeb6f4dc4ece2eee8268df1a31700aaaf19208f",
+                "url": "https://api.github.com/repos/iwyg/jmg-psr7/zipball/486e5210e637a443206ffb55d15c9594e1d76556",
+                "reference": "486e5210e637a443206ffb55d15c9594e1d76556",
                 "shasum": ""
             },
             "require": {
@@ -750,7 +750,7 @@
                 "image",
                 "psr7"
             ],
-            "time": "2016-02-29 17:11:27"
+            "time": "2016-04-02 14:22:29"
         },
         {
             "name": "willdurand/negotiation",
@@ -862,12 +862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
+                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/416fb8ad1d095a87f1d21bc40711843cd122fd4a",
+                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +908,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14 21:17:01"
+            "time": "2016-03-31 10:24:22"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1216,7 +1216,7 @@
         },
         {
             "name": "phpunit/php-timer",
-            "version": "dev-master",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
@@ -1310,12 +1310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5"
+                "reference": "beb7683ca88fd9901dccf296806d1e484bd00d11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
-                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/beb7683ca88fd9901dccf296806d1e484bd00d11",
+                "reference": "beb7683ca88fd9901dccf296806d1e484bd00d11",
                 "shasum": ""
             },
             "require": {
@@ -1330,7 +1330,7 @@
                 "phpunit/php-code-coverage": "^3.3.0",
                 "phpunit/php-file-iterator": "~1.4",
                 "phpunit/php-text-template": "~1.2",
-                "phpunit/php-timer": ">=1.0.6",
+                "phpunit/php-timer": "^1.0.6",
                 "phpunit/phpunit-mock-objects": "^3.1",
                 "sebastian/comparator": "~1.1",
                 "sebastian/diff": "~1.2",
@@ -1377,7 +1377,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-03-23 10:10:18"
+            "time": "2016-04-05 14:37:38"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

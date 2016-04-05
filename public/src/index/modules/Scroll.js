@@ -1,5 +1,5 @@
 import {window} from 'global';
-import {EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP} from './Events';
+import {EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP, EVENT_VIEWPORT_SCROLL} from './Events';
 
 const {CustomEvent} = window;
 const ScrollTimer = (function (element) {

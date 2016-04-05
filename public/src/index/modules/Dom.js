@@ -32,6 +32,14 @@ export const removeClass = (el, className) => {
   }
 };
 
+export const hasClass = (element, className) => {
+  return element.className.split(' ').indexOf(className) > -1;
+};
+
+export const toggleClass = (element, className) => {
+  return hasClass(element, className) ? removeClass(element, className) : addClass(element, className);
+};
+
 function Q (selector = '') {
   let el = selector.length ? Array.prototype.slice.call(selectAll(selector)) : [];
   Array.prototype.push.apply(this, el, 0);

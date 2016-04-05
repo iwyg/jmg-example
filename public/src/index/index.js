@@ -1,20 +1,22 @@
-import 'modernizr';
+import {prefixed} from 'modernizr';
 import 'styles/index';
+import 'babel-polyfill';
 import {document, window} from 'global';
 import debounce from 'lodash.debounce';
 import difference from 'lodash.difference';
-import Prism from 'prismjs';
-import {php, bash, sh} from 'prism-languages';
-import 'babel-polyfill';
 import ViewPort, {tick} from './modules/ViewPort';
 import {EVENT_VIEWPORT, EVENT_VIEWPORT_ENTER, EVENT_VIEWPORT_LEAVE,
-  EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP
+  EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP,
+  EVENT_VIEWPORT_SCROLL
 } from './modules/Events';
 
-import Q, {select, selectAll, addClass, removeClass} from './modules/Dom';
+import Q, {select, selectAll, addClass, removeClass, toggleClass} from './modules/Dom';
 import {requestAnimationFrame} from 'polyfill/animation-frame';
 import scroll from 'scroll';
 import { createHistory } from 'history';
+
+require('imports?Prism!../../../node_modules/prismjs/components/prism-bash.js');
+require('imports?Prism!../../../node_modules/prismjs/components/prism-php.js');
 
 let animateable = Q('section.container .animateable');
 let sections = Q('#fold, section.container');
@@ -27,6 +29,13 @@ const scrollTarget = (function () {
   return /Firefox/.test(navigator.userAgent) ?
   document.documentElement :
   document.body
+}());
+
+const getTopMargin = (function () {
+  const header = select('#site-header');
+  return () => {
+    return header.clientHeight
+  };
 }());
 
 const S_STACK = [];
@@ -58,12 +67,15 @@ const doScroll = debounce(function (scroller) {
 }(smon), 300);
 
 const scrollHandler = (targetId) => {
+
   let target = document.getElementById(targetId);
   if (!target) {
     return;
   }
 
-  doScroll(target.offsetTop);
+  console.log(target, getTopMargin());
+
+  doScroll(Math.max(0, target.offsetTop - getTopMargin()));
 };
 
 // wrapper for history, can lock pushes.
@@ -86,13 +98,15 @@ const handleClick = (e) => {
     hash: HASH_SPLIT + targetId
   });
 
-  S_STACK.pop().call(null);
+  //S_STACK.pop().call(null);
+  scrollHandler(targetId);
 };
 
 const handler = function (event) {
   let element = event.target;
   requestAnimationFrame(() => {
     addClass(element, 'anim-in');
+    element.removeEventListener(EVENT_VIEWPORT, handler);
   });
 };
 
@@ -101,7 +115,7 @@ animateable.get().forEach((element) => {
 });
 
 viewPort.registerElements(animateable, null, (e) => {
-  removeClass(e.target, 'anim-in');
+  //removeClass(e.target, 'anim-in');
 });
 
 viewPort.registerElements(sections, (e) => {
@@ -134,7 +148,7 @@ const historyHandler = (location) => {
 };
 
 let hstop = history.history.listen(function (location) {
-  S_STACK.push(historyHandler.bind(null, location));
+  //S_STACK.push(historyHandler.bind(null, location));
 });
 
 window.addEventListener(EVENT_VIEWPORT_SCROLL_START, (e) => {
@@ -148,6 +162,36 @@ window.addEventListener(EVENT_VIEWPORT_SCROLL_STOP, (e) => {
   if (func !== undefined) {
     func.call(null);
   }
+});
+
+(function (backdrop, container){
+
+  let height = window.innerHeight;
+  const PROP_TRANSFORM = prefixed('transform');
+
+  const updateHeight = () => {
+    height = window.innerHeight;
+  };
+
+  const transformHeader = () => {
+    const top = (height - window.pageYOffset) / 100;
+    const p = 0 - Math.min(10, (height / 100) - top);
+    const pp = p * 2.8;
+
+    backdrop.style[PROP_TRANSFORM]  = `translate3d(0, ${p}%, 0)`;
+    container.style[PROP_TRANSFORM] = `translate3d(0, ${pp}%, 0)`;
+  };
+
+  document.addEventListener(EVENT_VIEWPORT_SCROLL, transformHeader);
+  window.addEventListener('resize', updateHeight);
+
+}(select('.hero'), select('.fold > .container')));
+
+let menu = select('.main-nav');
+select('.toggle').addEventListener('click', (e) => {
+  e.preventDefault();
+
+  toggleClass(menu, 'open');
 });
 
 tick.start();

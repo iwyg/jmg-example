@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce';
 import {requestAnimationFrame, cancelAnimationFrame} from '../../polyfill/animation-frame';
 import scroll from './Scroll';
 import {EVENT_VIEWPORT, EVENT_VIEWPORT_ENTER, EVENT_VIEWPORT_LEAVE,
-  EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP
+  EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP, EVENT_VIEWPORT_SCROLL
 } from './Events';
 
 const {CustomEvent} = window;
@@ -29,6 +29,7 @@ const loop = (function () {
   const _loop = () => {
     currentFrame = requestAnimationFrame(() => {
       updateViewPort();
+      document.dispatchEvent(new CustomEvent(EVENT_VIEWPORT_SCROLL));
       _loop()
     });
   };

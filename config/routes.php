@@ -7,6 +7,21 @@ return [
         'handler' => 'ctrl.index'
     ],
 
+    'docs' => [
+        'pattern' => '/docs/{version?}{any?}',
+        'methods' => ['GET'],
+        'handler' => 'ctrl.docs',
+        'defaults' => [
+            'version' => 'v0.0.1',
+            'any' => 'index'
+        ],
+
+        'requirements' => [
+            'version' => 'v(\d++\.?){1,3}/?',
+            'any' => '[^//++].*'
+        ],
+    ],
+
     'playground' => [
         'pattern' => '/playground',
         'methods' => ['GET'],
@@ -33,7 +48,6 @@ return [
                 'handler' => 'ctrl.api@handleErr',
             ]
         ]
-
     ],
 
     'media.recipes' => [

@@ -10,7 +10,10 @@ return [
         'icons' => [
             'link'    => '../../public/src/icons/ic_link_black_48px.svg',
             'install' => '../../public/src/icons/ic_system_update_alt_black_48px.svg',
-            'grid'    => '../../public/src/icons/ic_dashboard_black_48px.svg'
+            'grid'    => '../../public/src/icons/ic_dashboard_black_48px.svg',
+            'menu'    => '../../public/src/icons/ic_menu_black_48px.svg',
+            'more'    => '../../public/src/icons/ic_more_vert_black_48px.svg',
+            'github'  => '../../public/src/icons/github-round.svg'
         ]
     ],
 

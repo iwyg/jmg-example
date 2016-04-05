@@ -4,8 +4,13 @@ code, tt {
   margin: 0 2px;
   padding: 0 5px;
   white-space: nowrap;
-  background-color: color('black');
+  background-color: transparent;
   font-weight: normal;
+  display: inline-block;
+  max-width: 100%;
+  overflow: auto;
+  overflow-wrap: word-wrap;
+  vertical-align: bottom;
 }
 
 pre code {
@@ -14,6 +19,7 @@ pre code {
   white-space: pre;
   border: none;
   background: transparent;
+  //background-color: color('black');
 }
 
 .highlight pre {
@@ -21,7 +27,7 @@ pre code {
 }
 
 pre {
-	background: color('black');
+	//background: color('black');
   overflow: auto;
 	padding: 2em 3.2rem;
 }
@@ -59,7 +65,7 @@ pre[class*="language-"] {
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-	background: color('black');
+	border: 1px solid color('blue');
 }
 
 /* Inline code */

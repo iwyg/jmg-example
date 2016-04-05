@@ -1,15 +1,12 @@
-<div class="clm clm__2 force">
+<div class="clm .nav">
   <nav>
+    <?= $view->insert('index/logo.phpml') ?>
     <ul role="navigation">
-      <li><a class="link int" href="#about">About</a></li>
-      <li><a class="link int" href="#features">Features</a></li>
-      <li><a class="link int" href="#contribute">Contribute</a></li>
+      <li><a class="link int" href="/#about">About</a></li>
+      <li><a class="link int" href="/#features">Features</a></li>
+      <li><a class="link int" href="/#contribute">Contribute</a></li>
+      <li><a class="link" href="/docs">Docs</a></li>
     </ul>
-  </nav>
-</div>
-
-<div class="clm clm__2 force">
-  <nav>
     <ul role="navigation" class="right">
       <li><a class="link ext" target="_blanc" href="https://github.com/iwyg/jmg"
             title="jmg on GitHub">
@@ -27,5 +24,8 @@
           <span class="text">Install</span>
       </a></li>
     </ul>
+    <div class="toggle">
+      <?php $view->func('icon', 'menu')?>
+    </div>
   </nav>
 </div>

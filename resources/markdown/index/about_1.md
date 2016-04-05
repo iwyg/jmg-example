@@ -1,4 +1,10 @@
-## I don't know what to do
+## Image manipulation on the fly
 
-Jmg is the next iteration of JitImage, with a decoupled image engine. The core
-concepts stayed the same: Handle image manipulation per request.
+Jmg is a versatile, highly adaptable php library for handling http driven just in time image manipulation and a perfect fit for your next PHP project <sup>*</sup>.
+
+It supports Imagemagick, Imagick and, GD out of the box - or just write your own
+driver implementation.
+
+<div>
+    <sup>* requires PHP 5.6 or greater.</sup>
+</div>

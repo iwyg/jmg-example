@@ -28,7 +28,7 @@ p {
 
 h1, h2, h3, h4, h5, h6 {
   padding: 0;
-  margin: 0;
+  //margin: 0;
 }
 
 %content {
@@ -91,7 +91,7 @@ strong {
   line-height: 1.8;
 
   p {
-    margin: 0 0 2rem 0;
+    //margin: 1.2rem 0 2.8rem 0;
   }
 
   &.row {
@@ -140,6 +140,7 @@ strong {
   }
 
   .link {
+    color: color('white');
 
     display: block;
     .icon {
@@ -249,7 +250,7 @@ p {
     }
     .icon {
       padding: 0 .2rem;
-      height: 2.4rem;
+      height: 2.6rem;
       svg {
         fill: color('white');
       }
@@ -492,7 +493,7 @@ nav {
 .content {
   h1, h2, h3, h4, h5, h6  {
     color: color('blue');
-    text-transform: uppercase;
+    text-transform: capitalize;
   }
 
   h1  {
@@ -508,5 +509,72 @@ nav {
   padding-bottom: 2.6rem;
 }
 
-#about {
+#features, #features-more {
+  color: color('white');
+}
+#features {
+  background-color: color('red');
+  h1, h2, h3, h4, h5, h6  {
+    color: color('white');
+  }
+}
+#features-more {
+  background-color: color('blue');
+  h1, h2, h3, h4, h5, h6  {
+    color: color('white');
+  }
+}
+
+#contribute {
+  //color: color('red');
+  //h1, h2, h3, h4, h5, h6  {
+  //  color: color('red');
+  //}
+}
+
+.content {
+  p {
+    //font-weight: 500;
+    //color: lighten(color('black'), 20);
+  }
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  &::before {
+    content: ' ';
+    display: block;
+    width: 100vw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -50vw;
+    background-color: #fff;
+    z-index: -1;
+  }
+}
+
+p + sup, p + sub, div > sub,  div > sup {
+  display: inline-block;
+  padding-top: 3.6rem;
+}
+
+.centered {
+  text-align: center;
+  & > * {
+    display: inline-block;
+  }
+}
+
+.icon {
+  &.github-contrib {
+    width: 6.4rem;
+    height: 6.4rem;
+
+    svg {
+      fill: color('blue');
+    }
+  }
 }

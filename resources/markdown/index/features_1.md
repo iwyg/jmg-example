@@ -1,3 +1,6 @@
+## And there's more <sup>*</sup>
+
+
 ### Dynamic, per request, image processing
 
 At its core, Jmg will manipulate images by a given set of parameters. Parameters
@@ -32,11 +35,16 @@ request defined in you application.
 Furthermore, image dimension can be
 restricted to not exceed predefined boundaries.
 
-### Use dynamic processing or recipes in your views
+### Ready for your favourite templating engine
 
-Jmg comes with a helper class that makes it easy to integrate image request in
-your template layer.
+Thanks to the view helper class it's easy to integrate jmg image requests in
+your templating layer of your choice.
 
 ### Caching
 
-Jmg can cache processed images for better performance.
+Jmg also comes with a poweful caching layer.
+
+<div>
+<sup>* jmg is still in a pre releas state. listed features are considered stable
+and unlikley to change.</sup>
+</div>

@@ -1,0 +1,19 @@
+<?= $view->extend('main.php') ?>
+<?= $view->section('head')?>
+<link href="/dist/css/index.css" rel="stylesheet"/>
+<?= $view->endsection() ?>
+
+<?= $view->section('content') ?>
+<header id="site-header" class="site-header">
+  <div class="main-nav row">
+    <?= $view->insert('index/mainnav.phpml') ?>
+  </div>
+</header>
+<section class="container">
+    <div class="content row">
+        <div class="clm  clm__2 center">
+            <h1>Coming soon</h1>
+        </div>
+    </div>
+</section>
+<?= $view->endsection() ?>

@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux.git",
-                "reference": "b20b69a6227fcc4e28dea88a29e4f8a038bdd967"
+                "reference": "cc01859bb8239bcdbf1427e1174a5a5b15b9abfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux/zipball/b20b69a6227fcc4e28dea88a29e4f8a038bdd967",
-                "reference": "b20b69a6227fcc4e28dea88a29e4f8a038bdd967",
+                "url": "https://api.github.com/repos/lucidphp/mux/zipball/cc01859bb8239bcdbf1427e1174a5a5b15b9abfd",
+                "reference": "cc01859bb8239bcdbf1427e1174a5a5b15b9abfd",
                 "shasum": ""
             },
             "require": {
@@ -190,7 +190,7 @@
                 "prs7",
                 "routing"
             ],
-            "time": "2016-03-01 21:12:23"
+            "time": "2016-04-05 16:15:10"
         },
         {
             "name": "lucid/mux-cache",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucidphp/mux-cache.git",
-                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513"
+                "reference": "ab04bdfddc21f8696c0d5beccc246495aadde864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/ecac13f955eba1e5ca24584377cd4a33b9a61513",
-                "reference": "ecac13f955eba1e5ca24584377cd4a33b9a61513",
+                "url": "https://api.github.com/repos/lucidphp/mux-cache/zipball/ab04bdfddc21f8696c0d5beccc246495aadde864",
+                "reference": "ab04bdfddc21f8696c0d5beccc246495aadde864",
                 "shasum": ""
             },
             "require": {
@@ -232,7 +232,7 @@
                 }
             ],
             "description": "cache capability for lucid/mux",
-            "time": "2016-03-17 08:43:20"
+            "time": "2016-04-05 15:57:33"
         },
         {
             "name": "lucid/resource",
@@ -1310,12 +1310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "48d813db92d400f8a3a25930c41bc655d0cd5a14"
+                "reference": "beb7683ca88fd9901dccf296806d1e484bd00d11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/48d813db92d400f8a3a25930c41bc655d0cd5a14",
-                "reference": "48d813db92d400f8a3a25930c41bc655d0cd5a14",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/beb7683ca88fd9901dccf296806d1e484bd00d11",
+                "reference": "beb7683ca88fd9901dccf296806d1e484bd00d11",
                 "shasum": ""
             },
             "require": {
@@ -1377,7 +1377,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-04-02 06:41:30"
+            "time": "2016-04-05 14:37:38"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

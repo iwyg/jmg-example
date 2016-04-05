@@ -27,6 +27,10 @@ $container['ctrl.index'] = $container->share(function () use ($container) {
     return new App\Controller\IndexController($container['view']);
 });
 
+$container['ctrl.docs'] = $container->share(function () use ($container) {
+    return new App\Controller\DocsController($container['view']);
+});
+
 $container['ctrl.playground'] = $container->share(function () use ($container) {
     return new App\Controller\PlaygroundController($container['view']);
 });

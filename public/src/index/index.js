@@ -1,11 +1,9 @@
 import {prefixed} from 'modernizr';
 import 'styles/index';
+import 'babel-polyfill';
 import {document, window} from 'global';
 import debounce from 'lodash.debounce';
 import difference from 'lodash.difference';
-import Prism from 'prismjs';
-import {php, bash, sh} from 'prism-languages';
-import 'babel-polyfill';
 import ViewPort, {tick} from './modules/ViewPort';
 import {EVENT_VIEWPORT, EVENT_VIEWPORT_ENTER, EVENT_VIEWPORT_LEAVE,
   EVENT_VIEWPORT_SCROLL_START, EVENT_VIEWPORT_SCROLL_STOP,
@@ -16,6 +14,9 @@ import Q, {select, selectAll, addClass, removeClass, toggleClass} from './module
 import {requestAnimationFrame} from 'polyfill/animation-frame';
 import scroll from 'scroll';
 import { createHistory } from 'history';
+
+require('imports?Prism!../../../node_modules/prismjs/components/prism-bash.js');
+require('imports?Prism!../../../node_modules/prismjs/components/prism-php.js');
 
 let animateable = Q('section.container .animateable');
 let sections = Q('#fold, section.container');
@@ -105,6 +106,7 @@ const handler = function (event) {
   let element = event.target;
   requestAnimationFrame(() => {
     addClass(element, 'anim-in');
+    element.removeEventListener(EVENT_VIEWPORT, handler);
   });
 };
 
@@ -113,7 +115,7 @@ animateable.get().forEach((element) => {
 });
 
 viewPort.registerElements(animateable, null, (e) => {
-  removeClass(e.target, 'anim-in');
+  //removeClass(e.target, 'anim-in');
 });
 
 viewPort.registerElements(sections, (e) => {

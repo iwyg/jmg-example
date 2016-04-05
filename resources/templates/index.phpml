@@ -43,31 +43,43 @@
 <section id="features" class="container">
   <div class="content row">
     <div class="clm  clm__2 right">
-      <h2>some header</h2>
+      <?= $view->func('markdown', 'features.md') ?>
     </div>
     <div class="clm clm__2">
       <?=$view->insert('index/chain.svg.phpml')?>
     </div>
   </div>
-
-  <div class="content row">
-    <div class="clm  clm__2 center">
-      <?= $view->func('markdown', 'features_1.md') ?>
-      <?= $view->func('markdown', 'feature_dynamic_proc.md') ?>
-    </div>
-  </div>
-
+</section>
+<section id="features-example" class="container">
   <div class="content row">
     <div class="clm  clm__2">
-      <?= $view->func('markdown', 'features_2.md') ?>
+      <?= $view->func('markdown', 'features_loaders.md') ?>
     </div>
     <div class="clm  clm__2">
-      <?= $view->func('markdown', 'features_3.md') ?>
+      <?= $view->func('markdown', 'features_loaders_example.md') ?>
     </div>
   </div>
 </section>
+<section id="features-more" class="container">
+  <div class="content row">
+    <div class="clm  clm__2 center">
+      <?= $view->func('markdown', 'features_1.md') ?>
+    </div>
+  </div>
+
+</section>
 
 <section id="contribute" class="container">
+  <div class="content row">
+    <div class="clm  clm__2 center centered">
+      <div class="icon github-contrib">
+        <?= $view->func('icon', 'github') ?>
+      </div>
+    </div>
+    <div class="clm  clm__2 center">
+      <?= $view->func('markdown', 'contrib.md') ?>
+    </div>
+  </div>
 </section>
 
 <footer class="site-footer">

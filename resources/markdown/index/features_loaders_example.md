@@ -1,5 +1,3 @@
-Jmg lets you define custom resource loaders, for instance, an AWS loader would look something like this
-
 ```php
 <?php
 
@@ -20,3 +18,5 @@ class AWSLoader extends AbstractLoader
     }
 }
 ```
+
+Jmg lets you define custom resource loaders, for instance, an AWS loader would look something like the example above.

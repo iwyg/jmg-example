@@ -2,9 +2,10 @@
   <nav>
     <?= $view->insert('index/logo.phpml') ?>
     <ul role="navigation">
-      <li><a class="link int" href="#about">About</a></li>
-      <li><a class="link int" href="#features">Features</a></li>
-      <li><a class="link int" href="#contribute">Contribute</a></li>
+      <li><a class="link int" href="/#about">About</a></li>
+      <li><a class="link int" href="/#features">Features</a></li>
+      <li><a class="link int" href="/#contribute">Contribute</a></li>
+      <li><a class="link" href="/docs">Docs</a></li>
     </ul>
     <ul role="navigation" class="right">
       <li><a class="link ext" target="_blanc" href="https://github.com/iwyg/jmg"

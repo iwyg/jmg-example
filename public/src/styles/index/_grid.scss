@@ -20,9 +20,21 @@
     &.clm__4.force {
       width: 25%;
     }
+
+    &.right {
+      float: right;
+    }
   }
 
   @include breakpoint($q-medium) {
+
+    &.center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+      width: 68%;
+    }
 
     padding-left: 2.6rem;
     padding-right: 2.6rem;

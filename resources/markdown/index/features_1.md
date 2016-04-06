@@ -6,8 +6,7 @@ In some cases you want to resize an image before cropping (or the other way arou
 
 ### Define recipes
 
-Recipes are conceptual predefined parameters that will be applied to your
-images.
+Recipes are predefined parameters that are typically linked to a predefined uri.
 
 ### Filters
 
@@ -19,11 +18,9 @@ Jmg ships with a few basic filters, like autorotate, grayscale, colorize, and a 
 ### Processing constraints.
 
 It's possible to restrict the usage of dynamic processing by signing the
-generated image URL. This way processing is restricted to the
-request defined in you application.
+generated image URL. This way processing is restricted to requests defined within your application.
 
-Furthermore, image dimension can be
-restricted to not exceed predefined boundaries.
+Furthermore, image dimension can be restricted to not exceed predefined boundaries.
 
 ### Ready for your favourite templating engine
 
@@ -32,7 +29,7 @@ your templating layer of your choice.
 
 ### Caching
 
-Jmg also comes with a poweful caching layer.
+Jmg also comes with a powerful caching layer.
 
 <footer>
     <sub>* jmg is still in a pre releas state. listed features are considered stable

@@ -28,22 +28,9 @@
 
   @include breakpoint($q-medium) {
 
-    &.center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      float: none;
-    }
 
     padding-left: 2.6rem;
     padding-right: 2.6rem;
-    &:first-child {
-      padding-left: 3.6rem;
-    }
-
-    &:last-child {
-      padding-right: 3.6rem;
-    }
 
     &.clm__2 {
       width: 50%;
@@ -56,8 +43,43 @@
       width: 33.33333%;
     }
 
+    &.clm__2__3 {
+      width: 33.33333% * 2;
+    }
+
     &.clm__4 {
       width: 25%;
     }
+
+    &.clm__3__4 {
+      width: 75%;
+    }
+
+    &:first-child:not(.swap) {
+      padding-left: 3.6rem;
+    }
+
+    &:last-child:not(.swap) {
+      padding-right: 3.6rem;
+    }
+
+    .swap & {
+      &:first-child {
+        float: right;
+        padding-right: 3.6rem;
+      }
+
+      &:last-child {
+        padding-left: 3.6rem;
+      }
+    }
+
+    &.center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+    }
   }
+
 }

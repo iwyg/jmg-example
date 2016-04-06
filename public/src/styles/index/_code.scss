@@ -169,4 +169,7 @@ pre[class*="language-"] {
   &.class-name {
     color: $syn_classname;
   }
+  &.package {
+    color: $syn_package;
+  }
 }

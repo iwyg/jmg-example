@@ -5,6 +5,6 @@ Jmg is a versatile, highly adaptable php library for handling http driven just i
 It supports Imagemagick, Imagick and, GD out of the box - or just write your own
 driver implementation.
 
-<div>
+<footer>
     <sup>* requires PHP 5.6 or greater.</sup>
-</div>
+</footer>

@@ -1,2 +1,7 @@
-$color-primary: $palette-blue-grey-300 !default;
-$color-primary-dark: $palette-blue-grey-600 !default;
+//$color-primary: $palette-blue-grey-300 !default;
+//$color-primary-dark: $palette-blue-grey-600 !default;
+
+@import "./public/src/styles/_pallettes.scss";
+
+$color-primary: color('blue') !default;
+$color-primary-dark: color('black') !default;

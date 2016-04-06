@@ -1,6 +1,12 @@
 // media types
-$q-small: 400px;
-$q-medium: 800px;
-$q-big: 1400px;
-$q-large: 2000px;
-$q-x-large: 3000px;
+$bp-small:   400px;
+$bp-medium:  800px;
+$bp-big:     1400px;
+$bp-large:   2000px;
+$bp-x-large: 3000px;
+
+$q-small:   $bp-medium;
+$q-medium:  $bp-medium;
+$q-big:     $bp-big;
+$q-large:   $bp-large;
+$q-x-large: $bp-x-large;

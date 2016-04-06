@@ -2,7 +2,7 @@
   color: color($color);
 }
 
-$syn_comment:   color('gray');
+$syn_comment:   color('white');
 $syn_var:       color('red');
 $syn_def:       color('yellow');
 $syn_char:      color('green');
@@ -12,13 +12,14 @@ $syn_func:      color('cyan');
 $syn_num:       color('magenta');
 $syn_this:      $syn_var;
 $syn_symbol:    color('red');
+$syn_package:   color('cyan');
 $syn_punct:     $syn_keyword;
 $syn_classname: color('magenta');
 $syn_delim:     $syn_comment;
-$syn_operator:  color('white');
-$syn_property:  color('white');
+$syn_operator:  color('black');
+$syn_property:  color('black');
 
 $syn_var:       color('white');
 $syn_def:       color('white');
 $syn_symbol:    color('white');
-$syn_classname: color('blue');
+$syn_classname: color('cyan');

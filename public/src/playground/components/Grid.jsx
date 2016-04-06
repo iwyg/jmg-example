@@ -96,7 +96,23 @@ export default class Grid extends React.Component {
     let ref = (baseRef && baseRef.refs) ? baseRef.refs.figure : (baseRef || false);
     let cwidth = this.domNode.clientWidth;
     let fwidth = !ref ? cwidth : ReactDOM.findDOMNode(ref).clientWidth;
-    this.setState({maxWidth: fwidth});
+    let nWidth = this.getWidth(fwidth);
+
+    if (nWidth !== this.state.maxWidth) {
+      this.setState({maxWidth: nWidth});
+    }
+  }
+
+  getWidth(computedWidth) {
+    let {maxWidth} = this.state;
+
+    // do not load smaller images
+    // also do not update within a range of 50px
+    if (computedWidth < maxWidth || computedWidth - maxWidth < 50) {
+      return maxWidth;
+    }
+
+    return computedWidth;
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -154,7 +170,6 @@ export default class Grid extends React.Component {
   componentWillUnmount() {
     CONTEXT.removeEventListener(RESIZE, this.onResize);
     this.setState({loaded: false, maxWidth: null});
-
   }
 
   getClassName() {

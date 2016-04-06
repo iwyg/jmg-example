@@ -46,7 +46,9 @@ class Processor implements ProcessorInterface
     {
         $parsed = sprintf('<div>%s</div>', mb_convert_encoding($parsed, 'HTML-ENTITIES', 'UTF-8'));
         $this->dom = new DOMDocument('1.0', 'UTF-8');
+        $libxmlState = libxml_use_internal_errors(true);
         $this->dom->loadHTML(utf8_decode($parsed), LIBXML_NOXMLDECL|LIBXML_HTML_NODEFDTD|LIBXML_HTML_NOIMPLIED);
+        libxml_use_internal_errors($libxmlState);
     }
 
     /**

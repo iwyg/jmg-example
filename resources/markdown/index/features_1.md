@@ -1,14 +1,4 @@
-## And there's more <sup>*</sup>
-
-
-### Dynamic, per request, image processing
-
-At its core, Jmg will manipulate images by a given set of parameters. Parameters
-are defined by their mode where each mode represents a different basic task
-(mainly resizing and cropping). Parametes can also be joind by filters.
-
-Parameters may be passed as query or you may define them as placeholder
-parameter in the routing framework of your choice.
+<h2>And there's more <sup>*</sup></h2>
 
 ### Parameter chaining
 
@@ -44,7 +34,8 @@ your templating layer of your choice.
 
 Jmg also comes with a poweful caching layer.
 
-<div>
-<sup>* jmg is still in a pre releas state. listed features are considered stable
-and unlikley to change.</sup>
-</div>
+<footer>
+    <sub>* jmg is still in a pre releas state. listed features are considered stable
+        and unlikley to change.
+    </sub>
+</footer>

@@ -6,9 +6,6 @@ var autoprefixer      = require('autoprefixer');
 var precss            = require('precss');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-//var modules                = path.resolve(__dirname, './src/js/modules');
-//var nodeModules       = path.resolve(__dirname, './node_modules');
-
 var base              = 'public';
 var buildDir          = base + '/dist';
 var srcDir            = base + '/src';
@@ -78,13 +75,8 @@ module.exports = {
           'style',
           'css'
           +'!postcss'
-          +'!sass'
-          +'?includePaths[]=node_modules/normalize.css'
-          +'&includePaths[]=node_modules/breakpoint-sass/stylesheets'
-          +'&includePaths[]=node_modules/susy/sass'
-          +'&includePaths[]=src/fonts'
-          +'&includePaths[]=src/fonts/roboto'
-          +'!toolbox'
+          +'!sass?config=sassLoader'
+          +'!toolbox?includePaths[]=public/src/styles'
         )
       },
       // namespaced styles
@@ -92,11 +84,9 @@ module.exports = {
         test: /react-toolbox\/.*\.(.css|.scss)$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          //'css'
           'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
           +'!postcss'
-          +'!sass'
-          //+'!sass?sourceMap'
+          +'!sass?config=sassLoader'
           +'!toolbox'
         )
       },
@@ -116,29 +106,27 @@ module.exports = {
         test: /\modernizr\.json$/,
         loader: 'modernizr'
       },
-      //{
-      //  test: /\.(scss?|sass)$/,
-      //  loader: ExtractTextPlugin.extract('style', 'css?minimize!postcss!sass?'
-      //    + 'includePaths[]=public/src/assets'
-      //    +'&includePaths[]=public/src/scss'
-      //    +'&includePaths[]=node_modules/breakpoint-sass/stylesheets'
-      //    +'&includePaths[]=node_modules/reset.scss'
-      //    +'&includePaths[]=node_modules/susy/sass'
-      //   )
-      //},
-      //{
-      //  test: /\.css$/,
-      //  loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
-      //},
     ]
   },
   toolbox: {
     theme: path.join(__dirname, 'public/src/styles/toolbox-theme.scss')
   },
-  postcss: function () { return [autoprefixer];},
-  //postcss: function () {
-  //  return [autoprefixer, precss];
-  //},
+  sassLoader: {
+    includePaths: [
+      path.resolve(__dirname, './public/src/styles'),
+      path.resolve(__dirname, './public/src/fonts'),
+      path.resolve(__dirname, './public/src/fonts/roboto'),
+      path.resolve(__dirname, './node_modules/normalize.css'),
+      path.resolve(__dirname, './node_modules/breakpoint-sass/stylesheets'),
+      path.resolve(__dirname, './node_modules/susy/sass'),
+      path.resolve(__dirname, './node_modules/react-toolbox/lib'),
+      path.resolve(__dirname, './node_modules/react-toolbox/app'),
+      path.resolve(__dirname, './node_modules/react-toolbox/components'),
+    ]
+  },
+  postcss: function () {
+    return [autoprefixer, precss];
+  },
   stats: {
     colors: true
   },
@@ -151,10 +139,6 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
-    ]),
-    //new webpack.DefinePlugin({
-    //  'process.env.NODE_ENV': JSON.stringify('development')
-    //})
+    ])
   ],
-
 };

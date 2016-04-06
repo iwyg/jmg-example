@@ -49,6 +49,12 @@ h1, h2, h3, h4, h5, h6 {
 @import "grid";
 @import "code";
 
+code, code[class*="language-"], pre[class*="language-"] {
+  .content & {
+    font-size: 1.4rem;
+  }
+}
+
 section.container {
   background: #fff;
   padding-top: 3.6rem;
@@ -90,8 +96,14 @@ strong {
   @extend %content;
   line-height: 1.8;
 
+
   p {
     //margin: 1.2rem 0 2.8rem 0;
+    text-align: justify;
+
+    @include breakpoint($q-small) {
+      text-align: left;
+    }
   }
 
   &.row {
@@ -292,6 +304,7 @@ p {
   code, code[class*="language-"], pre[class*="language-"] {
     text-overflow: clip;
     text-overflow: ellipsis;
+    font-size: 1.6rem;
   }
 
   .content {
@@ -308,39 +321,30 @@ p {
 
 .hero {
   @include inbox();
-
-  //background-blend-mode: overlay;
-
   position: absolute;
   width: 100%;
   height: 100%;
-  will-change: transform;
   top: 0;
   left: 0;
   z-index: 1;
-  background-image: url('../images/index_hero_overlay_opt.jpg');
-  background-image: url('../images/test_1.jpg');
-  background-position-x: center;
-  background-position-y: center;
-  //background: url('../images/photo-1447622919665-d95b0d80b251.jpg') center center;
-  opacity: 0.3;
+
+  background-position: 50% 50%;
   background-size: cover;
 
-
-  @include breakpoint($q-medium) {
-    //display: block;
-    ////background: url('../images/index_hero_1200.jpg') center center;
-    ////background: url('../images/index_hero_full.jpg') center center;
+  @include breakpoint(max-device-width $bp-small) {
+    background-image: url('../images/hero_opt_25.jpg');
   }
 
-  //@include breakpoint($q-big) {
-  //  background: url('../images/index_hero_1800.jpg') center center;
-  //}
+  @include breakpoint(max-device-width $bp-medium) {
+    background-image: url('../images/hero_opt_50.jpg');
+  }
 
-  //@include breakpoint($q-large) {
-  //  background: url('../images/index_hero_full.jpg') center center;
-  //  background-size: cover;
-  //}
+  @include breakpoint(min-device-width $bp-medium) {
+    background-image: url('../images/hero_opt.jpg');
+  }
+
+  opacity: 0.3;
+  will-change: transform;
 }
 
 .main-nav-container {
@@ -556,8 +560,7 @@ nav {
   }
 }
 
-p + sup, p + sub, div > sub,  div > sup {
-  display: inline-block;
+p + footer {
   padding-top: 3.6rem;
 }
 

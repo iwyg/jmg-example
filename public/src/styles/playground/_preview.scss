@@ -27,7 +27,7 @@
   @include clearfix;
   font-size: 1.2rem;
   line-height: .4rem;
-  color: color('black');
+  color: $color-primary;
 
   @include flex(space-between);
 
@@ -36,7 +36,7 @@
     //border-left: 1px solid darken($color-primary-dark, 5);
   }
 
-  background-color: rgba(color('black'), 0.08);
+  background-color: rgba(color('white'), 0.02);
 }
 
 .preview-container {

@@ -5,7 +5,7 @@ var LiveReloadPlugin = require('webpack-livereload-plugin');
 var config = {
   output: base.output || {},
   devtool: [
-    'source-map'
+    'eval-source-map'
   ],
   devServer: {
   contentBase: 'dist/',

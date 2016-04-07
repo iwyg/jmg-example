@@ -3,3 +3,4 @@
 !/logs/README.md
 vendor
 public/dist
+config/config.production.php

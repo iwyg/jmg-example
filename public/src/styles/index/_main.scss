@@ -266,6 +266,9 @@ p {
       svg {
         fill: color('white');
       }
+      .small & {
+        height: 2.6rem * 0.8;
+      }
     }
   }
 }
@@ -580,4 +583,8 @@ p + footer {
       fill: color('blue');
     }
   }
+}
+
+.small {
+  @extend small;
 }

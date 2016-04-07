@@ -7,28 +7,28 @@ var precss            = require('precss');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var base              = 'public';
-var buildDir          = base + '/dist';
-var srcDir            = base + '/src';
+var buildDir          = path.join(base, 'dist');
+var srcDir            = path.join(base, 'src');
 
 module.exports = {
-  context: path.resolve(__dirname, './' + srcDir + '/'),
+  context: path.resolve(__dirname, srcDir),
   entry: {
     index: 'index/index.js',
+    docs: 'docs/index.js',
     playground: 'playground/index.js',
   },
   output: {
-    path: __dirname + '/' + buildDir,
+    path: path.resolve(__dirname, buildDir),
     filename: '[name]/index.js',
-    //chunkFilename: '[name]/[name]_[chunkhash].js',
     publicPath: '/',
   },
   resolve: {
     extensions: ['', '.jsx', '.js', '.scss', '.json'],
     root: [
-      path.resolve('./node_modules')
+      path.resolve(__dirname, './node_modules')
     ],
     alias: {
-      modernizr$: path.resolve(__dirname, srcDir + '/modernizr.json')
+      modernizr$: path.resolve(__dirname, path.join(srcDir,  'modernizr.json'))
     },
     modulesDirectories: [
       'web_modules',
@@ -47,12 +47,12 @@ module.exports = {
   },
   module: {
     loaders:[
-      //// fonts
+      // font resources
       {
         test   : /fonts?\/.*\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader : 'file-loader?name=../dist/[path][name].[ext]'
       },
-
+      // image resources
       {
         test    : /images?\/.*\.(jpe?g|png|gif)(\?[a-z0-9]+)?$/,
         loaders : [
@@ -60,10 +60,6 @@ module.exports = {
           'image-webpack?bypassOnDebug=false&optimizationLevel=7&interlaced=false&progressive=true&quality=30'
         ]
       },
-      //{
-      //  test   : /fonts?\/.*\.(ttf|eot|svg|woff(2))(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      //  loader : 'file-loader?name=/dist/[path][name].[ext]'
-      //},
       // svg icons n stuff
       { test: /\.svg$/,
         loader: 'babel!svg-react?reactDOM=react'
@@ -97,8 +93,7 @@ module.exports = {
         query: {
           cacheDirectory: true,
           sourceMap: true,
-          presets: ['react', 'es2015', 'stage-0'],
-          //plugins: ['transform-object-rest-spread', 'transform-runtime'],
+          presets: ['es2015', 'stage-0', 'react'],
           plugins: ['transform-object-rest-spread'],
         }
       },
@@ -109,7 +104,7 @@ module.exports = {
     ]
   },
   toolbox: {
-    theme: path.join(__dirname, 'public/src/styles/toolbox-theme.scss')
+    theme: path.join(__dirname, srcDir, 'styles/toolbox-theme.scss')
   },
   sassLoader: {
     includePaths: [
@@ -124,9 +119,7 @@ module.exports = {
       path.resolve(__dirname, './node_modules/react-toolbox/components'),
     ]
   },
-  postcss: function () {
-    return [autoprefixer, precss];
-  },
+  postcss: [autoprefixer, precss],
   stats: {
     colors: true
   },

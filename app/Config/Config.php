@@ -12,6 +12,7 @@
 namespace App\Config;
 
 use ArrayAccess;
+use App\Env\Detect;
 use RuntimeException;
 use Lucid\Common\Helper\Arr;
 
@@ -36,16 +37,20 @@ class Config implements ArrayAccess
     /** @var string */
     private $path;
 
+    /** @var Detect */
+    private $env;
+
     /**
      * Constructor.
      *
      * @param string $path
      */
-    public function __construct($path)
+    public function __construct($path, Detect $env)
     {
         $this->pool   = [];
         $this->config = [];
         $this->path   = $path;
+        $this->env    = $env;
     }
 
     /**
@@ -57,12 +62,18 @@ class Config implements ArrayAccess
      */
     public function load(array $files)
     {
+        $conf = [];
+
         foreach ($files as $file) {
             if (file_exists($resource = $this->path.DIRECTORY_SEPARATOR.$file) &&
                 'php' === pathinfo(strtolower($resource), PATHINFO_EXTENSION)) {
-                $this->config = array_merge($this->config, include $resource);
+                $conf = $this->findFilesAndMerge($resource, $conf);
+                //$conf = array_merge($conf, include $resource);
             }
         }
+
+
+        $this->config = $conf;
     }
 
     /**
@@ -118,5 +129,24 @@ class Config implements ArrayAccess
     public function offsetSet($offset, $values)
     {
         throw new RuntimeException('Config is read only.');
+    }
+
+    /**
+     * Merge env based files.
+     *
+     * @param string $file
+     * @param array $conf
+     *
+     * @return array
+     */
+    private function findFilesAndMerge($file, array $conf)
+    {
+        $config = include $file;
+
+        if (is_file($env = substr($file, 0, -3).$this->env.'.php')) {
+            $config = array_merge($config, include $env);
+        }
+
+        return array_merge($conf, $config);
     }
 }

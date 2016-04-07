@@ -1,6 +1,6 @@
 <?= $view->extend('main.php') ?>
 <?= $view->section('head')?>
-<link href="/dist/css/index.css" rel="stylesheet"/>
+<link href="/dist/css/docs.css" rel="stylesheet"/>
 <?= $view->endsection() ?>
 
 <?= $view->section('content') ?>
@@ -16,4 +16,8 @@
         </div>
     </div>
 </section>
+<?= $view->endsection() ?>
+
+<?= $view->section('body-scripts') ?>
+<script src="dist/docs/index.js" type="text/javascript"></script>
 <?= $view->endsection() ?>

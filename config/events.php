@@ -21,6 +21,10 @@ return function (Interop\Container\ContainerInterface $container, Lucid\Signal\E
         $event->getEngine()->registerExtension(
             new App\Bridge\Template\UtilsExtension($config->get('view:icons', []))
         );
+
         $view->addListener('playground.php', new App\View\RenderAppSettingsListener($config));
+        $view->addListener('gascript.phpml', new App\View\RenderGaScriptListener(
+            $config->get('ga_tracking_id', 'UA-XXXXXXXX-XX')
+        ));
     });
 };

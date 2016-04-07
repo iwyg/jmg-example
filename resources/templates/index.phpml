@@ -106,27 +106,22 @@
   </div>
   <div class="content row">
     <div class="clm  clm__2__3 center">
-      <small>
+      <div class="small">
         <?= $view->func('markdown', '../disclaimer.md') ?>
-      </small>
+      </div>
     </div>
   </div>
   <div class="content row">
     <div class="clm  clm__2__3 center">
-      <small>
+      <div class="small">
         <?= $view->func('markdown', '../legal-notice.md') ?>
-      </small>
+      </div>
     </div>
   </div>
 </footer>
 <?= $view->endsection() ?>
 
 <?= $view->section('body-scripts') ?>
-<script type="text/javascript">
-  (function (exports, undefined) {
-  //alert('fuck off.');
-  }(this));
-</script>
-<script src="dist/index/index.js" type="text/javascript">
-</script>
+<script src="dist/index/index.js" type="text/javascript"></script>
+<?= $view->insert('gascript.phpml') ?>
 <?= $view->endsection() ?>

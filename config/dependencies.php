@@ -8,12 +8,16 @@ use Lucid\Mux\Handler\Dispatcher;
 
 /*
  * ---------------------------------------------------
- * Controller
+ * Config
  * ---------------------------------------------------
  */
+$container['env'] = $container->share(function () use ($container) {
+    return new App\Env\Detect($_SERVER, 'APP_ENV');
+});
+
 $container['config'] = $container->share(function () use ($container) {
-    $config = new App\Config\Config(__DIR__);
-    $config->load(['config.default.php', 'config.php']);
+    $config = new App\Config\Config(__DIR__, $container->get('env'));
+    $config->load(['config.php']);
 
     return $config;
 });

@@ -21,6 +21,7 @@
     "lucid/resource":"dev-develop",
     "lucid/template": "dev-master",
     "lucid/signal": "dev-develop",
+    "lucid/infuse": "dev-develop",
     "lucid/common": "dev-master",
     "lucid/xml": "dev-master",
     "symfony/polyfill-mbstring": "^1.1",

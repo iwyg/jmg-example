@@ -185,11 +185,18 @@ $container['events'] = $container->share(function () use ($container) {
  * ---------------------------------------------------
  */
 $container['kernel.middleware'] = $container->share(function () use ($container) {
-    return new App\Middleware\Queue($container->get('events'), 'kernel.middleware');
+    return new Lucid\Infuse\Queue($container->get('events'), 'kernel.middleware');
 });
 
 $container['negotiation'] = $container->share(function () use ($container) {
     return new Negotiation\Negotiator;
+});
+
+$container['middleware.headers'] = $container->share(function () use ($container) {
+    return new App\Middleware\Headers([
+        'Content-Security-Policy' => 'default-src \'self\'',
+        'Strict-Transport-Security' => 'max-age=31536000'
+    ]);
 });
 
 $container['middleware.xhr_request'] = $container->share(function () use ($container) {

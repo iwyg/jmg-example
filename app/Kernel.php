@@ -14,7 +14,7 @@ namespace App;
 use App\Events\KernelEvents;
 use App\Events\RequestEvent;
 use App\Events\RequestExceptionEvent;
-use App\Middleware\MiddlewareInterface;
+use Lucid\Infuse\MiddlewareInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
@@ -35,7 +35,7 @@ class Kernel
     /** @var ContainerInterface */
     private $container;
 
-    /** @var App\Middleware\QueueInterface */
+    /** @var  */
     private $middleware;
 
     /** @var bool */
@@ -80,7 +80,7 @@ class Kernel
     public function handle(ServerRequestInterface $request, ResponseInterface $response = null)
     {
         try {
-            list($request, $response) = $this->getMiddleware()->handle($request, $response);
+            list($request, $response) = $this->getMiddleware()->handle($request, $response ?: new Response);
             $this->getEvents()->dispatch(
                 KernelEvents::REQUEST_OK,
                 $event = new RequestEvent($request, $response)
@@ -142,7 +142,7 @@ class Kernel
     /**
      * getEvents
      *
-     * @return Lucid\Signal\EventDispatcherInterface
+     * @return \Lucid\Signal\EventDispatcherInterface
      */
     protected function getEvents()
     {
@@ -152,11 +152,12 @@ class Kernel
     /**
      * getMiddleware
      *
-     * @return App\Middleware\Stack
+     * @return \Lucid\Infuse\QueueInterface
      */
     protected function getMiddleware()
     {
         if (null === $this->middleware) {
+            /** @var \Lucid\Infuse\QueueInterface middleware */
             $this->middleware = $this->container->get('kernel.middleware');
         }
 

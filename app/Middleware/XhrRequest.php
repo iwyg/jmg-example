@@ -11,9 +11,11 @@
 
 namespace App\Middleware;
 
+use App\Events\XhrRequestEvent;
 use Lucid\Signal\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Lucid\Infuse\MiddlewareInterface;
 
 /**
  * @class XhttpRequestMiddleWare
@@ -24,14 +26,22 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class XhrRequest implements MiddlewareInterface
 {
+    /** @var EventDispatcherInterface  */
     private $events;
 
+    /**
+     * XhrRequest constructor.
+     * @param EventDispatcherInterface $events
+     */
     public function __construct(EventDispatcherInterface $events)
     {
         $this->events = $events;
     }
 
-    public function handle(Request $request, Response $response = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(Request $request, Response $response)
     {
         if ($this->isXHRRequest($request)) {
             $this->events->dispatch('request.xhr', $event = new XhrRequestEvent($request, $response));
@@ -42,12 +52,12 @@ class XhrRequest implements MiddlewareInterface
         return [$request, $response];
     }
 
-    private function isXHRRequest($request)
+    /**
+     * @param $request
+     * @return bool
+     */
+    private function isXHRRequest(Request $request)
     {
-        if ((bool)($xhttp = $request->getHeader('http_x_requested_with'))) {
-            return true;
-        }
-
-        return false;
+        return (bool)($request->getHeader('http_x_requested_with'));
     }
 }

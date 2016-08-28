@@ -16,7 +16,7 @@ use App\Events\ContentTypeEvent;
 use Lucid\Signal\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
+use Lucid\Infuse\MiddlewareInterface;
 /**
  * @class RequestType
  *
@@ -26,17 +26,28 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ContentType implements MiddlewareInterface
 {
+    /** @var EventDispatcherInterface  */
     private $events;
 
+    /** @var Negotiator  */
     private $negotiator;
 
+    /**
+     * ContentType constructor.
+     * @param Negotiator $negotiator
+     * @param EventDispatcherInterface $events
+     */
     public function __construct(Negotiator $negotiator, EventDispatcherInterface $events)
     {
         $this->events = $events;
         $this->negotiator = $negotiator;
     }
 
-    public function handle(Request $request, Response $response = null)
+    /**
+     * Dispatches an event.
+     * {@inheritdoc}
+     */
+    public function handle(Request $request, Response $response)
     {
         $this->events->dispatch(
             'accept.content_type',

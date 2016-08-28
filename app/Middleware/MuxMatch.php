@@ -18,6 +18,8 @@ use Lucid\Signal\EventDispatcherInterface;
 use Lucid\Mux\Request\Context as RequestContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Lucid\Infuse\MiddlewareInterface;
+
 
 /**
  * @class Mux
@@ -53,11 +55,9 @@ class MuxMatch implements MiddlewareInterface
      *
      * {@inheritdoc}
      */
-    public function handle(Request $request, ResponseInterface $response = null)
+    public function handle(Request $request, ResponseInterface $response)
     {
-        if (null === $response) {
-            list($request, $response) = $this->match($request, $response);
-        }
+        list($request, $response) = $this->match($request, $response);
 
         return [$request, $response];
     }

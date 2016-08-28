@@ -17,6 +17,10 @@ set_error_handler(function ($errno, $errmsg, $errfile, $lino) {
     throw new \ErrorException($errmsg, $errno, 1, $errfile, $lino);
 });
 
+$cp = session_get_cookie_params();
+
+session_set_cookie_params($cp['lifetime'], $cp['path'], '.thomas-appel.com', $cp['secure'], true);
+session_name('jmg.thomas-appel.com');
 session_start();
 
 $app = require __DIR__ . '/../config/bootstrap.php';

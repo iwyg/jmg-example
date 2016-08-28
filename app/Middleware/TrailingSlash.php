@@ -13,6 +13,7 @@ namespace App\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Lucid\Infuse\MiddlewareInterface;
 
 /**
  * @class TrailingSlash
@@ -23,7 +24,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class TrailingSlash implements MiddlewareInterface
 {
-    public function handle(Request $request, Response $response = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(Request $request, Response $response)
     {
         $url = $request->getUri();
         $path = $url->getPath();

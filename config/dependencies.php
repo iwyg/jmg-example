@@ -194,7 +194,7 @@ $container['negotiation'] = $container->share(function () use ($container) {
 
 $container['middleware.headers'] = $container->share(function () use ($container) {
     return new App\Middleware\Headers([
-        'Content-Security-Policy' => 'default-src \'self\'',
+        //'Content-Security-Policy' => 'default-src \'self\' \'unsafe-inline\'',
         'Strict-Transport-Security' => 'max-age=31536000'
     ]);
 });
